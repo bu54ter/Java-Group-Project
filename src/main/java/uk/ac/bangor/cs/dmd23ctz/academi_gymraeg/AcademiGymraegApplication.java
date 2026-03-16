@@ -26,6 +26,8 @@ public class AcademiGymraegApplication {
 		SpringApplication.run(AcademiGymraegApplication.class, args);
 	}
 
+	
+	
 	@Bean
 	LocalValidatorFactoryBean getValidator() {
 		LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
