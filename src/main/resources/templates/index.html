@@ -1,0 +1,57 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<link rel="stylesheet" th:href="@{/style.css}">
+<body>
+
+	<div th:replace="layout :: header"></div>
+	<div sec:authorize="not isAuthenticated()">
+		<div th:replace="layout :: loginModal"></div>
+	</div>
+	<div sec:authorize="isAuthenticated()">
+		<div th:replace="layout :: userDetails"></div>
+	</div>
+	<div sec:authorize="isAuthenticated()">
+		<div th:replace="layout :: logout"></div>
+	</div>
+	<h2>Creoso</h2>
+	<hr>
+	<h2>Noun of the Day</h2>
+
+<div th:if="${wordOfTheDay != null}">
+    <p>
+        <strong>
+        <span th:text="${wordOfTheDay.welshWord}"></span></strong>
+		: 
+		<span th:text="${wordOfTheDay.englishWord}"></span>
+		<br/>
+        <i>
+       <span th:text="${wordOfTheDay.gender == T(uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Gender).MASCULINE ? 'Masculine' : 'Feminine'}"></span>
+       </i>
+       <br/>
+        <strong>How to use in a sentence:</strong>
+        <br/>
+        <span th:text="${wordOfTheDay.welshSent}"></span>
+        <i>
+        <span th:text="${wordOfTheDay.englishSent}"></span>
+        </i>
+    </p>
+
+    <form th:action="@{/}" method="get">
+        <button type="submit">Show another random noun</button>
+    </form>
+</div>
+
+<div th:if="${wordOfTheDay == null}">
+    <p>No nouns available.</p>
+</div>
+<hr>
+	<p>EXTRA. Show a noun and its translate, then a sentence how to use. DONE</p>
+	<p>EXTRA. Button to shuffle the above noun. DONE</p>
+	<p>EXTRA, Disable this view for Student who is taking a test.</p>
+	
+	<hr>
+	<div th:replace="layout :: footer"></div>
+	<div th:replace="layout :: scripts"></div>
+</body>
+</html>
+</html>

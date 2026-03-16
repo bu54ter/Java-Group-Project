@@ -1,0 +1,67 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<link rel="stylesheet" th:href="@{/style.css}">
+<body>
+
+	<div th:replace="layout :: header"></div>
+	<div sec:authorize="not isAuthenticated()">
+		<div th:replace="layout :: loginModal"></div>
+	</div>
+	<div sec:authorize="isAuthenticated()">
+		<div th:replace="layout :: userDetails"></div>
+	</div>
+	<div sec:authorize="isAuthenticated()">
+		<div th:replace="layout :: logout"></div>
+	</div>
+	<h2>Lecturer Dashboard</h2>
+	<hr>
+	<h3>Noun Table</h3>
+	<table border="1">
+		<tr>
+			<th>ID</th>
+			<th>Welsh Noun</th>
+			<th>English Noun</th>
+			<th>Gender</th>
+			<th>Added, date</th>
+			<th>Added, by whom</th>
+			<th>Deleted, date</th>
+			<th>Deleted, by whom</th>
+			<th>Welsh Sentence</th>
+			<th>Enlgish Sentence</th>
+		</tr>
+
+		<tr th:each="n : ${nouns}">
+    <td th:text="${n.nounId}"></td>
+    <td th:text="${n.welshWord}"></td>
+    <td th:text="${n.englishWord}"></td>
+    <td th:text="${n.gender}"></td>
+    <td th:text="${n.createdAt}"></td>
+    <td th:text="${n.createdBy}"></td>
+    <td th:text="${n.deletedAt}"></td>
+    <td th:text="${n.deletedBy}"></td>
+    <td th:text="${n.welshSent}"></td>
+    <td th:text="${n.englishSent}"></td>
+</tr>
+		</table>
+		
+			
+	<hr>
+	<h3>Edit Nouns</h3>
+	<hr>
+	<h3> EXTRA. Drop down with different db resquest.</h3>
+	<hr>
+	<p>
+		Jobs to do: <br /> As an Instructor, I must be able to create new
+		nouns in the system. <br /> AsanInstructor, I must be able to edit
+		nouns in the system. <br /> AsanInstructor, I should be able to delete
+		nouns in the system. <br />
+	</p>
+
+	<hr>
+	<div th:replace="layout :: nav"></div>
+	<hr>
+	<div th:replace="layout :: footer"></div>
+	<div th:replace="layout :: scripts"></div>
+</body>
+</html>
+</html>
