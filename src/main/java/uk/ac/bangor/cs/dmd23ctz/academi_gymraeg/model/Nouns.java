@@ -14,8 +14,6 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "ag_nouns")
 public class Nouns {
-
-	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "noun_id")
