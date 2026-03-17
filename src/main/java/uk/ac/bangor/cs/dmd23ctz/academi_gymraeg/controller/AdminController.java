@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
-
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserDeletedRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.security.UserService;
 
@@ -24,20 +24,20 @@ public class AdminController {
     private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
 	private final UserService userService;
+	private final UserDeletedRepository userDeletedRepository;
 
-
-
-    public AdminController(UserRepository userRepo, PasswordEncoder passwordEncoder, UserService userService) {
+    public AdminController(UserRepository userRepo, PasswordEncoder passwordEncoder, UserService userService, UserDeletedRepository userDeletedRepository) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
-    
+        this.userDeletedRepository = userDeletedRepository;
     }
 
     @GetMapping("/admin/dashboard")
     public String adminPage(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("users", userRepo.findAll());
+        model.addAttribute("deletedUsers", userDeletedRepository.findAll());
         return "admin/dashboard";
     }
 

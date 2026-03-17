@@ -27,7 +27,7 @@ public class User implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
-	private Long user_id;
+	private Long userId;
 	@Column(nullable = false, unique = true)
 	private String username;
 	private String password;
@@ -40,8 +40,7 @@ public class User implements UserDetails {
 	private Role role;
 	@CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
-	private LocalDateTime created_at;
-	private LocalDateTime deleted_at;
+	private LocalDateTime createdAt;
 
 	@Transient
 	private List<GrantedAuthority> authorities = null;
@@ -68,12 +67,12 @@ public class User implements UserDetails {
 		this.role = role;
 	}
 
-	public Long getUser_id() {
-		return user_id;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public String getUsername() {
@@ -108,20 +107,11 @@ public class User implements UserDetails {
 		this.surname = surname;
 	}
 
-	public LocalDateTime getCreated_at() {
-		return created_at;
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreated_at(LocalDateTime created_at) {
-		this.created_at = created_at;
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
 	}
-
-	public LocalDateTime getDeleted_at() {
-		return deleted_at;
-	}
-
-	public void setDeleted_at(LocalDateTime deleted_at) {
-		this.deleted_at = deleted_at;
-	}
-
 }

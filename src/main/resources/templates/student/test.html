@@ -3,22 +3,15 @@
 <link rel="stylesheet" th:href="@{/style.css}">
 <body>
 
-	<div th:replace="layout :: header"></div>
-	<div sec:authorize="not isAuthenticated()">
-		<div th:replace="layout :: loginModal"></div>
-	</div>
-	<div sec:authorize="isAuthenticated()">
-		<div th:replace="layout :: userDetails"></div>
-	</div>
-	<div sec:authorize="isAuthenticated()">
-		<div th:replace="layout :: logout"></div>
-	</div>
+
+<div th:replace="layout :: heroSection50"></div>
+<div th:replace="layout :: nav"></div>
+<div sec:authorize="not isAuthenticated()">
+    <div th:replace="layout :: loginModal"></div>
+</div>
 	<h2>Student Test Page</h2>
 	<hr>
 	<h3>Take a test.</h3>
-	<hr>
-
-	<div th:replace="layout :: nav"></div>
 	<hr>
 	<div th:replace="layout :: footer"></div>
 	<div th:replace="layout :: scripts"></div>

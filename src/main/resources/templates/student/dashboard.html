@@ -3,22 +3,18 @@
 <link rel="stylesheet" th:href="@{/style.css}">
 <body>
 
-	<div th:replace="layout :: header"></div>
-	<div sec:authorize="not isAuthenticated()">
-		<div th:replace="layout :: loginModal"></div>
-	</div>
-	<div sec:authorize="isAuthenticated()">
-		<div th:replace="layout :: userDetails"></div>
-	</div>
-	<div sec:authorize="isAuthenticated()">
-		<div th:replace="layout :: logout"></div>
-	</div>
+
+<div th:replace="layout :: heroSection50"></div>
+<div th:replace="layout :: nav"></div>
+<div sec:authorize="not isAuthenticated()">
+    <div th:replace="layout :: loginModal"></div>
+</div>
 	<h2>Student Dashboard</h2>
 	<hr>
 	<h3>Show Studnet Stats.</h3>
 	<hr>
 	<a th:href="@{/student/dashboard}">
-        <button type="button">Take a Test</button>
+        take a test
     </a>
     <hr>
 	<p>
@@ -28,8 +24,6 @@
 		Student, I should be able to view all of my test results. <br />
 	<p />
 
-	<hr>
-	<div th:replace="layout :: nav"></div>
 	<hr>
 	<div th:replace="layout :: footer"></div>
 	<div th:replace="layout :: scripts"></div>

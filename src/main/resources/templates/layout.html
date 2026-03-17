@@ -2,49 +2,107 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<!-- Header -->
-<div th:fragment="header">
-	<h1>Group Project</h1>
-	<hr>
-	<hr>
-</div>
+<section th:fragment="heroSection" class="hero1">
 
-<!-- Login modal -->
+    <video class="hero-video" autoplay muted loop>
+        <source th:src="@{/img/banMov.mp4}" type="video/mp4">
+    </video>
+
+    <section class="hero-text">
+        <h1>hiraeth</h1>
+        <h3><i>noun - feminine</i></h3>
+        <h3>the longing for one's homeland</h3>
+    </section>
+</section>
+<section th:fragment="heroSection50"
+        class="hero5"
+        th:style="'background-image: url(' + @{/img/banImg.jpeg} + ');'">
+
+    <section class="hero-text">
+        <h1>hiraeth</h1>
+        <h3><i>noun - feminine</i></h3>
+        <h3>the longing for one's homeland</h3>
+    </section>
+
+</section>
+
+<nav th:fragment="nav" class="sticky">
+    <ul class="list-inline">
+		<li> <a href="\">home </a></li>
+		 <!-- Admin dashboard -->
+        <li sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin/dashboard}">Admin Dashboard</a>
+        </li>
+
+        <!-- Lecturer dashboard -->
+        <li sec:authorize="hasRole('LECTURER')">
+            <a th:href="@{/lecturer/dashboard}">Lecturer Dashboard</a>
+        </li>
+        <!-- Lecturer dashboard -->
+        <li sec:authorize="hasRole('STUDENT')">
+            <a th:href="@{/student/dashboard}">Student Dashboard</a>
+        </li>
+        <!-- Lecturer dashboard -->
+        <li sec:authorize="hasRole('STUDENT')">
+            <a th:href="@{/student/test}">take a test</a>
+        </li>
+        
+        <li sec:authorize="not isAuthenticated()">
+            <a href="#" onclick="document.getElementById('loginModal').style.display='block'; return false;">
+                Login
+            </a>
+        </li>
+		
+        <li sec:authorize="isAuthenticated()">
+            <div th:replace="layout :: userDetails"></div>
+        </li>
+
+        <li sec:authorize="isAuthenticated()">
+            <div th:replace="layout :: logout"></div>
+        </li>
+
+    </ul>
+</nav>
+
 <div th:fragment="loginModal">
-	<button
-		onclick="document.getElementById('loginModal').style.display='block'">
-		Login</button>
+    <div id="loginModal" class="modal">
+        <form class="modal-content animate" th:action="@{/login}" method="post">
 
-	<!-- Modal -->
-	<div id="loginModal" class="modal">
+            <div class="imgcontainer">
+                <span class="close"
+                      title="Close Modal"
+                      onclick="document.getElementById('loginModal').style.display='none'">
+                    &times;
+                </span>
+                <img th:src="@{/img/avit.jpeg}" alt="Avatar" class="avatar">
+            </div>
 
-		<form class="modal-content" th:action="@{/login}" method="post">
-			<div class="imgcontainer">
-				<span class="close"
-					onclick="document.getElementById('loginModal').style.display='none'">
-					&times; </span> <img th:src="@{/img/avit.jpeg}" alt="Avatar"
-					class="avatar">
-			</div>
+            <div class="container">
+                <label for="username"><b>Username</b></label>
+                <input type="text"
+                       id="username"
+                       name="username"
+                       placeholder="Enter Username"
+                       required>
 
-			<div class="container">
-				<label>Username</label> <input type="text" name="username" required>
-			</div>
+                <label for="password"><b>Password</b></label>
+                <input type="password"
+                       id="password"
+                       name="password"
+                       placeholder="Enter Password"
+                       required>
 
-			<div>
-				<label>Password</label> <input type="password" name="password"
-					required>
-			</div>
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}" />
+            </div>
 
-			<!-- CSRF token for Spring Security -->
-			<input type="hidden" th:name="${_csrf.parameterName}"
-				th:value="${_csrf.token}" />
+            <div class="container1">
+                <button type="submit" class="loginbtn">Login</button>
+            </div>
 
-			<button type="submit">Login</button>
-
-		</form>
-
-	</div>
-	<hr>
+        </form>
+    </div>
 </div>
 
 <!-- Login modal -->
@@ -66,24 +124,16 @@
 			<div class="container">
 			<label>Username:</label> <input type="text" th:field="*{username}"
 					required>
-			</div>
-
-			<div>
+			
 				<label>Password:</label> <input type="password"
 					th:field="*{password}" required>
-			</div>
-
-			<div>
+			
 				<label>First name:</label> <input type="text"
 					th:field="*{firstname}" required>
-			</div>
-
-			<div>
+			
 				<label>Surname:</label> <input type="text" th:field="*{surname}"
 					required>
-			</div>
-
-			<div>
+			
 				<label>Role:</label><br> <label> <input type="radio"
 					th:field="*{role}" value="ADMIN" required> ADMIN
 				</label> <label> <input type="radio" th:field="*{role}"
@@ -96,31 +146,26 @@
 			<!-- CSRF token for Spring Security -->
 			<input type="hidden" th:name="${_csrf.parameterName}"
 				th:value="${_csrf.token}" />
-
-			<button type="submit">Create User</button>
-
+			<div class="container1">
+			<button type="submit" class="loginbtn">Create User</button>
+			</div>
 		</form>
 	</div>
-	<hr>
 </div>
 
 <!-- User details -->
 <div th:fragment="userDetails">
-	Hello <span th:text="${#authentication.principal.firstname}"></span>. <br />
+	Hello <span th:text="${#authentication.principal.firstname}"></span>. 
 	You are logged in as <span th:text="${#authentication.principal.role}"></span>.
 </div>
 
 <!-- Logout -->
 <div th:fragment="logout">
 	<a th:href="@{/logout}">
-		<button type="button">Logout</button>
+		Logout
 	</a>
 </div>
-<div th:fragment="nav">
-	<a th:href="@{/}">
-		<button type="button">Home</button>
-	</a>
-</div>
+
 <!-- Footer -->
 <div th:fragment="footer">
 	<p>© 2026 Best Team Ever</p>

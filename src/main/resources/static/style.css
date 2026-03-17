@@ -1,4 +1,42 @@
+/* unvisited link */
+a:link {
+  color: white;
+}
+/* visited link */
+a:visited {
+  color: white;
+}
+/* mouse over link */
+a:hover {
+  color: pink;
+}
+/* selected link */
+a:active {
+  color: white;
+}
+/* unvisited link */
+a:link { 
+  text-decoration: none; 
+} 
+/* visited link */
+a:visited { 
+  text-decoration: none; 
+} 
+/* mouse over link */
+a:hover { 
+  text-decoration: none; 
+} 
+/* selected link */
+a:active { 
+  text-decoration: none; 
+}
 
+/* Set font for body of pages.*/
+body {
+  	margin: 0;
+  	font-family: "EB Garamond", "garamond-premier-pro-display";
+	background-color: black;}
+	
 /* Modal background */
 .modal {
   display: none;
@@ -68,3 +106,327 @@ img.avatar
   	border-radius: 50%;
 	}
 
+/* Style the div, set max width so it scales responsively. */
+.div1 {
+   max-width:1000px;
+   min-height:100%;
+   top:0;
+   margin: 0 auto;  
+   padding:5px;
+   left:0;
+   text-align: centre;
+   color: white;
+   border-radius: 0%;
+   box-sizing: border-box;
+}
+tr{font-size: 14px;
+    color: white;
+    text-align: center;}
+/* Style the div, headings style. */
+ h1{ 
+    font-size: 30px;
+    color: white;
+    text-align: center;}
+/* Style the div, headings style. */
+/* Style the div, headings style. */
+h2{ 
+    font-size: 25px;
+    color: white;
+    text-align: center;}
+    /* Style the div, headings style. */
+h3{ 
+    font-size: 20px;
+    color: white;
+    text-align: center;}
+    /* Style the div, headings style. */
+h4{ 
+    font-size: 17px;
+    color: white;
+    text-align: center;}
+    /* Style the div, headings style. */
+h5{ 
+    font-size: 15px;
+    color: white;
+    text-align: center;}
+    
+ nav.sticky {
+	background-color: #455A64;;
+	position: sticky;
+	top: 0;
+	margin: 0 auto;
+	width: 100%;
+	overflow: hidden;
+	z-index: 990;
+	}  
+ul.list-inline {
+	list-style: none;
+	margin: auto;
+  	overflow: hidden;
+  	background-color: #455A64;
+  	text-transform: lowercase;
+	display: flex;
+	max-width:1000px;  	
+	padding: 20px;
+	justify-content: space-around; 
+	color: white;
+}
+/* unvisited link in sticky nav. */
+ul.list-inline a:link {
+  color: white;
+}
+/* visited link in sticky nav. */
+ul.list-inline a:visited {
+  color: white;
+}
+/* Style for inline links sticky nav. */
+ul.list-inline > li {
+	display: inline-block;
+	color: white;}
+/* Style for inline links sticky nav. */
+ul.list-inline > li:before {
+	content: "\200B"; /* 1 */
+	position: absolute; /* 2 */
+	color: white;}
+/* Style for inline links sticky nav. */
+ul.list-inline a:hover {
+    text-transform: uppercase;
+    text-decoration-thickness: 10px;
+    color: white;
+    }
+.banner {
+	background-color: #455A64;;
+	top: 0;
+	margin: 0 auto;
+	width: 100%;
+	overflow: hidden;
+	} 
+	
+	.hero1{
+	/* Sizing */
+	position: relative;
+	justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;    
+    color: white;
+    /* Background styles */
+    height: 100%;
+    width: 100%;
+    background-image: 	linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.6)), 
+    					url('../files/img/img_ban1.jpg');
+  	background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}  
+.hero-video 
+	{
+	/* Setting for video positon and layer */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This ensures the video covers the whole hero section */
+    z-index: -1; /* Ensures the video stays behind any text or content */
+	}
+/* Style for the logo */
+.hero1 .logo {
+  width: 50%; /* Adjust the size of your logo */
+  height: auto; /* Keep the aspect ratio of the logo */
+  margin-bottom:20px;
+  z-index: 10; /* Ensures logo is above other content */
+}
+
+/* Settings for Hero image fonts and sizes */
+.hero1 .hero-text {
+  margin-top: 20px; /* Add spacing above the text section */
+  text-align: center;
+} 
+.hero1 .hero-text h1
+	{
+    /* Text styles */
+    font-size:15vw;
+    /* Margins */
+    margin: 5px 0;
+    }
+/* Settings for Hero image fonts and sizes.*/
+.hero1 .hero-text h3
+	{
+    /* Text styles */
+    font-size:3vw;
+    /* Margins */
+    margin: 5px 0;
+    }
+.hero1 hero-text a
+	{
+  	color: white; /* Ensure social icons are visible */
+  	margin: 0 10px; /* Add spacing between social links */
+  	text-decoration: none;
+	}
+
+.hero1 hero-text a:hover {
+  	opacity: 0.8; /* Add hover effect */
+	}
+
+.hero5 {
+    height: 40vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* Style for the logo */
+.hero5 .logo {
+  width: 25%; /* Adjust the size of your logo */
+  height: auto; /* Keep the aspect ratio of the logo */
+  margin-bottom:20px;
+  z-index: 10; /* Ensures logo is above other content */
+}
+
+/* Settings for Hero image fonts and sizes */
+.hero5 .hero-text {
+  margin-top: 20px; /* Add spacing above the text section */
+  text-align: center;
+} 
+
+.hero5 .hero-text h1
+	{
+    /* Text styles */
+    font-size:15vw;
+    /* Margins */
+    margin: 5px 0;
+    }
+/* Settings for Hero image fonts and sizes.*/
+.hero5 .hero-text h3
+	{
+    /* Text styles */
+    font-size:3vw;
+    /* Margins */
+    margin: 5px 0;
+    }
+.hero5 hero-text a
+	{
+  	color: white; /* Ensure social icons are visible */
+  	margin: 0 10px; /* Add spacing between social links */
+  	text-decoration: none;
+	}
+
+.hero5 hero-text a:hover {
+  	opacity: 0.8; /* Add hover effect */
+	}
+	
+	/* Modal background */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+/* Modal box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    border: 1px solid #888;
+    width: 40%;
+}
+
+/* Optional animation */
+.animate {
+    animation: animatezoom 0.4s;
+}
+
+@keyframes animatezoom {
+    from {transform: scale(0.9);}
+    to {transform: scale(1);}
+}
+
+/* Avatar section */
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
+}
+
+img.avatar {
+    width: 30%;
+    border-radius: 50%;
+}
+
+/* Close button */
+.close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: red;
+}
+
+/* Form container */
+.container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    color: black;
+}
+
+.container label {
+    color: black;
+    padding: 5px;
+    font-size: 12px;
+    display: block;
+}
+
+/* Text inputs + password inputs */
+input[type=text],
+input[type=password],
+input[type=email],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+
+/* Button container */
+.container1 {
+    padding: 20px;
+    background-color: white;
+}
+
+/* Login button */
+.loginbtn {
+    background-color: #455A64;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.loginbtn:hover {
+    text-transform: uppercase;
+    color: white;
+}

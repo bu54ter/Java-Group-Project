@@ -3,19 +3,15 @@
 <link rel="stylesheet" th:href="@{/style.css}">
 <body>
 
-	<div th:replace="layout :: header"></div>
-	<div sec:authorize="not isAuthenticated()">
-		<div th:replace="layout :: loginModal"></div>
-	</div>
-	<div sec:authorize="isAuthenticated()">
-		<div th:replace="layout :: userDetails"></div>
-	</div>
-	<div sec:authorize="isAuthenticated()">
-		<div th:replace="layout :: logout"></div>
-	</div>
+<div th:replace="layout :: heroSection50"></div>
+<div th:replace="layout :: nav"></div>
+<div sec:authorize="not isAuthenticated()">
+    <div th:replace="layout :: loginModal"></div>
+</div>
+<section class="div1">
 	<h2>Lecturer Dashboard</h2>
-	<hr>
-	<h3>Noun Table</h3>
+<br/>
+	<h3>Active Nouns</h3>
 	<table border="1">
 		<tr>
 			<th>ID</th>
@@ -24,8 +20,6 @@
 			<th>Gender</th>
 			<th>Added, date</th>
 			<th>Added, by whom</th>
-			<th>Deleted, date</th>
-			<th>Deleted, by whom</th>
 			<th>Welsh Sentence</th>
 			<th>Enlgish Sentence</th>
 		</tr>
@@ -37,8 +31,6 @@
     <td th:text="${n.gender}"></td>
     <td th:text="${n.createdAt}"></td>
     <td th:text="${n.createdBy}"></td>
-    <td th:text="${n.deletedAt}"></td>
-    <td th:text="${n.deletedBy}"></td>
     <td th:text="${n.welshSent}"></td>
     <td th:text="${n.englishSent}"></td>
 </tr>
@@ -47,6 +39,8 @@
 			
 	<hr>
 	<h3>Edit Nouns</h3>
+	<hr>
+	<h3>Deleted Nouns</h3>
 	<hr>
 	<h3> EXTRA. Drop down with different db resquest.</h3>
 	<hr>
@@ -58,10 +52,9 @@
 	</p>
 
 	<hr>
-	<div th:replace="layout :: nav"></div>
-	<hr>
 	<div th:replace="layout :: footer"></div>
 	<div th:replace="layout :: scripts"></div>
+	</section>
 </body>
 </html>
 </html>
