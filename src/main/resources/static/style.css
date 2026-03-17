@@ -131,7 +131,12 @@ img.avatar
    border-radius: 0%;
    box-sizing: border-box;
 }
-
+.error-message{
+	color:red;
+	font-style: italic;
+	text-align: center;
+	font-family: "EB Garamond", "garamond-premier-pro-display";
+}
 .div2 h5 {
 	font-size: 20px;
 	color: white;

@@ -65,14 +65,14 @@
 	<div id="loginModal" class="modal">
 		<form class="modal-content animate" th:action="@{/login}"
 			method="post">
-
+			
 			<div class="imgcontainer">
 				<span class="close" title="Close Modal"
 					onclick="document.getElementById('loginModal').style.display='none'">
 					&times; </span> <img th:src="@{/img/avit.jpeg}" alt="Avatar"
 					class="avatar">
 			</div>
-
+			
 			<div class="container">
 				<label for="username"><b>Username</b></label> <input type="text"
 					id="username" name="username" placeholder="Enter Username" required>
@@ -83,7 +83,8 @@
 				<input type="hidden" th:name="${_csrf.parameterName}"
 					th:value="${_csrf.token}" />
 			</div>
-
+			<div th:if="${param.error}" class="error-message">!!! Invalid
+				username or password !!!</div>
 			<div class="container1">
 				<button type="submit" class="loginbtn">Login</button>
 			</div>
@@ -93,9 +94,9 @@
 </div>
 
 <div th:fragment="newUserModal">
-<button
-		onclick="document.getElementById('newUserModal').style.display='block'" class="loginbtn">
-		create a new user</button>
+	<button
+		onclick="document.getElementById('newUserModal').style.display='block'"
+		class="loginbtn">create a new user</button>
 	<div id="newUserModal" class="modal">
 
 		<form class="modal-content" th:action="@{/createUser}"
@@ -132,9 +133,9 @@
 </div>
 
 <div th:fragment="newNounModal">
-<button
-		onclick="document.getElementById('newNounModal').style.display='block'" class="loginbtn">
-		create a new noun</button>
+	<button
+		onclick="document.getElementById('newNounModal').style.display='block'"
+		class="loginbtn">create a new noun</button>
 	<div id="newNounModal" class="modal">
 		<form class="modal-content" th:action="@{/createNoun}"
 			th:object="${noun}" method="post">
@@ -174,9 +175,8 @@
 
 <div th:fragment="editNounModal">
 	<div id="editNounModal" class="modal">
-		<form class="modal-content" id="editNounForm" 
-		th:action="@{/updateNoun}"
-			th:object="${noun}"method="post">
+		<form class="modal-content" id="editNounForm"
+			th:action="@{/updateNoun}" th:object="${noun}" method="post">
 			<div class="imgcontainer">
 				<span class="close"
 					onclick="document.getElementById('editNounModal').style.display='none'">

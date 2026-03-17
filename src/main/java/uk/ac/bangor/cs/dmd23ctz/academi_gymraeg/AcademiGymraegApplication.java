@@ -45,6 +45,15 @@ public class AcademiGymraegApplication {
 
 	@Bean
 	SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
+		http
+  
+        .formLogin(form -> form
+            .loginPage("/")                 // your home page
+            .loginProcessingUrl("/login")   // form action
+            .failureUrl("/?error")          // redirect home with error
+            .permitAll()
+        );
+
 		
 		http.authorizeHttpRequests(auth -> auth
 	            .requestMatchers("/", "/index", "/login").permitAll()
