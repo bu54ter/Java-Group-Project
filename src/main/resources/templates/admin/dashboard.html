@@ -11,9 +11,7 @@
 	<section class="div1">
 	<h2>Admin Dashboard</h2>
 	<hr>
-	<h2>Create User</h2>
 	<div th:replace="layout :: newUserModal"></div>
-	<hr>
 	<h2>Active Users</h2>
 
 	<table border="1">
@@ -71,7 +69,6 @@
 			<td th:text="${ud.firstname}"></td>
 			<td th:text="${ud.surname}"></td>
 			<td th:text="${ud.deletedAt}"></td>
-			<td>
 		</table>
 	<hr>
 	<p>
@@ -90,8 +87,6 @@
 	</section>
 </body>
 </html>
-</html>
-
 
 
 

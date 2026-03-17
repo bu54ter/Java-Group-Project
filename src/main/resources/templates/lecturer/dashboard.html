@@ -23,7 +23,8 @@
 			<th>Edited, by whom</th>
 			<th>Welsh Sentence</th>
 			<th>Enlgish Sentence</th>
-			<th>Delete?</th>
+			<th>Edit</th>
+			<th>Delete</th>
 		</tr>
 
 		<tr th:each="n : ${nouns}">
@@ -37,6 +38,21 @@
     <td th:text="${n.welshSent}"></td>
     <td th:text="${n.englishSent}"></td>
     <td>
+  
+    <button type="button"
+            th:attr="
+                data-id=${n.nounId},
+                data-welsh=${n.welshWord},
+                data-english=${n.englishWord},
+                data-welshsent=${n.welshSent},
+                data-englishsent=${n.englishSent},
+                data-gender=${n.gender}"
+            onclick="openEdit(this)">
+        Edit
+    </button>
+</td>
+
+    <td>
     <form th:action="@{/nouns/{id}/delete(id=${n.nounId})}"
       method="post" style="display:inline;">
     <input type="hidden" th:name="${_csrf.parameterName}"
@@ -48,10 +64,12 @@
 </td>
 </tr>
 </table>
-	<h3>Add Nouns</h3>
+	<br/>
 	<div th:replace="layout :: newNounModal"></div>
+	
 	<hr>
-	<h3>Deleted Nouns</h3>
+	
+	<h3>Deleted Nouns (not used in tests)</h3>
 	<table border="1">
 		<tr>
 			<th>ID</th>
@@ -90,10 +108,12 @@
 		Jobs to do: 
 	<br /> 
 	As an Instructor, I must be able to create new nouns in the system. DONE.
-	<br /> As an Instructor, I must be able to edit nouns in the system.
+	<br /> As an Instructor, I must be able to edit nouns in the system. DONE
 	<br /> As an Instructor, I should be able to delete nouns in the system. DONE. 
 	<br />
 	</p>
+<div th:replace="layout :: editNounModal"></div>
+
 
 	<hr>
 	<div th:replace="layout :: footer"></div>
@@ -102,3 +122,25 @@
 </body>
 </html>
 </html>
+<script>
+    function openEdit(button) {
+        const id = button.getAttribute('data-id');
+        const welshWord = button.getAttribute('data-welsh');
+        const englishWord = button.getAttribute('data-english');
+        const welshSent = button.getAttribute('data-welshsent');
+        const englishSent = button.getAttribute('data-englishsent');
+        const gender = button.getAttribute('data-gender');
+
+        document.getElementById('editNounForm').action = '/nouns/' + id + '/update';
+        document.getElementById('editWelshWord').value = welshWord || '';
+        document.getElementById('editEnglishWord').value = englishWord || '';
+        document.getElementById('editWelshSent').value = welshSent || '';
+        document.getElementById('editEnglishSent').value = englishSent || '';
+
+        document.getElementById('editGenderMasculine').checked = (gender === 'MASCULINE');
+        document.getElementById('editGenderFeminine').checked = (gender === 'FEMININE');
+
+        document.getElementById('editNounModal').style.display = 'block';
+    }
+</script>
+

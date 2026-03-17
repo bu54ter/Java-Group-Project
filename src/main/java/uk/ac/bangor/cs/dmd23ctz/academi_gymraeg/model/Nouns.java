@@ -27,11 +27,11 @@ public class Nouns {
 	@Column(name = "english_sent")
 	private String englishSent;
 	@Column(name = "created_by")
-	private Long createdBy;
+	private String createdBy;
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 	@Column(name = "edited_by")
-	private Long editedBy;
+	private String editedBy;
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Gender gender;
@@ -77,11 +77,11 @@ public class Nouns {
 		this.englishSent = englishSent;
 	}
 
-	public Long getCreatedBy() {
+	public String getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(Long createdBy) {
+	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -93,11 +93,11 @@ public class Nouns {
 		this.createdAt = createdAt;
 	}
 
-	public Long getEditedBy() {
+	public String getEditedBy() {
 		return editedBy;
 	}
 
-	public void setEditedBy(Long editedBy) {
+	public void setEditedBy(String editedBy) {
 		this.editedBy = editedBy;
 	}
 

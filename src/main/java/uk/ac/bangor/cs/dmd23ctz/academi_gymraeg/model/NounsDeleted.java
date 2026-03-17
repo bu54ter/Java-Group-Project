@@ -24,11 +24,11 @@ public class NounsDeleted {
 		@Column(name = "english_sent")
 		private String englishSent;
 		@Column(name = "created_by")
-		private Long createdBy;
+		private String createdBy;
 		@Column(name = "created_at")
 		private LocalDateTime createdAt;
 		@Column(name = "deleted_by")
-		private Long deletedBy;
+		private String deletedBy;
 		@Column(name = "deleted_at")
 		private LocalDateTime deletedAt;
 		@Enumerated(EnumType.STRING)
@@ -75,11 +75,11 @@ public class NounsDeleted {
 			this.englishSent = englishSent;
 		}
 
-		public Long getCreatedBy() {
+		public String getCreatedBy() {
 			return createdBy;
 		}
 
-		public void setCreatedBy(Long createdBy) {
+		public void setCreatedBy(String createdBy) {
 			this.createdBy = createdBy;
 		}
 
@@ -91,11 +91,11 @@ public class NounsDeleted {
 			this.createdAt = createdAt;
 		}
 
-		public Long getDeletedBy() {
+		public String getDeletedBy() {
 			return deletedBy;
 		}
 
-		public void setDeletedBy(Long deletedBy) {
+		public void setDeletedBy(String deletedBy) {
 			this.deletedBy = deletedBy;
 		}
 

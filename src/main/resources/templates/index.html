@@ -8,16 +8,19 @@
 <div sec:authorize="not isAuthenticated()">
     <div th:replace="layout :: loginModal"></div>
 </div>
-	<section class="div1">
-	<h2>Croeso</h2>
-	<hr>
-	<h2>Noun of the Day</h2>
-
-	
+	<section class="div2">
+	<h1>Croeso</h1>
+	<p>This website is designed to help students learn new Welsh nouns and test their knowledge.</p>
+	<hr/>
 		<div th:if="${wordOfTheDay != null}">
-			<p>
+		<h2>Noun of the Day</h2>
+			<h5>
+			
 				<strong> <span th:text="${wordOfTheDay.welshWord}"></span></strong>
-				: <span th:text="${wordOfTheDay.englishWord}"></span> <br /> <i>
+				: <span th:text="${wordOfTheDay.englishWord}"></span> 
+				</h5>
+				<p>
+				 <i>
 					<span
 					th:text="${wordOfTheDay.gender ==T(uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Gender).MASCULINE ? 'Masculine' : 'Feminine'}"></span>
 				</i> <br /> <strong>How to use in a sentence:</strong> <br /> <span
@@ -34,7 +37,10 @@
 		<div th:if="${wordOfTheDay == null}">
 			<p>No nouns available.</p>
 		</div>
+		
 		<hr>
+		<section class="div1">
+		
 		<p>EXTRA. Show a noun and its translate, then a sentence how to
 			use. DONE</p>
 		<p>EXTRA. Button to shuffle the above noun. DONE, jsut refreshes the page, myabe a better option?</p>
@@ -45,8 +51,8 @@
 
 	<div th:replace="layout :: footer"></div>
 	<div th:replace="layout :: scripts"></div>
-	
 	</section>
+	</section>
+	
 </body>
-</html>
 </html>

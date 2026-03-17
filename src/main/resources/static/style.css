@@ -111,13 +111,35 @@ img.avatar
    max-width:1000px;
    min-height:100%;
    top:0;
-   margin: 0 auto;  
+   margin: auto;  
    padding:5px;
    left:0;
-   text-align: centre;
+   text-align: left;
    color: white;
    border-radius: 0%;
    box-sizing: border-box;
+}
+.div2 {
+   max-width:950px;
+   min-height:100%;
+   top:0;
+   margin: 0 auto;  
+   padding:5px;
+   left:0;
+   text-align: center;
+   color: white;
+   border-radius: 0%;
+   box-sizing: border-box;
+}
+
+.div2 h5 {
+	font-size: 20px;
+	color: white;
+}
+.div1 table {
+    width: 95%;
+    margin: 0 auto;
+    border-collapse: collapse;
 }
 tr{font-size: 14px;
     color: white;
@@ -231,13 +253,7 @@ ul.list-inline a:hover {
     object-fit: cover; /* This ensures the video covers the whole hero section */
     z-index: -1; /* Ensures the video stays behind any text or content */
 	}
-/* Style for the logo */
-.hero1 .logo {
-  width: 50%; /* Adjust the size of your logo */
-  height: auto; /* Keep the aspect ratio of the logo */
-  margin-bottom:20px;
-  z-index: 10; /* Ensures logo is above other content */
-}
+
 
 /* Settings for Hero image fonts and sizes */
 .hero1 .hero-text {
@@ -271,7 +287,7 @@ ul.list-inline a:hover {
 	}
 
 .hero5 {
-    height: 40vh;
+    height: 60vh;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -279,13 +295,6 @@ ul.list-inline a:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-/* Style for the logo */
-.hero5 .logo {
-  width: 25%; /* Adjust the size of your logo */
-  height: auto; /* Keep the aspect ratio of the logo */
-  margin-bottom:20px;
-  z-index: 10; /* Ensures logo is above other content */
 }
 
 /* Settings for Hero image fonts and sizes */
