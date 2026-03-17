@@ -20,8 +20,10 @@
 			<th>Gender</th>
 			<th>Added, date</th>
 			<th>Added, by whom</th>
+			<th>Edited, by whom</th>
 			<th>Welsh Sentence</th>
 			<th>Enlgish Sentence</th>
+			<th>Delete?</th>
 		</tr>
 
 		<tr th:each="n : ${nouns}">
@@ -31,24 +33,66 @@
     <td th:text="${n.gender}"></td>
     <td th:text="${n.createdAt}"></td>
     <td th:text="${n.createdBy}"></td>
+    <td th:text="${n.editedBy}"></td>
     <td th:text="${n.welshSent}"></td>
     <td th:text="${n.englishSent}"></td>
+    <td>
+    <form th:action="@{/nouns/{id}/delete(id=${n.nounId})}"
+      method="post" style="display:inline;">
+    <input type="hidden" th:name="${_csrf.parameterName}"
+           th:value="${_csrf.token}" />
+    <button type="submit" onclick="return confirm('Delete this noun?')">
+        Delete
+    </button>
+</form>
+</td>
 </tr>
-		</table>
-		
-			
-	<hr>
-	<h3>Edit Nouns</h3>
+</table>
+	<h3>Add Nouns</h3>
+	<div th:replace="layout :: newNounModal"></div>
 	<hr>
 	<h3>Deleted Nouns</h3>
+	<table border="1">
+		<tr>
+			<th>ID</th>
+			<th>Welsh Noun</th>
+			<th>English Noun</th>
+			<th>Gender</th>
+			<th>Added, date</th>
+			<th>Added, by whom</th>
+			<th>Welsh Sentence</th>
+			<th>Enlgish Sentence</th>
+			<th>Deleted, date</th>
+			<th>Deleted, by whom</th>
+		</tr>
+
+		<tr th:each="nd : ${nounsDeleted}">
+    <td th:text="${nd.nounId}"></td>
+    <td th:text="${nd.welshWord}"></td>
+    <td th:text="${nd.englishWord}"></td>
+    <td th:text="${nd.gender}"></td>
+    <td th:text="${nd.createdAt}"></td>
+    <td th:text="${nd.createdBy}"></td>
+    <td th:text="${nd.welshSent}"></td>
+    <td th:text="${nd.englishSent}"></td>
+    <td th:text="${nd.deletedAt}"></td>
+    <td th:text="${nd.deletedBy}"></td>
+    
+    
+    
+</tr>
+</table>
+	
 	<hr>
 	<h3> EXTRA. Drop down with different db resquest.</h3>
 	<hr>
 	<p>
-		Jobs to do: <br /> As an Instructor, I must be able to create new
-		nouns in the system. <br /> AsanInstructor, I must be able to edit
-		nouns in the system. <br /> AsanInstructor, I should be able to delete
-		nouns in the system. <br />
+		Jobs to do: 
+	<br /> 
+	As an Instructor, I must be able to create new nouns in the system. DONE.
+	<br /> As an Instructor, I must be able to edit nouns in the system.
+	<br /> As an Instructor, I should be able to delete nouns in the system. DONE. 
+	<br />
 	</p>
 
 	<hr>

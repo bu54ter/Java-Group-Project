@@ -29,16 +29,15 @@ public class Nouns {
 	@Column(name = "english_sent")
 	private String englishSent;
 	@Column(name = "created_by")
-	private Integer createdBy;
+	private Long createdBy;
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
-	@Column(name = "deleted_by")
-	private Integer deletedBy;
-	@Column(name = "deleted_at")
-	private LocalDateTime deletedAt;
+	@Column(name = "edited_by")
+	private Long editedBy;
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Gender gender;
+	
 
 	public Long getNounId() {
 		return nounId;
@@ -80,11 +79,11 @@ public class Nouns {
 		this.englishSent = englishSent;
 	}
 
-	public Integer getCreatedBy() {
+	public Long getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(Integer createdBy) {
+	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -96,20 +95,12 @@ public class Nouns {
 		this.createdAt = createdAt;
 	}
 
-	public Integer getDeletedBy() {
-		return deletedBy;
+	public Long getEditedBy() {
+		return editedBy;
 	}
 
-	public void setDeletedBy(Integer deletedBy) {
-		this.deletedBy = deletedBy;
-	}
-
-	public LocalDateTime getDeletedAt() {
-		return deletedAt;
-	}
-
-	public void setDeletedAt(LocalDateTime deletedAt) {
-		this.deletedAt = deletedAt;
+	public void setEditedBy(Long editedBy) {
+		this.editedBy = editedBy;
 	}
 
 	public Gender getGender() {

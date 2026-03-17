@@ -22,7 +22,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        List<Nouns> availableNouns = nounRepository.findByDeletedAtIsNull();
+        List<Nouns> availableNouns = nounRepository.findAll();
 
         if (!availableNouns.isEmpty()) {
             Nouns wordOfTheDay = availableNouns.get(random.nextInt(availableNouns.size()));

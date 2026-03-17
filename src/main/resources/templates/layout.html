@@ -4,108 +4,94 @@
 
 <section th:fragment="heroSection" class="hero1">
 
-    <video class="hero-video" autoplay muted loop>
-        <source th:src="@{/img/banMov.mp4}" type="video/mp4">
-    </video>
+	<video class="hero-video" autoplay muted loop>
+		<source th:src="@{/img/banMov.mp4}" type="video/mp4">
+	</video>
 
-    <section class="hero-text">
-        <h1>hiraeth</h1>
-        <h3><i>noun - feminine</i></h3>
-        <h3>the longing for one's homeland</h3>
-    </section>
+	<section class="hero-text">
+		<h1>hiraeth</h1>
+		<h3>
+			<i>noun - feminine</i>
+		</h3>
+		<h3>the longing for one's homeland</h3>
+	</section>
 </section>
-<section th:fragment="heroSection50"
-        class="hero5"
-        th:style="'background-image: url(' + @{/img/banImg.jpeg} + ');'">
+<section th:fragment="heroSection50" class="hero5"
+	th:style="'background-image: url(' + @{/img/banImg.jpeg} + ');'">
 
-    <section class="hero-text">
-        <h1>hiraeth</h1>
-        <h3><i>noun - feminine</i></h3>
-        <h3>the longing for one's homeland</h3>
-    </section>
+	<section class="hero-text">
+		<h1>hiraeth</h1>
+		<h3>
+			<i>noun - feminine</i>
+		</h3>
+		<h3>the longing for one's homeland</h3>
+	</section>
 
 </section>
 
 <nav th:fragment="nav" class="sticky">
-    <ul class="list-inline">
-		<li> <a href="\">home </a></li>
-		 <!-- Admin dashboard -->
-        <li sec:authorize="hasRole('ADMIN')">
-            <a th:href="@{/admin/dashboard}">Admin Dashboard</a>
-        </li>
+	<ul class="list-inline">
+		<li><a href="\">home </a></li>
+		<!-- Admin dashboard -->
+		<li sec:authorize="hasRole('ADMIN')"><a
+			th:href="@{/admin/dashboard}">Admin Dashboard</a></li>
 
-        <!-- Lecturer dashboard -->
-        <li sec:authorize="hasRole('LECTURER')">
-            <a th:href="@{/lecturer/dashboard}">Lecturer Dashboard</a>
-        </li>
-        <!-- Lecturer dashboard -->
-        <li sec:authorize="hasRole('STUDENT')">
-            <a th:href="@{/student/dashboard}">Student Dashboard</a>
-        </li>
-        <!-- Lecturer dashboard -->
-        <li sec:authorize="hasRole('STUDENT')">
-            <a th:href="@{/student/test}">take a test</a>
-        </li>
-        
-        <li sec:authorize="not isAuthenticated()">
-            <a href="#" onclick="document.getElementById('loginModal').style.display='block'; return false;">
-                Login
-            </a>
-        </li>
-		
-        <li sec:authorize="isAuthenticated()">
-            <div th:replace="layout :: userDetails"></div>
-        </li>
+		<!-- Lecturer dashboard -->
+		<li sec:authorize="hasRole('LECTURER')"><a
+			th:href="@{/lecturer/dashboard}">Lecturer Dashboard</a></li>
+		<!-- Lecturer dashboard -->
+		<li sec:authorize="hasRole('STUDENT')"><a
+			th:href="@{/student/dashboard}">Student Dashboard</a></li>
+		<!-- Lecturer dashboard -->
+		<li sec:authorize="hasRole('STUDENT')"><a
+			th:href="@{/student/test}">take a test</a></li>
 
-        <li sec:authorize="isAuthenticated()">
-            <div th:replace="layout :: logout"></div>
-        </li>
+		<li sec:authorize="not isAuthenticated()"><a href="#"
+			onclick="document.getElementById('loginModal').style.display='block'; return false;">
+				Login </a></li>
 
-    </ul>
+		<li sec:authorize="isAuthenticated()">
+			<div th:replace="layout :: userDetails"></div>
+		</li>
+
+		<li sec:authorize="isAuthenticated()">
+			<div th:replace="layout :: logout"></div>
+		</li>
+
+	</ul>
 </nav>
 
 <div th:fragment="loginModal">
-    <div id="loginModal" class="modal">
-        <form class="modal-content animate" th:action="@{/login}" method="post">
+	<div id="loginModal" class="modal">
+		<form class="modal-content animate" th:action="@{/login}"
+			method="post">
 
-            <div class="imgcontainer">
-                <span class="close"
-                      title="Close Modal"
-                      onclick="document.getElementById('loginModal').style.display='none'">
-                    &times;
-                </span>
-                <img th:src="@{/img/avit.jpeg}" alt="Avatar" class="avatar">
-            </div>
+			<div class="imgcontainer">
+				<span class="close" title="Close Modal"
+					onclick="document.getElementById('loginModal').style.display='none'">
+					&times; </span> <img th:src="@{/img/avit.jpeg}" alt="Avatar"
+					class="avatar">
+			</div>
 
-            <div class="container">
-                <label for="username"><b>Username</b></label>
-                <input type="text"
-                       id="username"
-                       name="username"
-                       placeholder="Enter Username"
-                       required>
+			<div class="container">
+				<label for="username"><b>Username</b></label> <input type="text"
+					id="username" name="username" placeholder="Enter Username" required>
 
-                <label for="password"><b>Password</b></label>
-                <input type="password"
-                       id="password"
-                       name="password"
-                       placeholder="Enter Password"
-                       required>
+				<label for="password"><b>Password</b></label> <input type="password"
+					id="password" name="password" placeholder="Enter Password" required>
 
-                <input type="hidden"
-                       th:name="${_csrf.parameterName}"
-                       th:value="${_csrf.token}" />
-            </div>
+				<input type="hidden" th:name="${_csrf.parameterName}"
+					th:value="${_csrf.token}" />
+			</div>
 
-            <div class="container1">
-                <button type="submit" class="loginbtn">Login</button>
-            </div>
+			<div class="container1">
+				<button type="submit" class="loginbtn">Login</button>
+			</div>
 
-        </form>
-    </div>
+		</form>
+	</div>
 </div>
 
-<!-- Login modal -->
 <div th:fragment="newUserModal">
 	<button
 		onclick="document.getElementById('loginModal').style.display='block'">
@@ -114,28 +100,22 @@
 	<!-- Modal -->
 	<div id="loginModal" class="modal">
 
-		<form class="modal-content" th:action="@{/createUser}" th:object="${user}" method="post">
+		<form class="modal-content" th:action="@{/createUser}"
+			th:object="${user}" method="post">
 			<div class="imgcontainer">
 				<span class="close"
 					onclick="document.getElementById('loginModal').style.display='none'">
-					&times; </span> 
+					&times; </span>
 			</div>
 
 			<div class="container">
-			<label>Username:</label> <input type="text" th:field="*{username}"
-					required>
-			
-				<label>Password:</label> <input type="password"
-					th:field="*{password}" required>
-			
-				<label>First name:</label> <input type="text"
-					th:field="*{firstname}" required>
-			
-				<label>Surname:</label> <input type="text" th:field="*{surname}"
-					required>
-			
-				<label>Role:</label><br> <label> <input type="radio"
-					th:field="*{role}" value="ADMIN" required> ADMIN
+				<label>Username:</label> <input type="text" th:field="*{username}"
+					required> <label>Password:</label> <input type="password"
+					th:field="*{password}" required> <label>First name:</label>
+				<input type="text" th:field="*{firstname}" required> <label>Surname:</label>
+				<input type="text" th:field="*{surname}" required> <label>Role:</label><br>
+				<label> <input type="radio" th:field="*{role}" value="ADMIN"
+					required> ADMIN
 				</label> <label> <input type="radio" th:field="*{role}"
 					value="LECTURER"> LECTURER
 				</label> <label> <input type="radio" th:field="*{role}"
@@ -147,7 +127,48 @@
 			<input type="hidden" th:name="${_csrf.parameterName}"
 				th:value="${_csrf.token}" />
 			<div class="container1">
-			<button type="submit" class="loginbtn">Create User</button>
+				<button type="submit" class="loginbtn">Create User</button>
+			</div>
+		</form>
+	</div>
+</div>
+<div th:fragment="newNounModal">
+	<button
+		onclick="document.getElementById('nounModal').style.display='block'">
+		New Noun</button>
+
+	<div id="nounModal" class="modal">
+		<form class="modal-content" th:action="@{/createNoun}"
+			th:object="${noun}" method="post">
+
+			<div class="imgcontainer">
+				<span class="close"
+					onclick="document.getElementById('nounModal').style.display='none'">
+					&times; </span>
+			</div>
+
+			<div class="container">
+
+				<label>Welsh Noun:</label> <input type="text"
+					th:field="*{welshWord}" required> <label>English
+					Translation:</label> <input type="text" th:field="*{englishWord}" required>
+
+				<label>Welsh Sentence:</label> <input type="text"
+					th:field="*{welshSent}" required> <label>English
+					Sentence:</label> <input type="text" th:field="*{englishSent}" required>
+
+				<label>Gender:</label> <label> <input type="radio"
+					th:field="*{gender}" value="MASCULINE" required> Masculine
+				</label> <label> <input type="radio" th:field="*{gender}"
+					value="FEMININE"> Feminine
+				</label>
+			</div>
+
+			<input type="hidden" th:name="${_csrf.parameterName}"
+				th:value="${_csrf.token}" />
+
+			<div class="container1">
+				<button type="submit" class="loginbtn">Add noun</button>
 			</div>
 		</form>
 	</div>
@@ -155,15 +176,13 @@
 
 <!-- User details -->
 <div th:fragment="userDetails">
-	Hello <span th:text="${#authentication.principal.firstname}"></span>. 
+	Hello <span th:text="${#authentication.principal.firstname}"></span>.
 	You are logged in as <span th:text="${#authentication.principal.role}"></span>.
 </div>
 
 <!-- Logout -->
 <div th:fragment="logout">
-	<a th:href="@{/logout}">
-		Logout
-	</a>
+	<a th:href="@{/logout}"> Logout </a>
 </div>
 
 <!-- Footer -->
