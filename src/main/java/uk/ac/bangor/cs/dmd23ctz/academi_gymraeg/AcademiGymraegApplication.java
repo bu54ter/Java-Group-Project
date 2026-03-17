@@ -46,33 +46,26 @@ public class AcademiGymraegApplication {
 	@Bean
 	SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
 		http
-  
-        .formLogin(form -> form
-            .loginPage("/")                 // your home page
-            .loginProcessingUrl("/login")   // form action
-            .failureUrl("/?error")          // redirect home with error
-            .permitAll()
-        );
-
-		
-		http.authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/", "/index", "/login").permitAll()
-	            .requestMatchers("/css/**", "/js/**", "/img/**", "/style.css").permitAll()
+	        .authorizeHttpRequests(auth -> auth
+	            .requestMatchers("/", "/index", "/css/**", "/js/**", "/img/**", "/style.css").permitAll()
 	            .requestMatchers("/admin/**").hasRole("ADMIN")
 	            .requestMatchers("/lecturer/**").hasRole("LECTURER")
 	            .requestMatchers("/student/**").hasRole("STUDENT")
-	            .anyRequest().permitAll()
-	        );
-		
-		http.formLogin(formLogin -> formLogin
-				.loginPage("/login")
-				.successHandler(new LoginSuccessHandler())
-				);
+	            .anyRequest().authenticated()
+	        )
 
-		http.logout(logout -> logout
-				.logoutRequestMatcher(
-						PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/logout"))
-				.logoutSuccessUrl("/"));
+	        .formLogin(form -> form
+	            .loginPage("/")                     
+	            .loginProcessingUrl("/login")       
+	            .failureUrl("/?error")              
+	            .successHandler(new LoginSuccessHandler())
+	            .permitAll()
+	        )
+
+	        .logout(logout -> logout
+					.logoutRequestMatcher(
+							PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/logout"))
+					.logoutSuccessUrl("/"));
 		return http.build();
 	}
  	@Bean

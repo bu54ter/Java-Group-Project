@@ -8,10 +8,6 @@
 <div sec:authorize="not isAuthenticated()">
     <div th:replace="layout :: loginModal"></div>
 </div>
-
-<div th:if="${param.error}">
-    <div class="error-message">Invalid username or password</div>
-</div>
 	<section class="div2">
 	<h1>Croeso</h1>
 	<p>This website is designed to help students learn new Welsh nouns and test their knowledge.</p>
