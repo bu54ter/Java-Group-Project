@@ -10,6 +10,9 @@ public class WebpageController {
     @GetMapping("/")
     public String index() {
         return "index";
+    } @GetMapping("/student/dashboard")
+    public String student() {
+        return "student/dashboard";
     }
     */
 	
@@ -18,10 +21,7 @@ public class WebpageController {
     public String login() {
         return "login";
     }
-    @GetMapping("/student/dashboard")
-    public String student() {
-        return "student/dashboard";
-    }
+   
     @GetMapping("/student/results")
     public String studentResults() {
         return "student/results";

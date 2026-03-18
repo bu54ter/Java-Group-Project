@@ -431,6 +431,7 @@ textarea {
 
 /* Login button */
 .loginbtn {
+	display:block;
     background-color: #455A64;
     color: white;
     padding: 12px 20px;
@@ -438,6 +439,13 @@ textarea {
     border-radius: 4px;
     width: 100%;
     cursor: pointer;
+    text-align:center;
+}
+a.loginbtn {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    box-sizing: border-box;
 }
 
 .loginbtn:hover {

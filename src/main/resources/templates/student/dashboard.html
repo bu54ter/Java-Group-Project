@@ -9,24 +9,33 @@
 <div sec:authorize="not isAuthenticated()">
     <div th:replace="layout :: loginModal"></div>
 </div>
+	<section class="div1">
 	<h2>Student Dashboard</h2>
 	<hr>
-	<h3>Show Studnet Stats.</h3>
+	<h3>Your test results.</h3>
+	<table border="1">
+		<tr>
+			<th>Date of Test</th>
+			<th>Score</th>
+		</tr>
+		<tr th:each="t : ${tests}">
+            <td th:text="${t.testedAt}"></td>
+            <td th:text="${t.score}"></td>
+        </tr>
+		</table>
 	<hr>
-	<a th:href="@{/student/dashboard}">
-        take a test
-    </a>
-    <hr>
+	<a th:href="@{/student/test}" class="loginbtn">take a test</a>
 	<p>
 		Jobs to do: <br /> As a Student, I must be able to take a test. <br />
 		As a Student, I must not be able to edit my answers once submitted. <br />
 		As a Student, I must be shown my results for a test. <br /> As a
-		Student, I should be able to view all of my test results. <br />
+		Student, I should be able to view all of my test results. DONE <br />
 	<p />
 
 	<hr>
 	<div th:replace="layout :: footer"></div>
 	<div th:replace="layout :: scripts"></div>
+	</section>
 </body>
 </html>
 </html>
