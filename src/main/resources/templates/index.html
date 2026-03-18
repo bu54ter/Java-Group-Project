@@ -12,26 +12,21 @@
 	<h1>Croeso</h1>
 	<p>This website is designed to help students learn new Welsh nouns and test their knowledge.</p>
 	<hr/>
-		<div th:if="${wordOfTheDay != null}">
+		<div th:if="${wordOfTheDay != null}" id="nounCard">
 		<h2>Noun of the Day</h2>
 			<h5>
-			
-				<strong> <span th:text="${wordOfTheDay.welshWord}"></span></strong>
-				: <span th:text="${wordOfTheDay.englishWord}"></span> 
-				</h5>
-				<p>
-				 <i>
-					<span
-					th:text="${wordOfTheDay.gender ==T(uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Gender).MASCULINE ? 'Masculine' : 'Feminine'}"></span>
-				</i> <br /> <strong>How to use in a sentence:</strong> <br /> <span
-					th:text="${wordOfTheDay.welshSent}"></span> <i> <span
-					th:text="${wordOfTheDay.englishSent}"></span>
-				</i>
+				<strong><span id="welshWord" th:text="${wordOfTheDay.welshWord}"></span></strong>
+				: <span id="englishWord" th:text="${wordOfTheDay.englishWord}"></span>
+			</h5>
+			<p>
+				<i><span id="gender" th:text="${wordOfTheDay.gender == T(uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Gender).MASCULINE ? 'Masculine' : 'Feminine'}"></span></i>
+				<br />
+				<strong>How to use in a sentence:</strong>
+				<br />
+				<span id="welshSent" th:text="${wordOfTheDay.welshSent}"></span>
+				<i><span id="englishSent" th:text="${wordOfTheDay.englishSent}"></span></i>
 			</p>
-
-			<form th:action="@{/}" method="get">
-				<button type="submit">Show another random noun</button>
-			</form>
+			<button type="button" onclick="shuffleNoun()">Show another random noun</button>
 		</div>
 
 		<div th:if="${wordOfTheDay == null}">
@@ -56,6 +51,20 @@
 	
 </body>
 </html>
+
+<script>
+    function shuffleNoun() {
+        fetch('/random-noun')
+            .then(response => response.json())
+            .then(noun => {
+                document.getElementById('welshWord').textContent = noun.welshWord;
+                document.getElementById('englishWord').textContent = noun.englishWord;
+                document.getElementById('gender').textContent = noun.gender === 'MASCULINE' ? 'Masculine' : 'Feminine';
+                document.getElementById('welshSent').textContent = noun.welshSent || '';
+                document.getElementById('englishSent').textContent = noun.englishSent || '';
+            });
+    }
+</script>
 
 <script th:if="${param.error}">
     document.addEventListener("DOMContentLoaded", function () {
