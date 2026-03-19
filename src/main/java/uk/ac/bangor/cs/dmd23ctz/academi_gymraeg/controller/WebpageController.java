@@ -13,6 +13,9 @@ public class WebpageController {
     } @GetMapping("/student/dashboard")
     public String student() {
         return "student/dashboard";
+    } @GetMapping("/student/test")
+    public String studentTest() {
+        return "student/test";
     }
     */
 	
@@ -26,8 +29,5 @@ public class WebpageController {
     public String studentResults() {
         return "student/results";
     }
-    @GetMapping("/student/test")
-    public String studentTest() {
-        return "student/test";
-    }
+   
 }

@@ -18,7 +18,7 @@ public class Testss {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "test_id")
 	private Long testId;
-	@Column(name = "user_id")
+	@Column(name = "user_id", nullable = false)
 	private Long userId;
 	@CreationTimestamp
 	@Column(name = "tested_at", nullable = false, updatable = false)
