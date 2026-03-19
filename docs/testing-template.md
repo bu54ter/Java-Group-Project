@@ -138,9 +138,9 @@ Testing is complete when:
 
 | Data Item | Example | Purpose |
 |---|---|---|
-| Admin Account | admin@test.local | Test admin functions |
-| Lecturer Account | lecturer@test.local | Test noun management |
-| Student Account | student@test.local | Test quiz/test workflow |
+| Admin Account | admin | Test admin functions |
+| Lecturer Account | lecturer | Test noun management |
+| Student Account | student | Test quiz/test workflow |
 | Welsh Noun 1 | cath | Feminine noun test |
 | Welsh Noun 2 | ci | Masculine noun test |
 | Welsh Noun 3 | merch | Feminine noun test |
@@ -154,12 +154,12 @@ Testing is complete when:
 
 | Test Case ID | Area | Test Description | Preconditions | Steps | Expected Result | Actual Result | Status | Evidence | Comments |
 |---|---|---|---|---|---|---|---|---|---|
-| AUTH-001 | Login | Verify admin can log in | Admin account exists | 1. Open login page<br>2. Enter admin credentials<br>3. Select login | Admin logs in successfully and sees admin features |  |  |  |  |
-| AUTH-002 | Login | Verify lecturer can log in | Lecturer account exists | 1. Open login page<br>2. Enter lecturer credentials<br>3. Select login | Lecturer logs in successfully and sees lecturer features |  |  |  |  |
-| AUTH-003 | Login | Verify student can log in | Student account exists | 1. Open login page<br>2. Enter student credentials<br>3. Select login | Student logs in successfully and sees student dashboard |  |  |  |  |
-| AUTH-004 | Access Control | Verify student cannot access admin area | Student account logged in | 1. Attempt to open admin URL | Access is denied or user is redirected |  |  |  |  |
+| AUTH-001 | Login | Verify admin can log in | Admin account exists | 1. Open login page<br>2. Enter admin credentials<br>3. Select login | Admin logs in successfully and sees admin features | Account successfully logs in and displays dashboard | Passed | |  |
+| AUTH-002 | Login | Verify lecturer can log in | Lecturer account exists | 1. Open login page<br>2. Enter lecturer credentials<br>3. Select login | Lecturer logs in successfully and sees lecturer features | Account successfully logs in and displays dashboard | Passed | |  |
+| AUTH-003 | Login | Verify student can log in | Student account exists | 1. Open login page<br>2. Enter student credentials<br>3. Select login | Student logs in successfully and sees student dashboard | Account successfully logs in and displays dashboard | Passed | |  |
+| AUTH-004 | Access Control | Verify student cannot access admin area | Student account logged in | 1. Attempt to open admin URL | Access is denied or user is redirected | There was an unexpected error (type=Forbidden, status=403). | Passed |  | Create a page to be redirected to |
 | AUTH-005 | Access Control | Verify lecturer cannot access admin-only user management | Lecturer account logged in | 1. Attempt to access user management page | Access is denied |  |  |  |  |
-| AUTH-006 | Access Control | Verify admin can access user management | Admin account logged in | 1. Open user management page | Page loads correctly |  |  |  |  |
+| AUTH-006 | Access Control | Verify admin can access user management | Admin account logged in | 1. Open user management page | Page loads correctly | Page loads correctly | Passed |  |  |
 
 ---
 
