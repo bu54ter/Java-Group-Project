@@ -47,7 +47,7 @@ public class AcademiGymraegApplication {
 	SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
 		http
 	        .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/", "/index", "/css/**", "/js/**", "/img/**", "/style.css").permitAll()
+	            .requestMatchers("/", "/index", "/random-noun", "/css/**", "/js/**", "/img/**", "/style.css").permitAll()
 	            .requestMatchers("/admin/**").hasRole("ADMIN")
 	            .requestMatchers("/lecturer/**").hasRole("LECTURER")
 	            .requestMatchers("/student/**").hasRole("STUDENT")
