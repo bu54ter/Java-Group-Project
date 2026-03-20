@@ -10,7 +10,11 @@
     <div th:replace="layout :: loginModal"></div>
 </div>
 <section class="div1">
-	<h2>Student Test Page</h2>
+	<h2>Student Test Page</h2><hr/>
+	<p><i> Don't forget to use the Welsh alaphbet for when answering questions. <br/>
+	For more infromation on changing your keyboard layout, click <a href="https://support.apple.com/en-gb/guide/mac-help/mchlp1406/mac"> here</a> for a mac, and shag off if you're a peasant windows users!
+	</i> </p>
+	<hr/>
 
     <form method="post" th:action="@{/student/test/submit}">
         <input type="hidden" name="testId" th:value="${test.testId}" />
