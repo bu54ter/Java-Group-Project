@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Tests;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Testss;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
@@ -32,7 +32,7 @@ public class StudentController {
 	            .orElseThrow(() -> new RuntimeException("User not found"));
 
 	    model.addAttribute("tests", testRepository.findAllByUserId(user.getUserId()));
-	    model.addAttribute("test", new Tests());
+	    model.addAttribute("test", new Testss());
 
 	    return "student/dashboard";
 	}

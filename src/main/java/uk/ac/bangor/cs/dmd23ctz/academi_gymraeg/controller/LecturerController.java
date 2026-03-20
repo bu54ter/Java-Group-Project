@@ -17,7 +17,7 @@ import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.NounDeletedRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.NounRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.NounService;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.security.NounService;
 
 @Controller
 public class LecturerController {

@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "ag_questions")
 public class Questions {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
@@ -22,7 +23,7 @@ public class Questions {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "test_id", nullable = false)
-    private Tests test;
+    private Testss test;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "noun_id", nullable = false)
@@ -43,11 +44,11 @@ public class Questions {
         this.questionId = questionId;
     }
 
-    public Tests getTest() {
+    public Testss getTest() {
         return test;
     }
 
-    public void setTest(Tests test) {
+    public void setTest(Testss test) {
         this.test = test;
     }
 

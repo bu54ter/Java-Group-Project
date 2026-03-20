@@ -1,4 +1,4 @@
-package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service;
+package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.security;
 
 import java.time.LocalDateTime;
 

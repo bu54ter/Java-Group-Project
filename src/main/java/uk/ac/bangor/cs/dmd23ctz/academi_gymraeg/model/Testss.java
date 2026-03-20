@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "ag_tests")
-public class Tests {
+public class Testss {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,7 @@ public class Tests {
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Questions> questions = new ArrayList<>();
 
-    public Tests() {
+    public Testss() {
     }
 
     public Long getTestId() {
