@@ -9,11 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Questions;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Testss;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.AnswerRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.QuestionRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
@@ -26,18 +23,14 @@ public class TestController {
 	private final TestRepository testRepository;
 	private final QuestionService questionService;
 	private final QuestionRepository questionRepository;
-	private final AnswerRepository answerRepository;
 	private final AnswerService answerService;
 	
-	public TestController(UserRepository userRepository, TestRepository testRepository, QuestionService questionService, QuestionRepository questionRepository, AnswerRepository answerRepository, AnswerService answerService) {
+	public TestController(UserRepository userRepository, TestRepository testRepository, QuestionService questionService, QuestionRepository questionRepository, AnswerService answerService) {
 		this.userRepository = userRepository;
 		this.testRepository = testRepository;
 		this.questionService= questionService;
 		this.questionRepository = questionRepository;
-		this.answerRepository = answerRepository;
-		this.answerService = answerService;
-		
-		
+		this.answerService = answerService;	
 	}
 	
 	@GetMapping("/student/test")
