@@ -10,9 +10,9 @@ import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Testss;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.QuestionService;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.TestService;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.QuestionRepository;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.security.TestService;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.security.QuestionService;
 @Controller
 public class TestController {
 	

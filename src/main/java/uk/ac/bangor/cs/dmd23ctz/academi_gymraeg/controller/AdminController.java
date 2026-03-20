@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserDeletedRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.security.UserService;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.UserService;
 
 
 @Controller
