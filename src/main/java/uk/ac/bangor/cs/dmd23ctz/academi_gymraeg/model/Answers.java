@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,8 +17,10 @@ public class Answers {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "answer_id")
 	private Long answerId;
-	@Column(name = "question_id")
-	private Long questionId;
+
+	@ManyToOne
+	@JoinColumn(name = "question_id", nullable = false)
+	private Questions question;
 	@Column(name = "user_answer")
 	private String userAnswer;
 	@Column(name = "correct")
@@ -30,12 +34,12 @@ public class Answers {
 		this.answerId = answerId;
 	}
 
-	public Long getQuestionId() {
-		return questionId;
+	public Questions getQuestion() {
+		return question;
 	}
 
-	public void setQuestionId(Long questionId) {
-		this.questionId = questionId;
+	public void setQuestion(Questions question) {
+		this.question = question;
 	}
 
 	public String getUserAnswer() {

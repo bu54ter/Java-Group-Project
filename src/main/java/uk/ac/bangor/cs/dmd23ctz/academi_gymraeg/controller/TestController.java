@@ -1,18 +1,24 @@
 package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Questions;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Testss;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.AnswerRepository;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.QuestionRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.QuestionService;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.TestService;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.QuestionRepository;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.AnswerService;
 @Controller
 public class TestController {
 	
@@ -20,17 +26,19 @@ public class TestController {
 	private final TestRepository testRepository;
 	private final QuestionService questionService;
 	private final QuestionRepository questionRepository;
+	private final AnswerRepository answerRepository;
+	private final AnswerService answerService;
 	
-	public TestController(UserRepository userRepository, TestRepository testRepository, QuestionService questionService, QuestionRepository questionRepository) {
+	public TestController(UserRepository userRepository, TestRepository testRepository, QuestionService questionService, QuestionRepository questionRepository, AnswerRepository answerRepository, AnswerService answerService) {
 		this.userRepository = userRepository;
 		this.testRepository = testRepository;
 		this.questionService= questionService;
 		this.questionRepository = questionRepository;
+		this.answerRepository = answerRepository;
+		this.answerService = answerService;
+		
 		
 	}
-		
-	@Autowired
-    private TestService testService;
 	
 	@GetMapping("/student/test")
 	public String startTest(Model model, Authentication authentication) {
@@ -48,8 +56,18 @@ public class TestController {
 	    questionService.generateQuestionsForTest(savedTest.getTestId());
 
 	    model.addAttribute("test", savedTest);
-	    model.addAttribute("questions", questionRepository.findAllByTestId(savedTest.getTestId()));
+	    model.addAttribute("questions", questionRepository.findQuestionsWithNounByTestId(savedTest.getTestId()));
 
 	    return "student/test";
 	}
+	
+	@PostMapping("/student/test/submit")
+	public String submitTest(
+	        @RequestParam Long testId,
+	        @RequestParam List<Long> questionIds,
+	        @RequestParam Map<String, String> allParams
+	) {
+	    answerService.processTestSubmission(testId, questionIds, allParams);
+	    return "redirect:/student/results/" + testId;
 	}
+}

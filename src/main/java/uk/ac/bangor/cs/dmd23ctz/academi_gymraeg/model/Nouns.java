@@ -1,6 +1,8 @@
 package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,9 +21,9 @@ public class Nouns {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "noun_id")
 	private Long nounId;
-	@Column(name = "welsh_word")
+	@Column(name = "welsh_word", nullable = false)
 	private String welshWord;
-	@Column(name = "english_word")
+	@Column(name = "english_word", nullable = false)
 	private String englishWord;
 	@Column(name = "welsh_sent")
 	private String welshSent;
@@ -35,6 +38,8 @@ public class Nouns {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Gender gender;
+	@OneToMany(mappedBy = "noun")
+    private List<Questions> questions = new ArrayList<>();
 	
 
 	public Long getNounId() {
@@ -108,4 +113,12 @@ public class Nouns {
 	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
+	
+	public List<Questions> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Questions> questions) {
+        this.questions = questions;
+    }
 }

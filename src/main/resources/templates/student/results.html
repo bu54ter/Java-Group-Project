@@ -2,21 +2,40 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <link rel="stylesheet" th:href="@{/style.css}">
 <body>
-<div th:replace="layout :: header"></div>
-<div th:replace="layout :: nav"></div>
+	<div th:replace="layout :: heroSection50"></div>
+	<div th:replace="layout :: nav"></div>
+	<div sec:authorize="not isAuthenticated()">
+		<div th:replace="layout :: loginModal"></div>
+	</div>
+	<section class="div1">
+		<h2>Student</h2>
+		<p>
+			<strong>Test ID:</strong> <span th:text="${test.testId}"></span>
+		</p>
+		<p>
+			<strong>Date Taken:</strong> <span
+				th:text="${#temporals.format(test.testedAt, 'dd MMM yyyy HH:mm')}"></span>
+		</p>
+		<hr>
+		<h2>Your Score</h2>
+		<p>
+			<strong th:text="${test.score}"></strong> %
+		</p>
+		<p th:if="${test.score >= 70}">🎉 Well done!</p>
+
+		<p th:if="${test.score < 70}">📘 Keep practicing!</p>
+
+		<br> <a th:href="@{/student/dashboard}" class="loginbtn">back
+			to dash board</a>
 
 
-<div sec:authorize="not isAuthenticated()">
-    <div th:replace="layout :: loginModal"></div>
-</div>
-	<h2>Student Results</h2>
-	<hr>
-	<h3>Here are your results.</h3>
-	<hr>
+		<hr>
+		<div th:replace="layout :: footer"></div>
+		<div th:replace="layout :: scripts"></div>
 
-	<hr>
-	<div th:replace="layout :: footer"></div>
-	<div th:replace="layout :: scripts"></div>
+	</section>
 </body>
+
+
 </html>
 </html>
