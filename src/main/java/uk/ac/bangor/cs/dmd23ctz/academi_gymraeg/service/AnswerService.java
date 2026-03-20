@@ -59,7 +59,6 @@ public class AnswerService {
 				continue;
 			}
 
-			// ✅ Fetch question INSIDE loop
 			Questions question = questionRepository.findById(questionId)
 					.orElseThrow(() -> new RuntimeException("Question not found"));
 

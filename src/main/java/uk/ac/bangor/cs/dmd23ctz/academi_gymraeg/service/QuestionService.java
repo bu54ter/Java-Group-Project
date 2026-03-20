@@ -33,8 +33,6 @@ public class QuestionService {
 		return types[index];
 	}
 	
-	
-
 	public void generateQuestionsForTest(Long testId) {
 		Testss test = testRepository.findById(testId).orElseThrow(() -> new RuntimeException("Test not found"));
 

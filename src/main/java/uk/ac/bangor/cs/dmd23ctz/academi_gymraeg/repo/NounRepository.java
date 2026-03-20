@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Nouns;
 
+@Repository
 public interface NounRepository extends JpaRepository<Nouns, Long> {
 
 	@Query(value = "SELECT * FROM ag_nouns ORDER BY RAND() LIMIT 20", nativeQuery = true)
