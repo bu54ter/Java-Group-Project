@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Testss;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Tests;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
 
 @Controller
@@ -21,7 +21,7 @@ public class ResultsController {
 	@GetMapping("/student/results/{testId}")
 	public String showResults(@PathVariable Long testId, Model model) {
 
-	    Testss test = testRepository.findById(testId)
+	    Tests test = testRepository.findById(testId)
 	            .orElseThrow(() -> new RuntimeException("Test not found"));
 
 	    model.addAttribute("test", test);

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Answers;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Nouns;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Questions;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Testss;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Tests;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.AnswerRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.QuestionRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
@@ -79,7 +79,7 @@ public class AnswerService {
 
 		double percentage = (correctCount / 20.0) * 100;
 
-		Testss test = testRepository.findById(testId).orElseThrow(() -> new RuntimeException("Test not found"));
+		Tests test = testRepository.findById(testId).orElseThrow(() -> new RuntimeException("Test not found"));
 
 		test.setScore((int) percentage);
 		testRepository.save(test);
