@@ -72,9 +72,7 @@ public class NounService {
 	    noun.setWelshSent(updatedNoun.getWelshSent());
 	    noun.setEnglishSent(updatedNoun.getEnglishSent());
 	    noun.setGender(updatedNoun.getGender());
-
 	    noun.setEditedBy(fullName);
-	    //noun.setEditedAt(LocalDateTime.now());
 
 	    nounRepository.save(noun);
 	}

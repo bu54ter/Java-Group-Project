@@ -23,7 +23,7 @@ public class Questions {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "test_id", nullable = false)
-    private Testss test;
+    private Tests test;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "noun_id", nullable = false)
@@ -44,11 +44,11 @@ public class Questions {
         this.questionId = questionId;
     }
 
-    public Testss getTest() {
+    public Tests getTest() {
         return test;
     }
 
-    public void setTest(Testss test) {
+    public void setTest(Tests test) {
         this.test = test;
     }
 

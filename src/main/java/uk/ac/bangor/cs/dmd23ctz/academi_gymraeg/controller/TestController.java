@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Testss;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Tests;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.QuestionRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
@@ -40,11 +40,11 @@ public class TestController {
 	    User user = userRepository.findByUsername(username)
 	            .orElseThrow(() -> new RuntimeException("User not found"));
 
-	    Testss newTest = new Testss();
+	    Tests newTest = new Tests();
 	    newTest.setUserId(user.getUserId());
 	    newTest.setScore(0);
 
-	    Testss savedTest = testRepository.save(newTest);
+	    Tests savedTest = testRepository.save(newTest);
 
 	    questionService.generateQuestionsForTest(savedTest.getTestId());
 
