@@ -17,7 +17,7 @@ import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
 @Service
 public class AnswerService {
 
-	private boolean checkAnswer(Questions question, String userAnswer) {
+	boolean checkAnswer(Questions question, String userAnswer) {
 
 		Nouns noun = question.getNoun();
 
