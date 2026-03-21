@@ -56,7 +56,6 @@ public class UserDeleted  {
 		this.username = username;
 	}
 
-
 	public String getFirstname() {
 		return firstname;
 	}

@@ -2,6 +2,7 @@ package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,7 +19,7 @@ public class Answers {
 	@Column(name = "answer_id")
 	private Long answerId;
 
-	@ManyToOne
+	@ManyToOne (fetch = FetchType.LAZY)
 	@JoinColumn(name = "question_id", nullable = false)
 	private Questions question;
 	@Column(name = "user_answer")

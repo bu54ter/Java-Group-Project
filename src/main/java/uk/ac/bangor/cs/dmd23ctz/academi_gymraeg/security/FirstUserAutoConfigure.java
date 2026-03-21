@@ -32,7 +32,6 @@ public class FirstUserAutoConfigure {
                 firstUser.setUsername("admin");
                 firstUser.setPassword(passwordEncoder.encode("password"));
                 firstUser.setRole(Role.ADMIN);
-
                 userRepo.save(firstUser);
             }
 
