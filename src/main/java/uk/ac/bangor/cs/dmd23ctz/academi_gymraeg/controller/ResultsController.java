@@ -30,10 +30,8 @@ public class ResultsController {
                 .orElseThrow(() -> new RuntimeException("Test not found"));
 
         List<Answers> answers = answerRepository.findByTestIdWithQuestionAndNoun(testId);
-
         model.addAttribute("test", test);
         model.addAttribute("answers", answers);
-
         return "student/results";
     }
 }

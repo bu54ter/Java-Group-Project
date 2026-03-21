@@ -9,5 +9,4 @@ public class LoginUser {
 	    public String login() {
 	        return "login";
 	    }
-
 }

@@ -30,7 +30,6 @@ public class HomeController {
             Nouns wordOfTheDay = availableNouns.get(random.nextInt(availableNouns.size()));
             model.addAttribute("wordOfTheDay", wordOfTheDay);
         }
-
         return "index";
     }
 

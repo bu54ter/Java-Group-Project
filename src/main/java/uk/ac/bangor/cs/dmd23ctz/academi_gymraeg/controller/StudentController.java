@@ -31,7 +31,6 @@ public class StudentController {
 
 	    model.addAttribute("tests", testRepository.findAllByUserId(user.getUserId()));
 	    model.addAttribute("test", new Tests());
-
 	    return "student/dashboard";
 	}
 
