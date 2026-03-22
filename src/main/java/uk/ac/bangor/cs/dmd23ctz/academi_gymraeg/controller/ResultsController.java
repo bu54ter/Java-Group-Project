@@ -23,6 +23,18 @@ public class ResultsController {
 		this.answerRepository = answerRepository;
 	}
 
+	/**
+	 * Displays the results of a specific test for a student.
+	 *
+	 * <p>This method retrieves the {@link Tests} entity by its ID along with
+	 * the associated {@link Answers}, including related question and noun data.
+	 * The retrieved data is added to the model for rendering in the results view.</p>
+	 *
+	 * @param testId the unique identifier of the test whose results are to be displayed
+	 * @param model the {@link Model} used to pass attributes to the view
+	 * @return the test number of the student results view ("student/results")
+	 * @throws RuntimeException if the test with the given ID is not found
+	 */
 	@GetMapping("/student/results/{testId}")
 	public String showResults(@PathVariable Long testId, Model model) {
 

@@ -34,6 +34,18 @@ public class TestController {
 		this.answerService = answerService;
 	}
 
+	/**
+	 * Initiates a new test session for the authenticated student.
+	 *
+	 * <p>This method retrieves the currently authenticated user, creates a new
+	 * {@link Tests} instance with an initial score (0), and persists it. It then
+	 * generates questions for the test and loads them into the model for display.</p>
+	 *
+	 * @param model the {@link Model} used to pass attributes to the view
+	 * @param authentication the {@link Authentication} object containing the current user's details
+	 * @return the name of the student test view ("student/test")
+	 * @throws RuntimeException if the authenticated user cannot be found in the repository
+	 */
 	@GetMapping("/student/test")
 	public String startTest(Model model, Authentication authentication) {
 
@@ -54,6 +66,20 @@ public class TestController {
 		return "student/test";
 	}
 
+	/**
+	 * Handles the submission of a completed test.
+	 *
+	 * <p>This method processes the student's answers by delegating to the
+	 * {@code answerService}. It receives the test identifier, a list of question
+	 * IDs, and all submitted request parameters (which may include user responses).
+	 * After processing, the user is redirected to the test results page.</p>
+	 *
+	 * @param testId the unique identifier of the submitted test
+	 * @param questionIds the list of question IDs included in the test
+	 * @param allParams a map containing all request parameters, including user responses
+	 * @return a redirect to the results page for the submitted test
+	 *         ("redirect:/student/results/{testId}")
+	 */
 	@PostMapping("/student/test/submit")
 	public String submitTest(@RequestParam Long testId, @RequestParam List<Long> questionIds,
 			@RequestParam Map<String, String> allParams) {

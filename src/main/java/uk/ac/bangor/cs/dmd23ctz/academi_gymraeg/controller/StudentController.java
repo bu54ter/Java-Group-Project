@@ -21,6 +21,18 @@ public class StudentController {
 
 	}
 
+	/**
+	 * Handles requests to the student dashboard page.
+	 *
+	 * <p>This method retrieves the currently authenticated user and loads all
+	 * {@link Tests} associated with that user. It also provides a new {@link Tests}
+	 * instance for form binding in the view.</p>
+	 *
+	 * @param model the {@link Model} used to pass attributes to the view
+	 * @param authentication the {@link Authentication} object containing the current user's details
+	 * @return the name of the student dashboard view ("student/dashboard")
+	 * @throws RuntimeException if the authenticated user cannot be found in the repository
+	 */
 	@GetMapping("/student/dashboard")
 	public String studentTests(Model model, Authentication authentication) {
 

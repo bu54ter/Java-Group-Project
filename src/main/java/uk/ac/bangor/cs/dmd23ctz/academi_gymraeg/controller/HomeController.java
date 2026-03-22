@@ -19,6 +19,17 @@ public class HomeController {
     public HomeController(NounRepository nounRepository) {
         this.nounRepository = nounRepository;
     }
+    
+    /**
+     * Handles requests to the home page.
+     *
+     * <p>This method retrieves all available {@link Nouns} from the repository
+     * and selects a random entry as the "word of the day". If no nouns are available,
+     * no word is added to the model.</p>
+     *
+     * @param model the {@link Model} used to pass attributes to the view
+     * @return the name of the home page view ("index")
+     */
 
     @GetMapping("/")
     public String home(Model model) {
@@ -30,6 +41,16 @@ public class HomeController {
         }
         return "index";
     }
+    
+    /**
+     * Retrieves a random {@link Nouns} entry.
+     *
+     * <p>This endpoint returns a randomly selected noun from the repository.
+     * If no nouns are available, it responds with HTTP 204 (No Content).</p>
+     *
+     * @return a {@link ResponseEntity} containing a random {@link Nouns} object
+     *         with HTTP 200 (OK), or HTTP 204 (No Content) if no nouns exist
+     */
 
     @GetMapping("/random-noun")
     @ResponseBody
