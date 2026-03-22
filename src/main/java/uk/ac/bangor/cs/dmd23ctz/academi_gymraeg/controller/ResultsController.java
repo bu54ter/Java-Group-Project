@@ -15,23 +15,22 @@ import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
 @Controller
 public class ResultsController {
 
-    private final TestRepository testRepository;
-    private final AnswerRepository answerRepository;
+	private final TestRepository testRepository;
+	private final AnswerRepository answerRepository;
 
-    public ResultsController(TestRepository testRepository, AnswerRepository answerRepository) {
-        this.testRepository = testRepository;
-        this.answerRepository = answerRepository;
-    }
+	public ResultsController(TestRepository testRepository, AnswerRepository answerRepository) {
+		this.testRepository = testRepository;
+		this.answerRepository = answerRepository;
+	}
 
-    @GetMapping("/student/results/{testId}")
-    public String showResults(@PathVariable Long testId, Model model) {
+	@GetMapping("/student/results/{testId}")
+	public String showResults(@PathVariable Long testId, Model model) {
 
-        Tests test = testRepository.findById(testId)
-                .orElseThrow(() -> new RuntimeException("Test not found"));
+		Tests test = testRepository.findById(testId).orElseThrow(() -> new RuntimeException("Test not found"));
 
-        List<Answers> answers = answerRepository.findByTestIdWithQuestionAndNoun(testId);
-        model.addAttribute("test", test);
-        model.addAttribute("answers", answers);
-        return "student/results";
-    }
+		List<Answers> answers = answerRepository.findByTestIdWithQuestionAndNoun(testId);
+		model.addAttribute("test", test);
+		model.addAttribute("answers", answers);
+		return "student/results";
+	}
 }

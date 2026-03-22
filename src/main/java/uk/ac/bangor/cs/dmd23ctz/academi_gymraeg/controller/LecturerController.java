@@ -2,7 +2,6 @@ package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Nouns;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.NounsDeleted;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;

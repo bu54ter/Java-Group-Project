@@ -26,8 +26,6 @@ public class AcademiGymraegApplication {
 		SpringApplication.run(AcademiGymraegApplication.class, args);
 	}
 
-	
-	
 	@Bean
 	LocalValidatorFactoryBean getValidator() {
 		LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
@@ -45,32 +43,23 @@ public class AcademiGymraegApplication {
 
 	@Bean
 	SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
-		http
-	        .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/", "/index", "/random-noun", "/css/**", "/js/**", "/img/**", "/style.css").permitAll()
-	            .requestMatchers("/admin/**").hasRole("ADMIN")
-	            .requestMatchers("/lecturer/**").hasRole("LECTURER")
-	            .requestMatchers("/student/**").hasRole("STUDENT")
-	            .anyRequest().authenticated()
-	        )
+		http.authorizeHttpRequests(auth -> auth
+				.requestMatchers("/", "/index", "/random-noun", "/css/**", "/js/**", "/img/**", "/style.css")
+				.permitAll().requestMatchers("/admin/**").hasRole("ADMIN").requestMatchers("/lecturer/**")
+				.hasRole("LECTURER").requestMatchers("/student/**").hasRole("STUDENT").anyRequest().authenticated())
 
-	        .formLogin(form -> form
-	            .loginPage("/")                     
-	            .loginProcessingUrl("/login")       
-	            .failureUrl("/?error")              
-	            .successHandler(new LoginSuccessHandler())
-	            .permitAll()
-	        )
+				.formLogin(form -> form.loginPage("/").loginProcessingUrl("/login").failureUrl("/?error")
+						.successHandler(new LoginSuccessHandler()).permitAll())
 
-	        .logout(logout -> logout
-					.logoutRequestMatcher(
-							PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/logout"))
-					.logoutSuccessUrl("/"));
+				.logout(logout -> logout
+						.logoutRequestMatcher(
+								PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/logout"))
+						.logoutSuccessUrl("/"));
 		return http.build();
 	}
- 	@Bean
+
+	@Bean
 	PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
-
 }
