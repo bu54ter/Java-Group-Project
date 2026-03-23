@@ -1,5 +1,6 @@
 package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,27 @@ public class HomeController {
     private final NounRepository nounRepository;
     private final Random random = new Random();
 
+    // Tracks the current noun of the day and the date it was picked
+    private Nouns nounOfTheDay;
+    private LocalDate nounOfTheDayDate;
+
     public HomeController(NounRepository nounRepository) {
         this.nounRepository = nounRepository;
+    }
+
+    /**
+     * Returns today's noun, picking a new one only if the date has changed.
+     */
+    private Nouns getNounOfTheDay() {
+        LocalDate today = LocalDate.now();
+        if (nounOfTheDay == null || !today.equals(nounOfTheDayDate)) {
+            List<Nouns> availableNouns = nounRepository.findAll();
+            if (!availableNouns.isEmpty()) {
+                nounOfTheDay = availableNouns.get(random.nextInt(availableNouns.size()));
+                nounOfTheDayDate = today;
+            }
+        }
+        return nounOfTheDay;
     }
     
     /**
@@ -33,10 +53,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        List<Nouns> availableNouns = nounRepository.findAll();
-
-        if (!availableNouns.isEmpty()) {
-            Nouns wordOfTheDay = availableNouns.get(random.nextInt(availableNouns.size()));
+        Nouns wordOfTheDay = getNounOfTheDay();
+        if (wordOfTheDay != null) {
             model.addAttribute("wordOfTheDay", wordOfTheDay);
         }
         return "index";
@@ -59,6 +77,7 @@ public class HomeController {
         if (availableNouns.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+        // Shuffle button picks a truly random noun each time
         return ResponseEntity.ok(availableNouns.get(random.nextInt(availableNouns.size())));
     }
 }
