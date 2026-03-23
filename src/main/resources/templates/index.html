@@ -26,8 +26,7 @@
 				<span id="welshSent" th:text="${wordOfTheDay.welshSent}"></span>
 				<i><span id="englishSent" th:text="${wordOfTheDay.englishSent}"></span></i>
 			</p>
-			<button type="button" onclick="shuffleNoun()">Show another random noun</button>
-		</div>
+			</div>
 
 		<div th:if="${wordOfTheDay == null}">
 			<p>No nouns available.</p>
@@ -52,19 +51,6 @@
 </body>
 </html>
 
-<script>
-    function shuffleNoun() {
-        fetch('/random-noun')
-            .then(response => response.json())
-            .then(noun => {
-                document.getElementById('welshWord').textContent = noun.welshWord;
-                document.getElementById('englishWord').textContent = noun.englishWord;
-                document.getElementById('gender').textContent = noun.gender === 'MASCULINE' ? 'Masculine' : 'Feminine';
-                document.getElementById('welshSent').textContent = noun.welshSent || '';
-                document.getElementById('englishSent').textContent = noun.englishSent || '';
-            });
-    }
-</script>
 <script th:if="${param.error}">
     document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('loginModal').style.display = 'block';
