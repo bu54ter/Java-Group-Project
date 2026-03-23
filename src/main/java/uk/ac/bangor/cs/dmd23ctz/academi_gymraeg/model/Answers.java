@@ -19,7 +19,7 @@ public class Answers {
 	@Column(name = "answer_id")
 	private Long answerId;
 
-	@ManyToOne (fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "question_id", nullable = false)
 	private Questions question;
 	@Column(name = "user_answer")

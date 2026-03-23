@@ -1,0 +1,48 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<link rel="stylesheet" th:href="@{/style.css}">
+<body>
+
+
+<div th:replace="layout :: heroSection50"></div>
+<div th:replace="layout :: nav"></div>
+<div sec:authorize="not isAuthenticated()">
+    <div th:replace="layout :: loginModal"></div>
+</div>
+	<section class="div1">
+	<h2>Student Dashboard</h2>
+	<hr>
+	<h3>Your test results.</h3>
+	<table border="1">
+		<tr>
+			<th>Date of Test</th>
+			<th>Score (%)</th>
+		</tr>
+		<tr th:each="t : ${tests}">
+            <td th:text="${t.testedAt}"></td>
+            <td th:text="${t.score}"></td>
+        </tr>
+		</table>
+	<hr>
+	<a th:href="@{/student/test}" class="loginbtn">take a test</a>
+	<hr/>
+	<p>
+		Jobs to do: <br /> As a Student, I must be able to take a test. DONE<br />
+		As a Student, I must not be able to edit my answers once submitted. DONE<br />
+		As a Student, I must be shown my results for a test. DONE <br /> As a
+		Student, I should be able to view all of my test results. DONE <br />
+	<p />
+	<p>
+		Extras:
+		<br/>
+		Show right and wrong answers once submitted.<br/>
+		How do we stop taking another test at the same time?
+		</p>
+	
+
+	<hr>
+	<div th:replace="layout :: footer"></div>
+	<div th:replace="layout :: scripts"></div>
+	</section>
+</body>
+</html>

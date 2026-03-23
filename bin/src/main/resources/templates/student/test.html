@@ -1,0 +1,74 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<link rel="stylesheet" th:href="@{/style.css}">
+<body>
+
+
+<div th:replace="layout :: heroSection50"></div>
+<div th:replace="layout :: nav"></div>
+<div sec:authorize="not isAuthenticated()">
+    <div th:replace="layout :: loginModal"></div>
+</div>
+<section class="div1">
+	<h2>Student Test Page</h2><hr/>
+	<p><i> Don't forget to use the Welsh alaphbet for when answering questions. <br/>
+	For more infromation on changing your keyboard layout, click <a href="https://support.apple.com/en-gb/guide/mac-help/mchlp1406/mac"> here</a> for a mac, and shag off if you're a peasant windows users!
+	</i> </p>
+	<hr/>
+
+    <form method="post" th:action="@{/student/test/submit}">
+        <input type="hidden" name="testId" th:value="${test.testId}" />
+
+        <div th:each="question : ${questions}" class="question-block">
+
+            <p th:if="${question.questionType.name() == 'GENDER'}">
+                What is the gender of the Welsh noun
+                <strong th:text="${question.noun.welshWord}"></strong>?
+            </p>
+
+            <p th:if="${question.questionType.name() == 'MEANING'}">
+                What is the meaning of the Welsh noun
+                <strong th:text="${question.noun.welshWord}"></strong>?
+            </p>
+
+            <p th:if="${question.questionType.name() == 'TRANSLATE'}">
+                What is the Welsh noun for the English word
+                <strong th:text="${question.noun.englishWord}"></strong>?
+            </p>
+
+            <input type="hidden" name="questionIds" th:value="${question.questionId}" />
+
+            <!-- GENDER -->
+            <div th:if="${question.questionType.name() == 'GENDER'}">
+                <label>
+                    <input type="radio" th:name="'answers_' + ${question.questionId}" value="MASCULINE"/>
+                    Masculine
+                </label>
+
+                <label>
+                    <input type="radio" th:name="'answers_' + ${question.questionId}" value="FEMININE"/>
+                    Feminine
+                </label>
+            </div>
+
+            <!-- MEANING -->
+            <div th:if="${question.questionType.name() == 'MEANING'}">
+                <input type="text" th:name="'answers_' + ${question.questionId}" />
+            </div>
+
+            <!-- TRANSLATE -->
+            <div th:if="${question.questionType.name() == 'TRANSLATE'}">
+                <input type="text" th:name="'answers_' + ${question.questionId}" />
+            </div>
+
+        </div>
+
+        <button type="submit">Submit Test</button>
+    </form>
+
+    <hr>
+    <div th:replace="layout :: footer"></div>
+    <div th:replace="layout :: scripts"></div>
+</section>
+</body>
+</html>

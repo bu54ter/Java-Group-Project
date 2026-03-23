@@ -6,10 +6,7 @@
 Testing Template – Welsh Noun Gender Web Application
 
 **Project Name:**  
-[Enter project name]
-
-**Reference Number:**  
-[Enter project / ticket / change reference]
+Java project
 
 **Prepared By:**  
 [Name]
@@ -167,13 +164,13 @@ Testing is complete when:
 
 | Test Case ID | Area | Test Description | Preconditions | Steps | Expected Result | Actual Result | Status | Evidence | Comments |
 |---|---|---|---|---|---|---|---|---|---|
-| STU-001 | Student Test | Verify student can start a noun gender test | Student account exists and nouns are loaded | 1. Log in as student<br>2. Select start test | Test begins and nouns are displayed |  |  |  |  |
-| STU-002 | Student Test | Verify noun is displayed clearly | Test started | 1. View first question | A Welsh noun is shown clearly on screen |  |  |  |  |
-| STU-003 | Student Test | Verify student can choose masculine | Test started | 1. Select masculine for a noun<br>2. Continue | Selection is saved and next step works |  |  |  |  |
-| STU-004 | Student Test | Verify student can choose feminine | Test started | 1. Select feminine for a noun<br>2. Continue | Selection is saved and next step works |  |  |  |  |
-| STU-005 | Student Test | Verify student can submit completed test | Test completed | 1. Answer all questions<br>2. Submit test | Test submits successfully |  |  |  |  |
-| STU-006 | Student Test | Verify score/result is shown after submission | Submitted test exists | 1. Submit test | Student sees final result, score, or feedback |  |  |  |  |
-| STU-007 | Student Test | Verify correct answers are marked accurately | Known noun data exists | 1. Complete test using known correct answers | Score matches expected result |  |  |  |  |
+| STU-001 | Student Test | Verify student can start a noun gender test | Student account exists and nouns are loaded | 1. Log in as student<br>2. Select start test | Test begins and nouns are displayed | Test begins and nouns are displayed | Passed |  |  |
+| STU-002 | Student Test | Verify noun is displayed clearly | Test started | 1. View first question | A Welsh noun is shown clearly on screen | A Welsh noun is shown clearly on screen | Passed |  |  |
+| STU-003 | Student Test | Verify student can choose masculine | Test started | 1. Select masculine for a noun<br>2. Continue | Selection is saved and next step works | Selection is saved and next step works | Passed |  |  |
+| STU-004 | Student Test | Verify student can choose feminine | Test started | 1. Select feminine for a noun<br>2. Continue | Selection is saved and next step works | Selection is saved and next step works | Passed |  |  |
+| STU-005 | Student Test | Verify student can submit completed test | Test completed | 1. Answer all questions<br>2. Submit test | Test submits successfully | Test submits successfully | Passed |  |  |
+| STU-006 | Student Test | Verify score/result is shown after submission | Submitted test exists | 1. Submit test | Student sees final result, score, or feedback | Student sees final result, score, or feedback | Passed |  |  |
+| STU-007 | Student Test | Verify correct answers are marked accurately | Known noun data exists | 1. Complete test using known correct answers | Score matches expected result | Score matches expected result | Passed |  |  |
 | STU-008 | Validation | Verify student cannot submit without answering required questions | Test started | 1. Leave one or more answers blank<br>2. Submit | Validation message is shown or submission is blocked |  |  |  |  |
 | STU-009 | Session | Verify student progress is handled correctly if page refreshes | Test in progress | 1. Answer some questions<br>2. Refresh page | Application behaves as designed and does not corrupt the test session |  |  |  |  |
 
