@@ -43,23 +43,30 @@ public class AcademiGymraegApplication {
 
 	@Bean
 	SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
+		
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/", "/index", "/random-noun", "/css/**", "/js/**", "/img/**", "/style.css")
-				.permitAll().requestMatchers("/admin/**").hasRole("ADMIN").requestMatchers("/lecturer/**")
-				.hasRole("LECTURER").requestMatchers("/student/**").hasRole("STUDENT").anyRequest().authenticated())
+	            .requestMatchers("/", "/index", "/login").permitAll()
+	            .requestMatchers("/css/**", "/js/**", "/img/**", "/style.css").permitAll()
+	            .requestMatchers("/admin/**").hasRole("ADMIN")
+	            .requestMatchers("/lecturer/**").hasRole("LECTURER")
+	            .requestMatchers("/student/**").hasRole("STUDENT")
+	            .anyRequest().permitAll()
+	        );
+		
+		http.formLogin(formLogin -> formLogin
+				.loginPage("/login")
+				.successHandler(new LoginSuccessHandler())
+				);
 
-				.formLogin(form -> form.loginPage("/").loginProcessingUrl("/login").failureUrl("/?error")
-						.successHandler(new LoginSuccessHandler()).permitAll())
-
-				.logout(logout -> logout
-						.logoutRequestMatcher(
-								PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/logout"))
-						.logoutSuccessUrl("/"));
+		http.logout(logout -> logout
+				.logoutRequestMatcher(
+						PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/logout"))
+				.logoutSuccessUrl("/"));
 		return http.build();
 	}
-
-	@Bean
+ 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
+
 }
