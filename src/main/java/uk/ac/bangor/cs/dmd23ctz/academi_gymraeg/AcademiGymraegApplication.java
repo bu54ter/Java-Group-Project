@@ -54,8 +54,11 @@ public class AcademiGymraegApplication {
 	        );
 		
 		http.formLogin(formLogin -> formLogin
-				.loginPage("/login")
-				.successHandler(new LoginSuccessHandler())
+	            .loginPage("/")                  // home page contains modal
+	            .loginProcessingUrl("/login")    // form submits here
+	            .successHandler(new LoginSuccessHandler())
+	            .failureUrl("/?error")           // failed login returns to home page
+	            .permitAll()
 				);
 
 		http.logout(logout -> logout
