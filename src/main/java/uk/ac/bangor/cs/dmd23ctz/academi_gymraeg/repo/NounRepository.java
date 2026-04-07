@@ -42,4 +42,5 @@ public interface NounRepository extends JpaRepository<Nouns, Long> {
         nativeQuery = true
     )
     List<Nouns> findRandomNouns();
+    boolean existsBy();
 }
