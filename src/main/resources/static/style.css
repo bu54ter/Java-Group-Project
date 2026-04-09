@@ -1,454 +1,725 @@
-/* unvisited link */
-a:link {
-  color: white;
-}
-/* visited link */
-a:visited {
-  color: white;
-}
-/* mouse over link */
-a:hover {
-  color: pink;
-}
-/* selected link */
-a:active {
-  color: white;
-}
-/* unvisited link */
-a:link { 
-  text-decoration: none; 
-} 
-/* visited link */
-a:visited { 
-  text-decoration: none; 
-} 
-/* mouse over link */
-a:hover { 
-  text-decoration: none; 
-} 
-/* selected link */
-a:active { 
-  text-decoration: none; 
+/* Body and global font */
+body {
+  margin: 0;
+  font-family: "EB Garamond", sans-serif;
+  background-color: #202020;
 }
 
-/* Set font for body of pages.*/
-body {
-  	margin: 0;
-  	font-family: "EB Garamond", "garamond-premier-pro-display";
-	background-color: black;}
-	
-/* Modal background */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 999;
-  left: 0;
+/* Global headings */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "EB Garamond", "garamond-premier-pro-display";
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+h2 {
+  font-size: 25px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 17px;
+}
+
+h5 {
+  font-size: 15px;
+}
+
+/* Base link unvisited */
+a:link {
+  color: #5757fa;
+  text-decoration: none;
+}
+
+/* Base link visited */
+a:visited {
+  color: #8348bb;
+  text-decoration: none;
+}
+
+/* Base link hover */
+a:hover {
+  color: #5757fa;
+  text-decoration: underline;
+}
+
+/* Hero section container */
+.hero1 {
+  position: relative;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(#00000099, #00000099),
+    url('../files/img/img_ban1.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* Hero video element */
+.hero-video {
+  position: absolute;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.4);
-  padding-top: 60px;
+  object-fit: cover;
+  z-index: -1;
 }
 
-/* Modal box */
-.modal-content {
-  background-color: #fefefe;
-  margin: 5% auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 300px;
+/* Hero text wrapper */
+.hero1 .hero-text {
+  margin-top: 20px;
+  text-align: center;
 }
 
-/* Close button */
-.close {
-  float: right;
-  font-size: 28px;
-  cursor: pointer;
+/* Hero heading */
+.hero1 .hero-text h1 {
+  font-size: 15vw;
+  margin: 5px 0;
 }
-/* Close button on hover */
-.close:hover,
-.close:focus 
-	{
-  	color: red;
- 	 cursor: pointer;
-	}
 
-/* Add Zoom Animation, for opening and closing of modal login. */
-.animate 
-	{
-  	-webkit-animation: animatezoom 0.6s;
-  	animation: animatezoom 0.6s
-	}
+/* Hero subheading */
+.hero1 .hero-text h3 {
+  font-size: 3vw;
+  margin: 5px 0;
+}
 
-@-webkit-keyframes animatezoom 
-	{
-  	from {-webkit-transform: scale(0)} 
-  	to {-webkit-transform: scale(1)}
-	}
-  
-@keyframes animatezoom 
-	{
-  	from {transform: scale(0)} 
-  	to {transform: scale(1)}
-	}
-
-/* Center the image and position the close button */
-.imgcontainer 
-	{
-  	text-align: center;
-  	margin: 24px 0 12px 0;
-  	position: relative;
-	}
-
-img.avatar 
-	{
-  	width: 40%;
-  	border-radius: 50%;
-	}
-
-/* Style the div, set max width so it scales responsively. */
+/* Dashboard container 1 */
 .div1 {
-   max-width:1000px;
-   min-height:100%;
-   top:0;
-   margin: auto;  
-   padding:5px;
-   left:0;
-   text-align: left;
-   color: white;
-   border-radius: 0%;
-   box-sizing: border-box;
+  max-width: 1000px;
+  margin: auto;
+  padding: 5px;
+  text-align: left;
+  color: white;
+  box-sizing: border-box;
 }
+
+/* Dashboard container 2 */
 .div2 {
-   max-width:950px;
-   min-height:100%;
-   top:0;
-   margin: 0 auto;  
-   padding:5px;
-   left:0;
-   text-align: center;
-   color: white;
-   border-radius: 0%;
-   box-sizing: border-box;
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 5px;
+  text-align: center;
+  color: white;
+  box-sizing: border-box;
 }
-.error-message{
-	color:red;
-	font-style: italic;
-	text-align: center;
-	font-family: "EB Garamond", "garamond-premier-pro-display";
+
+/* Sticky navigation bar */
+nav.sticky {
+  background-color: #1b553c;
+  position: sticky;
+  top: 0;
+  margin: 0 auto;
+  width: 100%;
+  overflow: hidden;
+  z-index: 990;
 }
-.div2 h5 {
-	font-size: 20px;
-	color: white;
-}
-.div1 table {
-    width: 95%;
-    margin: 0 auto;
-    border-collapse: collapse;
-}
-tr{font-size: 14px;
-    color: white;
-    text-align: center;}
-/* Style the div, headings style. */
- h1{ 
-    font-size: 30px;
-    color: white;
-    text-align: center;}
-/* Style the div, headings style. */
-/* Style the div, headings style. */
-h2{ 
-    font-size: 25px;
-    color: white;
-    text-align: center;}
-    /* Style the div, headings style. */
-h3{ 
-    font-size: 20px;
-    color: white;
-    text-align: center;}
-    /* Style the div, headings style. */
-h4{ 
-    font-size: 17px;
-    color: white;
-    text-align: center;}
-    /* Style the div, headings style. */
-h5{ 
-    font-size: 15px;
-    color: white;
-    text-align: center;}
-    
- nav.sticky {
-	background-color: #455A64;;
-	position: sticky;
-	top: 0;
-	margin: 0 auto;
-	width: 100%;
-	overflow: hidden;
-	z-index: 990;
-	}  
+
+/* Navigation list */
 ul.list-inline {
-	list-style: none;
-	margin: auto;
-  	overflow: hidden;
-  	background-color: #455A64;
-  	text-transform: lowercase;
-	display: flex;
-	max-width:1000px;  	
-	padding: 20px;
-	justify-content: space-around; 
-	color: white;
-}
-/* unvisited link in sticky nav. */
-ul.list-inline a:link {
+  list-style: none;
+  margin: auto;
+  overflow: hidden;
+  align-items: center;
+  background-color: #1b553c;
+  display: flex;
+  max-width: 1000px;
+  padding: 0;
+  justify-content: flex-start;
   color: white;
 }
-/* visited link in sticky nav. */
+
+/* Navigation right-side alignment */
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+/* Navigation link color */
+ul.list-inline a:link,
 ul.list-inline a:visited {
   color: white;
 }
-/* Style for inline links sticky nav. */
-ul.list-inline > li {
-	display: inline-block;
-	color: white;}
-/* Style for inline links sticky nav. */
-ul.list-inline > li:before {
-	content: "\200B"; /* 1 */
-	position: absolute; /* 2 */
-	color: white;}
-/* Style for inline links sticky nav. */
+
+/* Navigation link items */
+ul.list-inline a {
+  display: inline-block;
+  padding: 20px 30px;
+  transition: background-color 0.3s;
+  text-decoration: none;
+}
+
+/* Navigation link hover style */
 ul.list-inline a:hover {
-    text-transform: uppercase;
-    text-decoration-thickness: 10px;
-    color: white;
-    }
-.banner {
-	background-color: #455A64;;
-	top: 0;
-	margin: 0 auto;
-	width: 100%;
-	overflow: hidden;
-	} 
-	
-	.hero1{
-	/* Sizing */
-	position: relative;
-	justify-content: center;
-    min-height: 100vh;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    flex-direction: column;    
-    color: white;
-    /* Background styles */
-    height: 100%;
-    width: 100%;
-    background-image: 	linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.6)), 
-    					url('../files/img/img_ban1.jpg');
-  	background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-}  
-.hero-video 
-	{
-	/* Setting for video positon and layer */
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* This ensures the video covers the whole hero section */
-    z-index: -1; /* Ensures the video stays behind any text or content */
-	}
+  background-color: #14422f;
+  color: white;
+}
 
+/* Navigation active link style */
+ul.list-inline a.active {
+  background-color: #0e2e21;
+  color: white;
+}
 
-/* Settings for Hero image fonts and sizes */
-.hero1 .hero-text {
-  margin-top: 20px; /* Add spacing above the text section */
+/* Circular navigation arrow */
+.nav-arrow {
+  position: absolute;
+  right: -60px;
+  background: #1b553c;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s, transform 0.2s;
+}
+
+/* Navigation arrow hover */
+.nav-arrow:hover {
+  background: #2d845e;
+  transform: scale(1.1);
+}
+
+/* Navigation arrow active */
+.nav-arrow:active {
+  transform: scale(0.95);
+}
+
+/* Icon within navigation arrow */
+.arrow-icon {
+  color: white;
+  font-size: 24px;
+}
+
+/* Primary block button */
+.button {
+  display: block;
+  background-color: #1b553c;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+  cursor: pointer;
   text-align: center;
-} 
-.hero1 .hero-text h1
-	{
-    /* Text styles */
-    font-size:15vw;
-    /* Margins */
-    margin: 5px 0;
-    }
-/* Settings for Hero image fonts and sizes.*/
-.hero1 .hero-text h3
-	{
-    /* Text styles */
-    font-size:3vw;
-    /* Margins */
-    margin: 5px 0;
-    }
-.hero1 hero-text a
-	{
-  	color: white; /* Ensure social icons are visible */
-  	margin: 0 10px; /* Add spacing between social links */
-  	text-decoration: none;
-	}
-
-.hero1 hero-text a:hover {
-  	opacity: 0.8; /* Add hover effect */
-	}
-
-.hero5 {
-    height: 60vh;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-/* Settings for Hero image fonts and sizes */
-.hero5 .hero-text {
-  margin-top: 20px; /* Add spacing above the text section */
-  text-align: center;
-} 
-
-.hero5 .hero-text h1
-	{
-    /* Text styles */
-    font-size:15vw;
-    /* Margins */
-    margin: 5px 0;
-    }
-/* Settings for Hero image fonts and sizes.*/
-.hero5 .hero-text h3
-	{
-    /* Text styles */
-    font-size:3vw;
-    /* Margins */
-    margin: 5px 0;
-    }
-.hero5 hero-text a
-	{
-  	color: white; /* Ensure social icons are visible */
-  	margin: 0 10px; /* Add spacing between social links */
-  	text-decoration: none;
-	}
-
-.hero5 hero-text a:hover {
-  	opacity: 0.8; /* Add hover effect */
-	}
-	
-	/* Modal background */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+/* Link as button */
+a.button {
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
 }
 
-/* Modal box */
-.modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
-    border: 1px solid #888;
-    width: 40%;
+/* Button hover state */
+.button:hover,
+.smlbtn:hover {
+  background-color: #14422f;
+  color: white;
 }
 
-/* Optional animation */
-.animate {
-    animation: animatezoom 0.4s;
+/* Small UI button */
+.smlbtn {
+  background-color: #1b553c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
-@keyframes animatezoom {
-    from {transform: scale(0.9);}
-    to {transform: scale(1);}
+/* Flex button container */
+.button-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
 }
 
-/* Avatar section */
-.imgcontainer {
-    text-align: center;
-    margin: 24px 0 12px 0;
-    position: relative;
+/* Responsive button in container */
+.button-container .button {
+  width: 100%;
+  display: block;
 }
 
-img.avatar {
-    width: 30%;
-    border-radius: 50%;
-}
-
-/* Close button */
-.close {
-    position: absolute;
-    right: 25px;
-    top: 0;
-    color: #000;
-    font-size: 35px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close:hover {
-    color: red;
-}
-
-/* Form container */
-.container {
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
-    color: black;
-}
-
-.container label {
-    color: black;
-    padding: 5px;
-    font-size: 12px;
-    display: block;
-}
-
-/* Text inputs + password inputs */
+/* Standard form input fields */
 input[type=text],
 input[type=password],
 input[type=email],
 select,
 textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    margin-top: 6px;
-    margin-bottom: 16px;
-    resize: vertical;
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #1b553c;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  resize: vertical;
 }
 
-/* Button container */
+/* Overlay modal background */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: #00000066;
+  padding-top: 60px;
+}
+
+/* Modal dialog box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 40%;
+}
+
+/* Fade and zoom animation */
+.animate {
+  animation: animatezoom 0.4s;
+}
+
+/* Modal zoom transition */
+@keyframes animatezoom {
+  from {
+    transform: scale(0.9)
+  }
+
+  to {
+    transform: scale(1)
+  }
+}
+
+/* Modal close icon */
+.close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Modal close button hover */
+.close:hover,
+.close:focus {
+  color: #ff0000;
+}
+
+/* Centered image container */
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+/* Circular avatar image */
+img.avatar {
+  width: 30%;
+  border-radius: 50%;
+}
+
+/* Form validation error message */
+.error-message {
+  color: red;
+  font-style: italic;
+  text-align: center;
+  font-family: "EB Garamond", "garamond-premier-pro-display";
+}
+
+/* Generic form container */
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  color: black;
+}
+
+/* Labels within form container */
+.container label {
+  color: black;
+  padding: 5px;
+  font-size: 12px;
+  display: block;
+}
+
+/* Secondary form control container */
 .container1 {
-    padding: 20px;
-    background-color: white;
+  padding: 20px;
+  background-color: white;
 }
 
-/* Login button */
-.loginbtn {
-	display:block;
-    background-color: #455A64;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    width: 100%;
-    cursor: pointer;
-    text-align:center;
-}
-a.loginbtn {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    box-sizing: border-box;
+/* Full-width dashboard table */
+.div1 table {
+  width: 100%;
+  margin: 25px 0;
+  border-collapse: collapse;
+  background-color: #262626;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  border: 1px solid #236b4a;
+  table-layout: auto;
 }
 
-.loginbtn:hover {
-    text-transform: uppercase;
-    color: white;
+/* Table cell spacing and alignment */
+th,
+td {
+  padding: 10px 2px;
+  text-align: left;
+  border-bottom: 1px solid #236b4a;
+  overflow-wrap: break-word;
+}
+
+/* Red Welsh table header */
+th {
+  background-color: #E11837;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0;
+}
+
+/* Table row typography */
+tr {
+  font-size: 14px;
+  color: #eeeeee;
+}
+
+/* Alternating row colors */
+tr:nth-child(even) {
+  background-color: #2d2d2d;
+}
+
+/* Remove bottom border from last cell */
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Password reset form in table */
+.resetpwd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 4px;
+}
+
+/* Password reset input width */
+.resetpwd input[type="password"] {
+  min-width: 150px;
+  width: 100%;
+}
+
+/* Wrapper for flashcard sets */
+.flashcard-container {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin: 20px 0;
+  perspective: 1000px;
+}
+
+/* 3D flashcard object */
+.flashcard {
+  width: 400px;
+  height: 250px;
+  cursor: pointer;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+/* Flipped state for flashcard */
+.flashcard.is-flipped {
+  transform: rotateY(180deg);
+}
+
+/* Inner 3D container */
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+/* Flashcard faces shared styles */
+.flashcard-front,
+.flashcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #2a2a2a;
+  border: 1px solid #1b553c;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Flashcard back face orientation */
+.flashcard-back {
+  transform: rotateY(180deg);
+  background-color: #236b4a;
+}
+
+/* Large Welsh word text */
+.answer-text {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+/* Secondary detail text on card */
+.answer-detail {
+  font-size: 16px;
+  color: #a8d5c2;
+}
+
+/* Revision section spacing */
+.revision-card {
+  max-width: 1000px;
+  margin: 20px auto;
+}
+
+/* Answer text reveal spacing */
+.answer {
+  margin-top: 10px;
+  color: #ddd;
+}
+
+/* Highlighted Noun of the Day card */
+#nounCard {
+  background-color: #1a1e26;
+  border: 2px solid #E11837;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 600px;
+  margin: 40px auto;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Word of the Day label badge */
+.noun-badge {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #E11837;
+  color: white;
+  padding: 5px 25px;
+  border-radius: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px rgba(225, 24, 55, 0.4);
+}
+
+/* Featured Welsh word styling */
+.welsh-word {
+  font-size: 42px;
+  color: #f8b4be;
+  margin-bottom: 5px;
+}
+
+/* Large English translation text */
+.english-translation {
+  font-size: 24px;
+  color: #a8d5c2;
+  margin-top: 0;
+}
+
+/* Detail section for feature card */
+.noun-details {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Styled gender label */
+.gender-tag {
+  display: inline-block;
+  background-color: #1b553c;
+  color: white;
+  padding: 3px 15px;
+  border-radius: 6px;
+  font-style: italic;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+/* Grouped sentence section */
+.sentence-section {
+  display: block;
+  background-color: #0d1117;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 15px;
+  border-left: 4px solid #1b553c;
+}
+
+/* Welsh example text styling */
+.sentence-welsh {
+  font-size: 16px;
+  color: #f8b4be;
+  display: block;
+  margin: 5px;
+}
+
+/* English translation text styling */
+.sentence-english {
+  font-size: 16px;
+  color: #a8d5c2;
+  display: block;
+}
+
+/* Detailed rules container */
+.rulesbox {
+  background-color: #2a2a2a;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 30px;
+  border: 1px solid #1b553c;
+}
+
+/* Box for primary test questions */
+.questionbox {
+  background-color: #2a2a2a;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+/* Secondary question box */
+.genderbox {
+  background-color: #2a2a2a;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+/* Card-style test question block */
+.question-block {
+  background-color: #2a2a2a;
+  padding: 25px;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  border: 1px solid #1b553c;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Question numbering header */
+.question-block h4 {
+  text-align: left;
+  margin-top: 0;
+  color: #a8d5c2;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #236b4a;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+/* Question prompt text */
+.question-block p {
+  font-size: 19px;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+/* Interactive radio labels */
+.question-block label {
+  display: block;
+  margin: 8px 0;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  color: #eee;
+  border: 1px solid transparent;
+}
+
+/* Radio label hover effect */
+.question-block label:hover {
+  background-color: #236b4a;
+  border-color: #1b553c;
+}
+
+/* Question radio input button */
+.question-block input[type="radio"] {
+  width: auto;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+/* Question text response field */
+.question-block input[type="text"] {
+  margin-top: 10px;
+  background-color: #1b1b1b;
+  color: white;
+  border: 1px solid #1b553c;
+}
+
+/* Question text field focus */
+.question-block input[type="text"]:focus {
+  border-color: #2d845e;
+  outline: none;
+  background-color: #202020;
+}
+
+/* Small screen adjustments */
+@media (max-width: 600px) {
+  .flashcard {
+    width: 280px;
+  }
+
+  .nav-arrow {
+    right: -20px;
+    width: 40px;
+    height: 40px;
+  }
 }
