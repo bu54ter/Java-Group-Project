@@ -45,7 +45,185 @@ h5 {
 }
 
 /* Base link unvisited */
+/* Body and global font */
+body {
+  margin: 0;
+  font-family: "EB Garamond", sans-serif;
+  background-color: #202020;
+}
+
+/* Global headings */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "EB Garamond", "garamond-premier-pro-display";
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+h2 {
+  font-size: 25px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 17px;
+}
+
+h5 {
+  font-size: 15px;
+}
+
+/* Base link unvisited */
 a:link {
+  color: #5757fa;
+  text-decoration: none;
+}
+
+/* Base link visited */
+a:visited {
+  color: #8348bb;
+  text-decoration: none;
+}
+
+/* Base link hover */
+a:hover {
+  color: #5757fa;
+  text-decoration: underline;
+}
+
+/* Hero section container */
+.hero1 {
+  position: relative;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(#00000099, #00000099),
+    url('../files/img/img_ban1.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* Hero video element */
+.hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* Hero text wrapper */
+.hero1 .hero-text {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Hero heading */
+.hero1 .hero-text h1 {
+  font-size: 15vw;
+  margin: 5px 0;
+}
+
+/* Hero subheading */
+.hero1 .hero-text h3 {
+  font-size: 3vw;
+  margin: 5px 0;
+}
+
+/* Dashboard container 1 */
+.div1 {
+  max-width: 1000px;
+  margin: auto;
+  padding: 5px;
+  text-align: left;
+  color: white;
+  box-sizing: border-box;
+}
+
+/* Dashboard container 2 */
+.div2 {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 5px;
+  text-align: center;
+  color: white;
+  box-sizing: border-box;
+}
+
+/* Sticky navigation bar */
+nav.sticky {
+  background-color: #1b553c;
+  position: sticky;
+  top: 0;
+  margin: 0 auto;
+  width: 100%;
+  overflow: hidden;
+  z-index: 990;
+}
+
+/* Navigation list */
+ul.list-inline {
+  list-style: none;
+  margin: auto;
+  overflow: hidden;
+  align-items: center;
+  background-color: #1b553c;
+  display: flex;
+  max-width: 1000px;
+  padding: 0;
+  justify-content: flex-start;
+  color: white;
+}
+
+/* Navigation right-side alignment */
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+/* Navigation link color */
+ul.list-inline a:link,
+ul.list-inline a:visited {
+  color: white;
+}
+
+/* Navigation link items */
+ul.list-inline a {
+  display: inline-block;
+  padding: 20px 30px;
+  transition: background-color 0.3s;
+  text-decoration: none;
+}
+
+/* Navigation link hover style */
+ul.list-inline a:hover {
+  background-color: #14422f;
+  color: white;
+}
+
+/* Navigation active link style */
+ul.list-inline a.active {
+  background-color: #0e2e21;
 /* ====================================
    Global links - P.B Update 24/03/26
    ==================================== */
@@ -68,6 +246,8 @@ a:active {
 a:visited {
   color: #8348bb;
   text-decoration: none;
+  font-size: 24px;
+  font-size: 24px;
 }
 
 /* Base link hover */
