@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<link rel="stylesheet" th:href="@{/style.css}">
+<body>
+
+<div th:replace="~{layout :: heroSection50}"></div>
+<div th:replace="~{layout :: nav}"></div>
+
+<section class="div2">
+    <h1>500 - Something Went Wrong</h1>
+    <p>Sorry, an unexpected error occurred. Please try again.</p>
+    <a th:href="@{/}">Return to Home</a>
+</section>
+
+<div th:replace="~{layout :: footer}"></div>
+
+</body>
+</html>
