@@ -60,8 +60,23 @@ public class AdminController {
      * @return a redirect to the admin dashboard page after successful user creation
      *         ("redirect:/admin/dashboard")
      */
+    
+    /**
+       * second password box to confirm password, if passwords do not match, return to admin dashboard with error message
+     */
     @PostMapping("/createUser")
-    public String createUser(@ModelAttribute("user") User user) {
+    public String createUser(@ModelAttribute("user") User user,
+                             @RequestParam("confirmPassword") String confirmPassword,
+                             Model model) {
+
+        if (!user.getPassword().equals(confirmPassword)) {
+            model.addAttribute("user", user);
+            model.addAttribute("users", userRepo.findAll());
+            model.addAttribute("deletedUsers", userDeletedRepository.findAll());
+            model.addAttribute("passwordError", "Passwords do not match");
+            return "admin/dashboard";
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
         return "redirect:/admin/dashboard";
