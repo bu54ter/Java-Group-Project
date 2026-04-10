@@ -165,7 +165,7 @@ Testing is complete when:
 | STU-005 | Student Test | Verify student can submit completed test | Test completed | 1. Answer all questions<br>2. Submit test | Test submits successfully | Test submits successfully | Passed |  |  |
 | STU-006 | Student Test | Verify score/result is shown after submission | Submitted test exists | 1. Submit test | Student sees final result, score, or feedback | Student sees results and score |  |  |  |
 | STU-007 | Student Test | Verify correct answers are marked accurately | Known noun data exists | 1. Complete test using known correct answers | Score matches expected result |  |  |  |  |
-| STU-008 | Validation | Verify student cannot submit without answering required questions | Test started | 1. Leave one or more answers blank<br>2. Submit | Validation message is shown or submission is blocked |  |  |  |  |
+| STU-008 | Validation | Verify student cannot submit without answering required questions | Test started | 1. Leave one or more answers blank<br>2. Submit | Validation message is shown or submission is blocked | Can submit the test blank | Failed |  |  |
 | STU-009 | Session | Verify student progress is handled correctly if page refreshes | Test in progress | 1. Answer some questions<br>2. Refresh page | Application behaves as designed and does not corrupt the test session |  |  |  |  |
 
 ---
@@ -215,6 +215,8 @@ Testing is complete when:
 | Issue ID | Description | Severity | Impact | Raised By | Date Raised | Owner | Status | Resolution |
 |---|---|---|---|---|---|---|---|---|
 | DEF-001 | There was an unexpected error (type=Forbidden, status=403) when student tried to access admin area.| Low | This will be if a student enters /admin in the URL. Can be resolved with a redirect. | Fern | 10/04/2026| Adam | Closed | Page now redirects |
+| DEF-002 | Can submit a blank test| Low | This has a low impact and can be easily fixed | Fern | 10/04/2026| Adam | Open | Submitted as a bug |
+
 
 ---
 
