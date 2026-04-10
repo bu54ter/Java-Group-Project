@@ -282,6 +282,14 @@ textarea {
   resize: vertical;
 }
 
+/* Password help display added by P.B on 2026-04-10 */
+.password-help {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+
 /* Overlay modal background */
 .modal {
   display: none;
@@ -722,4 +730,5 @@ tr:last-child td {
     width: 40px;
     height: 40px;
   }
+  
 }
