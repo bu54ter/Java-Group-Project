@@ -3,11 +3,14 @@ package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.controller;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import jakarta.validation.Valid;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserDeletedRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
@@ -61,7 +64,31 @@ public class AdminController {
      *         ("redirect:/admin/dashboard")
      */
     @PostMapping("/createUser")
-    public String createUser(@ModelAttribute("user") User user) {
+    public String createUser(@Valid @ModelAttribute("user") User user,
+                             BindingResult bindingResult,
+                             Model model) {
+
+        if (user.getUsername() != null) {
+            user.setUsername(user.getUsername().trim());
+        }
+        if (user.getFirstname() != null) {
+            user.setFirstname(user.getFirstname().trim());
+        }
+        if (user.getSurname() != null) {
+            user.setSurname(user.getSurname().trim());
+        }
+
+        if (user.getUsername() != null && userRepo.existsByUsername(user.getUsername())) {
+            bindingResult.rejectValue("username", "error.user", "Username already exists");
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("users", userRepo.findAll());
+            model.addAttribute("deletedUsers", userDeletedRepository.findAll());
+            model.addAttribute("showNewUserModal", true);
+            return "admin/dashboard";
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
         return "redirect:/admin/dashboard";
