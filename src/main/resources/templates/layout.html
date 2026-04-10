@@ -102,18 +102,15 @@
 
 <div th:fragment="newUserModal">
 
-	<button
-		onclick="document.getElementById('newUserModal').style.display='block'"
-		class="button">Create new user</button>
+	<button onclick="openNewUserModal()" class="button">Create new user</button>
 
 	<div id="newUserModal" class="modal"
 		th:style="${passwordError} ? 'display:block;' : 'display:none;'">
 
-		<form class="modal-content" th:action="@{/createUser}"
+		<form id="newUserForm" class="modal-content" th:action="@{/createUser}"
 			th:object="${user}" method="post">
 			<div class="imgcontainer">
-				<span class="close"
-					onclick="document.getElementById('newUserModal').style.display='none'">
+				<span class="close" onclick="closeNewUserModal()">
 					&times;
 				</span>
 			</div>
@@ -130,6 +127,8 @@
 				<label>Confirm Password:</label>
 				<input type="password" name="confirmPassword" required>
 
+				<p id="passwordRule" class="password-help">Select a role to see the minimum password length.</p>
+
 				<label>First name:</label>
 				<input type="text" th:field="*{firstname}" required>
 				<div th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" class="error"></div>
@@ -140,13 +139,13 @@
 
 				<label>Role:</label><br>
 				<label>
-					<input type="radio" th:field="*{role}" value="ADMIN" required> Admin
+					<input type="radio" th:field="*{role}" value="ADMIN" required onchange="updatePasswordRule()"> Admin
 				</label>
 				<label>
-					<input type="radio" th:field="*{role}" value="LECTURER"> Lecturer
+					<input type="radio" th:field="*{role}" value="LECTURER" onchange="updatePasswordRule()"> Lecturer
 				</label>
 				<label>
-					<input type="radio" th:field="*{role}" value="STUDENT"> Student
+					<input type="radio" th:field="*{role}" value="STUDENT" onchange="updatePasswordRule()"> Student
 				</label>
 				<div th:if="${#fields.hasErrors('role')}" th:errors="*{role}" class="error"></div>
 			</div>
@@ -261,24 +260,83 @@
 
 <div th:fragment="scripts">
 	<script>
-		window.onclick = function(event) {
-			const modal = document.getElementById('loginModal');
-			if (event.target == modal) {
-				modal.style.display = "none";
+		/* Clears the Create User form when the modal is opened or closed,
+		   so old half-entered values do not remain in the form. P.B 10/04/26 */
+		function clearNewUserForm() {
+			const form = document.getElementById('newUserForm');
+			const passwordRule = document.getElementById('passwordRule');
+
+			if (form) {
+				const textInputs = form.querySelectorAll('input[type="text"], input[type="password"]');
+				textInputs.forEach(function(input) {
+					input.value = "";
+				});
+
+				const radioInputs = form.querySelectorAll('input[type="radio"]');
+				radioInputs.forEach(function(input) {
+					input.checked = false;
+				});
+			}
+
+			if (passwordRule) {
+				passwordRule.textContent = "Select a role to see the minimum password length.";
 			}
 		}
-		window.onclick = function(event) {
-			const modal = document.getElementById('newUserModal');
-			if (event.target == modal) {
-				modal.style.display = "none";
+
+		/* Opens the Create User modal and resets the form first. */
+		function openNewUserModal() {
+			clearNewUserForm();
+			document.getElementById('newUserModal').style.display = 'block';
+		}
+
+		/* Closes the Create User modal and clears the form values. */
+		function closeNewUserModal() {
+			clearNewUserForm();
+			document.getElementById('newUserModal').style.display = 'none';
+		}
+
+		/* Updates the password helper text depending on the selected role. */
+		function updatePasswordRule() {
+			const selectedRole = document.querySelector('#newUserModal input[name="role"]:checked');
+			const passwordRule = document.getElementById('passwordRule');
+
+			if (!passwordRule) {
+				return;
+			}
+
+			if (!selectedRole) {
+				passwordRule.textContent = "Select a role to see the minimum password length.";
+			} else if (selectedRole.value === "STUDENT") {
+				passwordRule.textContent = "Minimum 8 characters.";
+			} else if (selectedRole.value === "LECTURER") {
+				passwordRule.textContent = "Minimum 10 characters.";
+			} else if (selectedRole.value === "ADMIN") {
+				passwordRule.textContent = "Minimum 12 characters.";
 			}
 		}
+
+		/* Closes modals when the user clicks outside them. */
 		window.onclick = function(event) {
-			const modal = document.getElementById('newNounModal');
-			if (event.target == modal) {
-				modal.style.display = "none";
+			const loginModal = document.getElementById('loginModal');
+			const newUserModal = document.getElementById('newUserModal');
+			const newNounModal = document.getElementById('newNounModal');
+
+			if (event.target == loginModal) {
+				loginModal.style.display = "none";
+			}
+
+			if (event.target == newUserModal) {
+				closeNewUserModal();
+			}
+
+			if (event.target == newNounModal) {
+				newNounModal.style.display = "none";
 			}
 		}
+
+		/* Sets the correct password helper message when the page loads. */
+		document.addEventListener("DOMContentLoaded", updatePasswordRule);
+
 		function toggleAnswer(button) {
 			const answer = button.nextElementSibling;
 
