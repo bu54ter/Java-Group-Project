@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:fragment="head">
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <section th:fragment="heroSection" class="hero1">
@@ -23,28 +24,36 @@
 
 <nav th:fragment="nav(activePage)" class="sticky">
 	<ul class="list-inline">
-		<li><a th:href="@{/}" th:classappend="${activePage == 'Home'} ? 'active' : ''">Home</a></li>
-		<!-- Admin dashboard -->
-		<li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/dashboard}"
-				th:classappend="${activePage == 'AdminDashboard'} ? 'active' : ''">Admin Dashboard</a></li>
+		<li><a th:href="@{/}"
+			th:classappend="${activePage == 'Home'} ? 'active' : ''">Home</a></li>
 
-		<!-- Lecturer dashboard -->
-		<li sec:authorize="hasRole('LECTURER')"><a th:href="@{/lecturer/dashboard}"
-				th:classappend="${activePage == 'LecturerDashboard'} ? 'active' : ''">Lecturer Dashboard</a></li>
-		<!-- Student dashboard -->
-		<li sec:authorize="hasRole('STUDENT')"><a th:href="@{/student/dashboard}"
-				th:classappend="${activePage == 'StudentDashboard'} ? 'active' : ''">Student Dashboard</a></li>
-		<!-- Student revision -->
-		<li sec:authorize="hasRole('STUDENT')"><a th:href="@{/student/revision}"
-				th:classappend="${activePage == 'Revision'} ? 'active' : ''">Revision</a></li>
-		<!-- Student test -->
-		<li sec:authorize="hasRole('STUDENT')"><a th:href="@{/student/test}"
-				th:classappend="${activePage == 'Test'} ? 'active' : ''">Take a Test</a></li>
+		<li sec:authorize="hasRole('ADMIN')"><a
+			th:href="@{/admin/dashboard}"
+			th:classappend="${activePage == 'AdminDashboard'} ? 'active' : ''">Admin
+				Dashboard</a></li>
 
+		<li sec:authorize="hasRole('LECTURER')"><a
+			th:href="@{/lecturer/dashboard}"
+			th:classappend="${activePage == 'LecturerDashboard'} ? 'active' : ''">Lecturer
+				Dashboard</a></li>
+
+		<li sec:authorize="hasRole('STUDENT')"><a
+			th:href="@{/student/dashboard}"
+			th:classappend="${activePage == 'StudentDashboard'} ? 'active' : ''">Student
+				Dashboard</a></li>
+
+		<li sec:authorize="hasRole('STUDENT')"><a
+			th:href="@{/student/revision}"
+			th:classappend="${activePage == 'Revision'} ? 'active' : ''">Revision</a></li>
+
+		<li sec:authorize="hasRole('STUDENT')"><a
+			th:href="@{/student/test}"
+			th:classappend="${activePage == 'Test'} ? 'active' : ''">Take a
+				Test</a></li>
 
 		<div class="nav-right">
 			<li sec:authorize="not isAuthenticated()"><a href="#"
-					onclick="document.getElementById('loginModal').style.display='block'; return false;">
+				onclick="document.getElementById('loginModal').style.display='block'; return false;">
 					Login </a></li>
 
 			<li sec:authorize="isAuthenticated()">
@@ -61,22 +70,25 @@
 
 <div th:fragment="loginModal">
 	<div id="loginModal" class="modal">
-		<form class="modal-content animate" th:action="@{/login}" method="post">
+		<form class="modal-content animate" th:action="@{/login}"
+			method="post">
 
 			<div class="imgcontainer">
 				<span class="close" title="Close Modal"
 					onclick="document.getElementById('loginModal').style.display='none'">
-					&times; </span> <img th:src="@{/img/avit.jpeg}" alt="Avatar" class="avatar">
+					&times; </span> <img th:src="@{/img/avit.jpeg}" alt="Avatar"
+					class="avatar">
 			</div>
 
 			<div class="container">
-				<label for="username"><b>Username</b></label> <input type="text" id="username" name="username"
-					placeholder="Enter Username" required>
+				<label for="username"><b>Username</b></label> <input type="text"
+					id="username" name="username" placeholder="Enter Username" required>
 
-				<label for="password"><b>Password</b></label> <input type="password" id="password" name="password"
-					placeholder="Enter Password" required>
+				<label for="password"><b>Password</b></label> <input type="password"
+					id="password" name="password" placeholder="Enter Password" required>
 
-				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				<input type="hidden" th:name="${_csrf.parameterName}"
+					th:value="${_csrf.token}" />
 			</div>
 			<div th:if="${param.error}" class="error-message">!!! Invalid
 				username or password !!!</div>
@@ -89,15 +101,19 @@
 </div>
 
 <div th:fragment="newUserModal">
-	<button onclick="document.getElementById('newUserModal').style.display='block'" class="button">
-		Create new user
-	</button>
 
-	<div id="newUserModal" class="modal">
+	<button
+		onclick="document.getElementById('newUserModal').style.display='block'"
+		class="button">Create new user</button>
 
-		<form class="modal-content" th:action="@{/createUser}" th:object="${user}" method="post">
+	<div id="newUserModal" class="modal"
+		th:style="${passwordError} ? 'display:block;' : 'display:none;'">
+
+		<form class="modal-content" th:action="@{/createUser}"
+			th:object="${user}" method="post">
 			<div class="imgcontainer">
-				<span class="close" onclick="document.getElementById('newUserModal').style.display='none'">
+				<span class="close"
+					onclick="document.getElementById('newUserModal').style.display='none'">
 					&times;
 				</span>
 			</div>
@@ -110,6 +126,9 @@
 				<label>Password:</label>
 				<input type="password" th:field="*{password}" required>
 				<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
+
+				<label>Confirm Password:</label>
+				<input type="password" name="confirmPassword" required>
 
 				<label>First name:</label>
 				<input type="text" th:field="*{firstname}" required>
@@ -132,7 +151,11 @@
 				<div th:if="${#fields.hasErrors('role')}" th:errors="*{role}" class="error"></div>
 			</div>
 
-			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			<input type="hidden" th:name="${_csrf.parameterName}"
+				th:value="${_csrf.token}" />
+
+			<div th:if="${passwordError}" class="error-message"
+				th:text="${passwordError}"></div>
 
 			<div class="container1">
 				<button type="submit" class="button">Create user</button>
@@ -148,32 +171,38 @@
 </div>
 
 <div th:fragment="newNounModal">
-	<button onclick="document.getElementById('newNounModal').style.display='block'" class="button">Create new
-		noun</button>
+	<button
+		onclick="document.getElementById('newNounModal').style.display='block'"
+		class="button">Create new noun</button>
 	<div id="newNounModal" class="modal">
-		<form class="modal-content" th:action="@{/createNoun}" th:object="${noun}" method="post">
+		<form class="modal-content" th:action="@{/createNoun}"
+			th:object="${noun}" method="post">
 
 			<div class="imgcontainer">
-				<span class="close" onclick="document.getElementById('newNounModal').style.display='none'">
+				<span class="close"
+					onclick="document.getElementById('newNounModal').style.display='none'">
 					&times; </span>
 			</div>
 
 			<div class="container">
 
-				<label>Welsh noun:</label> <input type="text" th:field="*{welshWord}" required> <label>English
+				<label>Welsh noun:</label> <input type="text"
+					th:field="*{welshWord}" required> <label>English
 					translation:</label> <input type="text" th:field="*{englishWord}" required>
 
-				<label>Welsh example sentence:</label> <input type="text" th:field="*{welshSent}" required>
-				<label>English
-					example sentence:</label> <input type="text" th:field="*{englishSent}" required>
-
-				<label>Gender:</label> <label> <input type="radio" th:field="*{gender}" value="MASCULINE" required>
+				<label>Welsh example sentence:</label> <input type="text"
+					th:field="*{welshSent}" required> <label>English
+					example sentence:</label> <input type="text" th:field="*{englishSent}"
+					required> <label>Gender:</label> <label> <input
+					type="radio" th:field="*{gender}" value="MASCULINE" required>
 					Masculine
-				</label> <label> <input type="radio" th:field="*{gender}" value="FEMININE"> Feminine
+				</label> <label> <input type="radio" th:field="*{gender}"
+					value="FEMININE"> Feminine
 				</label>
 			</div>
 
-			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			<input type="hidden" th:name="${_csrf.parameterName}"
+				th:value="${_csrf.token}" />
 
 			<div class="container1">
 				<button type="submit" class="button">Create noun</button>
@@ -184,27 +213,31 @@
 
 <div th:fragment="editNounModal">
 	<div id="editNounModal" class="modal">
-		<form class="modal-content" id="editNounForm" th:action="@{/updateNoun}" th:object="${noun}" method="post">
+		<form class="modal-content" id="editNounForm"
+			th:action="@{/updateNoun}" th:object="${noun}" method="post">
 			<div class="imgcontainer">
-				<span class="close" onclick="document.getElementById('editNounModal').style.display='none'">
+				<span class="close"
+					onclick="document.getElementById('editNounModal').style.display='none'">
 					&times; </span>
 			</div>
 			<div class="container">
-				<label>Welsh noun:</label> <input type="text" id="editWelshWord" name="welshWord" required>
-				<label>English
-					translation:</label> <input type="text" id="editEnglishWord" name="englishWord" required>
-				<label>Welsh example sentence:</label>
-				<input type="text" id="editWelshSent" name="welshSent" required>
-
-				<label>English example sentence:</label> <input type="text" id="editEnglishSent" name="englishSent"
-					required>
-				<label>Gender:</label>
-				<label> <input type="radio" name="gender" value="MASCULINE" id="editGenderMasculine" required> Masculine
-				</label> <label> <input type="radio" name="gender" value="FEMININE" id="editGenderFeminine"> Feminine
+				<label>Welsh noun:</label> <input type="text" id="editWelshWord"
+					name="welshWord" required> <label>English
+					translation:</label> <input type="text" id="editEnglishWord"
+					name="englishWord" required> <label>Welsh example
+					sentence:</label> <input type="text" id="editWelshSent" name="welshSent"
+					required> <label>English example sentence:</label> <input
+					type="text" id="editEnglishSent" name="englishSent" required>
+				<label>Gender:</label> <label> <input type="radio"
+					name="gender" value="MASCULINE" id="editGenderMasculine" required>
+					Masculine
+				</label> <label> <input type="radio" name="gender" value="FEMININE"
+					id="editGenderFeminine"> Feminine
 				</label>
 			</div>
 
-			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			<input type="hidden" th:name="${_csrf.parameterName}"
+				th:value="${_csrf.token}" />
 
 			<div class="container1">
 				<button type="submit" class="button">Update noun</button>
@@ -213,38 +246,34 @@
 	</div>
 </div>
 
-<!-- User details -->
 <div th:fragment="userDetails">
-	Hello <span th:text="${#authentication.principal.firstname}"></span>
-	(<span th:text="${#authentication.principal.role}"></span>)
+	Hello <span th:text="${#authentication.principal.firstname}"></span> (<span
+		th:text="${#authentication.principal.role}"></span>)
 </div>
 
-<!-- Logout -->
 <div th:fragment="logout">
 	<a th:href="@{/logout}"> Logout </a>
 </div>
 
-<!-- Footer -->
 <div th:fragment="footer">
 	<p>© 2026 - Bamber, Bramble, Dooley, Ritchie, Roberts, Thomas -</p>
 </div>
 
-<!-- Scripts -->
 <div th:fragment="scripts">
 	<script>
-		window.onclick = function (event) {
+		window.onclick = function(event) {
 			const modal = document.getElementById('loginModal');
 			if (event.target == modal) {
 				modal.style.display = "none";
 			}
 		}
-		window.onclick = function (event) {
+		window.onclick = function(event) {
 			const modal = document.getElementById('newUserModal');
 			if (event.target == modal) {
 				modal.style.display = "none";
 			}
 		}
-		window.onclick = function (event) {
+		window.onclick = function(event) {
 			const modal = document.getElementById('newNounModal');
 			if (event.target == modal) {
 				modal.style.display = "none";
