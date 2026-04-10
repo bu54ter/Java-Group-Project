@@ -19,6 +19,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 /**
  * Entity representing a system user.
@@ -45,17 +49,24 @@ public class User implements UserDetails {
     private Long userId;
 
     /** Unique username used for login */
+    @NotBlank(message = "Username is required")
+    @Size(max = 20, message = "Username must be 20 characters or fewer")
     @Column(nullable = false, unique = true)
     private String username;
-
+    
     /** Encrypted password (must never be stored in plain text) */
+    @NotBlank(message = "Password is required")
     private String password;
 
     /** User's first name */
+    @NotBlank(message = "First name is required")
+    @Size(max = 20)
     @Column(nullable = false)
     private String firstname;
 
     /** User's surname */
+    @NotBlank(message = "Surname is required")
+    @Size(max = 20)
     @Column(nullable = false)
     private String surname;
 

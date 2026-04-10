@@ -26,32 +26,30 @@
 	<ul class="list-inline">
 		<li><a th:href="@{/}"
 			th:classappend="${activePage == 'Home'} ? 'active' : ''">Home</a></li>
-		<!-- Admin dashboard -->
+
 		<li sec:authorize="hasRole('ADMIN')"><a
 			th:href="@{/admin/dashboard}"
 			th:classappend="${activePage == 'AdminDashboard'} ? 'active' : ''">Admin
 				Dashboard</a></li>
 
-		<!-- Lecturer dashboard -->
 		<li sec:authorize="hasRole('LECTURER')"><a
 			th:href="@{/lecturer/dashboard}"
 			th:classappend="${activePage == 'LecturerDashboard'} ? 'active' : ''">Lecturer
 				Dashboard</a></li>
-		<!-- Student dashboard -->
+
 		<li sec:authorize="hasRole('STUDENT')"><a
 			th:href="@{/student/dashboard}"
 			th:classappend="${activePage == 'StudentDashboard'} ? 'active' : ''">Student
 				Dashboard</a></li>
-		<!-- Student revision -->
+
 		<li sec:authorize="hasRole('STUDENT')"><a
 			th:href="@{/student/revision}"
 			th:classappend="${activePage == 'Revision'} ? 'active' : ''">Revision</a></li>
-		<!-- Student test -->
+
 		<li sec:authorize="hasRole('STUDENT')"><a
 			th:href="@{/student/test}"
 			th:classappend="${activePage == 'Test'} ? 'active' : ''">Take a
 				Test</a></li>
-
 
 		<div class="nav-right">
 			<li sec:authorize="not isAuthenticated()"><a href="#"
@@ -103,40 +101,56 @@
 </div>
 
 <div th:fragment="newUserModal">
+
 	<button
 		onclick="document.getElementById('newUserModal').style.display='block'"
 		class="button">Create new user</button>
+
 	<div id="newUserModal" class="modal"
 		th:style="${passwordError} ? 'display:block;' : 'display:none;'">
-		// The form submits to /createUser, handles password error display, and includes CSRF token for security.
 
 		<form class="modal-content" th:action="@{/createUser}"
 			th:object="${user}" method="post">
 			<div class="imgcontainer">
 				<span class="close"
 					onclick="document.getElementById('newUserModal').style.display='none'">
-					&times; </span>
+					&times;
+				</span>
 			</div>
 
 			<div class="container">
-				<label>Username:</label> <input type="text" th:field="*{username}"
-					required> <label>Password:</label> <input type="password"
-					th:field="*{password}" required> <label>Confirm
-					Password:</label> <input type="password" name="confirmPassword" required>
+				<label>Username:</label>
+				<input type="text" th:field="*{username}" required>
+				<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error"></div>
 
-				<label>First name:</label> <input type="text"
-					th:field="*{firstname}" required> <label>Surname:</label> <input
-					type="text" th:field="*{surname}" required> <label>Role:</label><br>
-				<label> <input type="radio" th:field="*{role}" value="ADMIN"
-					required> Admin
-				</label> <label> <input type="radio" th:field="*{role}"
-					value="LECTURER"> Lecturer
-				</label> <label> <input type="radio" th:field="*{role}"
-					value="STUDENT"> Student
+				<label>Password:</label>
+				<input type="password" th:field="*{password}" required>
+				<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
+
+				<label>Confirm Password:</label>
+				<input type="password" name="confirmPassword" required>
+
+				<label>First name:</label>
+				<input type="text" th:field="*{firstname}" required>
+				<div th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" class="error"></div>
+
+				<label>Surname:</label>
+				<input type="text" th:field="*{surname}" required>
+				<div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="error"></div>
+
+				<label>Role:</label><br>
+				<label>
+					<input type="radio" th:field="*{role}" value="ADMIN" required> Admin
 				</label>
+				<label>
+					<input type="radio" th:field="*{role}" value="LECTURER"> Lecturer
+				</label>
+				<label>
+					<input type="radio" th:field="*{role}" value="STUDENT"> Student
+				</label>
+				<div th:if="${#fields.hasErrors('role')}" th:errors="*{role}" class="error"></div>
 			</div>
 
-			<!-- CSRF token for Spring Security -->
 			<input type="hidden" th:name="${_csrf.parameterName}"
 				th:value="${_csrf.token}" />
 
@@ -148,6 +162,12 @@
 			</div>
 		</form>
 	</div>
+
+	<script th:if="${showNewUserModal}">
+		document.addEventListener("DOMContentLoaded", function () {
+			document.getElementById('newUserModal').style.display = 'block';
+		});
+	</script>
 </div>
 
 <div th:fragment="newNounModal">
@@ -226,23 +246,19 @@
 	</div>
 </div>
 
-<!-- User details -->
 <div th:fragment="userDetails">
 	Hello <span th:text="${#authentication.principal.firstname}"></span> (<span
 		th:text="${#authentication.principal.role}"></span>)
 </div>
 
-<!-- Logout -->
 <div th:fragment="logout">
 	<a th:href="@{/logout}"> Logout </a>
 </div>
 
-<!-- Footer -->
 <div th:fragment="footer">
 	<p>© 2026 - Bamber, Bramble, Dooley, Ritchie, Roberts, Thomas -</p>
 </div>
 
-<!-- Scripts -->
 <div th:fragment="scripts">
 	<script>
 		window.onclick = function(event) {
