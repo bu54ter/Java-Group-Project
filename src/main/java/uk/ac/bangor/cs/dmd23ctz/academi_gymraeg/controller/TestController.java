@@ -83,7 +83,13 @@ public class TestController {
 	@PostMapping("/student/test/submit")
 	public String submitTest(@RequestParam Long testId, @RequestParam List<Long> questionIds,
 			@RequestParam Map<String, String> allParams) {
+		Tests test = testRepository.findById(testId).orElseThrow(() -> new RuntimeException("Test not found"));
+		if (test.isSubmitted()) {
+			return "redirect:/student/results/" + testId;
+		}
 		answerService.processTestSubmission(testId, questionIds, allParams);
+		test.setSubmitted(true);
+		testRepository.save(test);
 		return "redirect:/student/results/" + testId;
 	}
 }

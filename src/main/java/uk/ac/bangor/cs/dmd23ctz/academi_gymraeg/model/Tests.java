@@ -55,6 +55,10 @@ public class Tests {
     @Column(name = "score")
     private Integer score;
 
+    /** Whether the test has been submitted, to prevent resubmission */
+    @Column(name = "submitted", nullable = false)
+    private boolean submitted = false;
+
     /**
      * List of questions associated with this test.
      *
@@ -99,6 +103,14 @@ public class Tests {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+
+    public boolean isSubmitted() {
+        return submitted;
+    }
+
+    public void setSubmitted(boolean submitted) {
+        this.submitted = submitted;
     }
 
     /**
