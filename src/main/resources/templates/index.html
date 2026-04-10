@@ -1,58 +1,56 @@
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{layout :: head}"></head>
 <link rel="stylesheet" th:href="@{/style.css}">
+
 <body>
 
-<div th:replace="layout :: heroSection"></div>
-<div th:replace="layout :: nav"></div>
-<div sec:authorize="not isAuthenticated()">
-    <div th:replace="layout :: loginModal"></div>
-</div>
+	<div th:replace="layout :: heroSection"></div>
+	<div th:replace="~{layout :: nav('Home')}"></div>
+	<div sec:authorize="not isAuthenticated()">
+		<div th:replace="layout :: loginModal"></div>
+	</div>
 	<section class="div2">
-	<h1>Croeso</h1>
-	<p>This website is designed to help students learn new Welsh nouns and test their knowledge.</p>
-	<hr/>
+		<h1>Croeso</h1>
+		<p>This website is designed to help students learn new Welsh nouns and test their knowledge.</p>
+		<hr />
 		<div th:if="${wordOfTheDay != null}" id="nounCard">
-		<h2>Noun of the Day</h2>
-			<h5>
-				<strong><span id="welshWord" th:text="${wordOfTheDay.welshWord}"></span></strong>
-				: <span id="englishWord" th:text="${wordOfTheDay.englishWord}"></span>
-			</h5>
-			<p>
-				<i><span id="gender" th:text="${wordOfTheDay.gender == T(uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Gender).MASCULINE ? 'Masculine' : 'Feminine'}"></span></i>
-				<br />
-				<strong>How to use in a sentence:</strong>
-				<br />
-				<span id="welshSent" th:text="${wordOfTheDay.welshSent}"></span>
-				<i><span id="englishSent" th:text="${wordOfTheDay.englishSent}"></span></i>
-			</p>
+			<div class="noun-badge">Gair y Dydd</div>
+			<div class="noun-content">
+				<h2 class="welsh-word" th:text="${wordOfTheDay.welshWord}"></h2>
+				<h3 class="english-translation">
+					: <span th:text="${wordOfTheDay.englishWord}"></span>
+				</h3>
+				<p class="noun-details">
+					<span class="gender-tag"
+						th:text="${wordOfTheDay.gender.name() == 'MASCULINE' ? 'Masculine' : 'Feminine'}"></span>
+					<br />
+					<span class="sentence-section">
+						<strong>Example:</strong><br />
+						<span class="sentence-welsh" th:text="${wordOfTheDay.welshSent}"></span><br />
+						<i class="sentence-english" th:text="${wordOfTheDay.englishSent}"></i>
+					</span>
+				</p>
 			</div>
+		</div>
 
 		<div th:if="${wordOfTheDay == null}">
 			<p>No nouns available.</p>
 		</div>
-		
+
 		<hr>
 		<section class="div1">
-		
-		<p>EXTRA. Show a noun and its translate, then a sentence how to
-			use. DONE</p>
-		<p>EXTRA. Button to shuffle the above noun. DONE, jsut refreshes the page, myabe a better option? DONE</p>
-		<p>EXTRA, Disable this view for Student who is taking a test.</p>
 
-		<hr>
-	
+			<div th:replace="layout :: footer"></div>
+			<div th:replace="layout :: scripts"></div>
+		</section>
+	</section>
 
-	<div th:replace="layout :: footer"></div>
-	<div th:replace="layout :: scripts"></div>
-	</section>
-	</section>
-	
+	<script th:if="${param.error}">
+		document.addEventListener("DOMContentLoaded", function () {
+			document.getElementById('loginModal').style.display = 'block';
+		});
+	</script>
 </body>
-</html>
 
-<script th:if="${param.error}">
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById('loginModal').style.display = 'block';
-    });
-</script>
+</html>

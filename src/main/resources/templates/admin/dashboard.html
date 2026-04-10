@@ -1,92 +1,80 @@
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{layout :: head}"></head>
 <link rel="stylesheet" th:href="@{/style.css}">
+
 <body>
 
-<div th:replace="layout :: heroSection50"></div>
-<div th:replace="layout :: nav"></div>
-<div sec:authorize="not isAuthenticated()">
-    <div th:replace="layout :: loginModal"></div>
-</div>
+
+	<div th:replace="~{layout :: nav('AdminDashboard')}"></div>
+	<div sec:authorize="not isAuthenticated()">
+		<div th:replace="layout :: loginModal"></div>
+	</div>
 	<section class="div1">
-	<h2>Admin Dashboard</h2>
-	<hr>
-	<div th:replace="layout :: newUserModal"></div>
-	<h2>Active Users</h2>
+		<h2>Admin Dashboard</h2>
+		<hr>
+		<h2>Active users</h2>
+		<div th:replace="layout :: newUserModal"></div><br>
+		<table >
+			<tr>
+				<th>ID</th>
+				<th>Username</th>
+				<th>Role</th>
+				<th>First Name</th>
+				<th>Surname</th>
+				<th>Date Created</th>
+				<th>Reset Password</th>
+				<th>Delete User</th>
+			</tr>
 
-	<table border="1">
-		<tr>
-			<th>ID</th>
-			<th>Username</th>
-			<th>Role</th>
-			<th>First Name</th>
-			<th>Surname</th>
-			<th>Date Created</th>
-			<th>Reset Password</th>
-			<th>Delete User</th>
-		</tr>
-
-		<tr th:each="u : ${users}">
-			<td th:text="${u.userId}"></td>
-			<td th:text="${u.username}"></td>
-			<td th:text="${u.role}"></td>
-			<td th:text="${u.firstname}"></td>
-			<td th:text="${u.surname}"></td>
-			<td th:text="${u.createdAt}"></td>
-			<td>
-				<form th:action="@{/users/{id}/reset-password(id=${u.userId})}"
-					method="post">
-					<input type="password" name="newPassword"
-						placeholder="New password" required>
-					<button type="submit">Reset Password</button>
-				</form>
-			</td>
-			<td>
-				<form th:action="@{/users/{id}/delete(id=${u.userId})}"
-					method="post" style="display: inline;">
-					<input type="hidden" th:name="${_csrf.parameterName}"
-						th:value="${_csrf.token}" />
-					<button type="submit" onclick="return confirm('Delete this user?')">Delete</button>
-				</form>
-			</td>
-		</tr>
-	</table>
-	<hr>
-	<h2>Deleted Users</h2>
-	<table border="1">
-		<tr>
-			<th>ID</th>
-			<th>Username</th>
-			<th>Role</th>
-			<th>First Name</th>
-			<th>Surname</th>
-			<th>Date Deleted</th>
-		</tr>
-		<tr th:each="ud : ${deletedUsers}">
-			<td th:text="${ud.userId}"></td>
-			<td th:text="${ud.username}"></td>
-			<td th:text="${ud.role}"></td>
-			<td th:text="${ud.firstname}"></td>
-			<td th:text="${ud.surname}"></td>
-			<td th:text="${ud.deletedAt}"></td>
+			<tr th:each="u : ${users}">
+				<td th:text="${u.userId}"></td>
+				<td th:text="${u.username}"></td>
+				<td th:text="${u.role}"></td>
+				<td th:text="${u.firstname}"></td>
+				<td th:text="${u.surname}"></td>
+				<td th:text="${u.createdAt}"></td>
+				<td>
+					<form th:action="@{/users/{id}/reset-password(id=${u.userId})}" method="post" class="resetpwd">
+						<input type="password" name="newPassword" placeholder="New password" required>
+						<button type="submit" class="smlbtn">Reset password</button>
+					</form>
+				</td>
+				<td>
+					<form th:action="@{/users/{id}/delete(id=${u.userId})}" method="post" style="display: inline;">
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+						<button type="submit" class="smlbtn"
+							onclick="return confirm('Delete this user?')">Delete</button>
+					</form>
+				</td>
+			</tr>
 		</table>
-	<hr>
-	<p>
-		Jobs to do: <br /> As a System Administrator, I must be able to
-		register a new user. DONE. <br /> As a System Administrator, I should
-		be able to set the type of any user. DONE <br /> As a System
-		Administrator, I should be able to delete users. DONE <br /> As a
-		System Administrator, I should be able to reset users' passwords. DONE<br />
+		<br>
+		<hr>
 
-	<hr>
-	
-	
-	<div th:replace="layout :: footer"></div>
-	<div th:replace="layout :: scripts"></div>
-	
+		<h2>Deleted Users</h2>
+		<table >
+			<tr>
+				<th>ID</th>
+				<th>Username</th>
+				<th>Role</th>
+				<th>First Name</th>
+				<th>Surname</th>
+				<th>Date Deleted</th>
+			</tr>
+			<tr th:each="ud : ${deletedUsers}">
+				<td th:text="${ud.userId}"></td>
+				<td th:text="${ud.username}"></td>
+				<td th:text="${ud.role}"></td>
+				<td th:text="${ud.firstname}"></td>
+				<td th:text="${ud.surname}"></td>
+				<td th:text="${ud.deletedAt}"></td>
+		</table>
+		<hr>
+		<div th:replace="layout :: footer"></div>
+		<div th:replace="layout :: scripts"></div>
+
 	</section>
 </body>
+
 </html>
-
-
-
