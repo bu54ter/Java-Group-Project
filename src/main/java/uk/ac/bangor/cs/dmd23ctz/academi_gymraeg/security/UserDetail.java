@@ -55,12 +55,15 @@ public class UserDetail implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
+        // Normalise username before checking the database
+        String normalisedUsername = username.trim().toLowerCase();
+
         // Attempt to find the user by username in the database
-        Optional<User> user = userRepo.findByUsername(username);
+        Optional<User> user = userRepo.findByUsername(normalisedUsername);
 
         // If user is not found, throw exception for Spring Security to handle
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException(username + " not found.");
+            throw new UsernameNotFoundException(normalisedUsername + " not found.");
         }
 
         // Return the found user (must implement UserDetails)
