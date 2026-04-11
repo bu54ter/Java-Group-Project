@@ -1,21 +1,28 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="~{layout :: head}"></head>
 <link rel="stylesheet" th:href="@{/style.css}">
 
 <body>
 
-
 	<div th:replace="~{layout :: nav('AdminDashboard')}"></div>
 	<div sec:authorize="not isAuthenticated()">
 		<div th:replace="layout :: loginModal"></div>
 	</div>
+
 	<section class="div1">
 		<h2>Admin Dashboard</h2>
 		<hr>
 		<h2>Active users</h2>
-		<div th:replace="layout :: newUserModal"></div><br>
-		<table >
+
+		<div th:if="${resetPasswordError}" class="error-message"
+			th:text="${resetPasswordError}"></div>
+
+		<div th:replace="layout :: newUserModal"></div>
+		<br>
+
+		<table>
 			<tr>
 				<th>ID</th>
 				<th>Username</th>
@@ -35,25 +42,56 @@
 				<td th:text="${u.surname}"></td>
 				<td th:text="${u.createdAt}"></td>
 				<td>
-					<form th:action="@{/users/{id}/reset-password(id=${u.userId})}" method="post" class="resetpwd">
-						<input type="password" name="newPassword" placeholder="New password" required>
-						<button type="submit" class="smlbtn">Reset password</button>
+					<!-- Reset password form with:
+					     1. eye icon to show or hide password
+					     2. role-based minimum length hint
+					     3. two-step re-enter password check
+					     all kept inside the same table cell -->
+					<form th:action="@{/users/{id}/reset-password(id=${u.userId})}"
+						method="post" class="resetpwd"
+						onsubmit="return handleResetPasswordSubmit(this)">
+						<input type="hidden" th:name="${_csrf.parameterName}"
+							th:value="${_csrf.token}" />
+
+						<!-- Tracks whether the reset form is on the first entry or re-enter step -->
+						<input type="hidden" name="confirmStep" value="false"
+							class="confirm-step">
+
+						<!-- Temporarily stores the first password entry for front-end comparison -->
+						<input type="hidden" name="firstPasswordEntry" value=""
+							class="first-password-entry">
+
+						<div class="password-input-wrapper">
+							<input type="password" name="newPassword" required
+								class="reset-password-input"
+								th:attr="data-role=${u.role.name()}"
+								placeholder="New password">
+							<button type="button" class="toggle-password-btn"
+								onclick="togglePassword(this)" aria-label="Show password"
+								title="Show password">👁</button>
+						</div>
+
+						<button type="submit" class="smlbtn reset-password-btn">Reset
+							password</button>
 					</form>
 				</td>
 				<td>
-					<form th:action="@{/users/{id}/delete(id=${u.userId})}" method="post" style="display: inline;">
-						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+					<form th:action="@{/users/{id}/delete(id=${u.userId})}"
+						method="post" style="display: inline;">
+						<input type="hidden" th:name="${_csrf.parameterName}"
+							th:value="${_csrf.token}" />
 						<button type="submit" class="smlbtn"
 							onclick="return confirm('Delete this user?')">Delete</button>
 					</form>
 				</td>
 			</tr>
 		</table>
+
 		<br>
 		<hr>
 
 		<h2>Deleted Users</h2>
-		<table >
+		<table>
 			<tr>
 				<th>ID</th>
 				<th>Username</th>
@@ -69,10 +107,109 @@
 				<td th:text="${ud.firstname}"></td>
 				<td th:text="${ud.surname}"></td>
 				<td th:text="${ud.deletedAt}"></td>
+			</tr>
 		</table>
 		<hr>
+
 		<div th:replace="layout :: footer"></div>
 		<div th:replace="layout :: scripts"></div>
+
+		<script>
+			/* Returns the minimum password length required for each user role. */
+			function getMinLengthForRole(role) {
+				if (role === "STUDENT") {
+					return 8;
+				} else if (role === "LECTURER") {
+					return 10;
+				} else if (role === "ADMIN") {
+					return 12;
+				}
+				return 0;
+			}
+
+			/* Returns the short default placeholder text for the reset password field. */
+			function getDefaultResetPlaceholder(role) {
+				if (role === "STUDENT") {
+					return "Min 8 chars";
+				} else if (role === "LECTURER") {
+					return "Min 10 chars";
+				} else if (role === "ADMIN") {
+					return "Min 12 chars";
+				}
+				return "New password";
+			}
+
+			/* Sets the reset password placeholder based on the user's role
+			   so the table input stays short and does not break the layout. */
+			function setResetPasswordPlaceholders() {
+				document.querySelectorAll('.reset-password-input').forEach(function(input) {
+					const role = input.dataset.role;
+					input.placeholder = getDefaultResetPlaceholder(role);
+				});
+			}
+
+			/* Handles the two-step reset password flow:
+			   1. checks role-based minimum length
+			   2. stores the first password entry
+			   3. asks the admin to re-enter the password
+			   4. only submits if both entries match */
+			function handleResetPasswordSubmit(form) {
+				const passwordInput = form.querySelector('.reset-password-input');
+				const confirmStepInput = form.querySelector('.confirm-step');
+				const firstPasswordEntryInput = form.querySelector('.first-password-entry');
+				const submitButton = form.querySelector('.reset-password-btn');
+
+				if (!passwordInput || !confirmStepInput || !firstPasswordEntryInput || !submitButton) {
+					return true;
+				}
+
+				const role = passwordInput.dataset.role;
+				const minLength = getMinLengthForRole(role);
+				const defaultPlaceholder = getDefaultResetPlaceholder(role);
+
+				/* Stop the reset if the entered password is too short for that account type. */
+				if (passwordInput.value.length < minLength) {
+					passwordInput.value = "";
+					passwordInput.placeholder = "Enter at least " + minLength + " characters";
+					passwordInput.type = "password";
+					passwordInput.focus();
+					return false;
+				}
+
+				/* First click stores the first password entry and changes the field to re-enter mode. */
+				if (confirmStepInput.value === "false") {
+					firstPasswordEntryInput.value = passwordInput.value;
+					passwordInput.value = "";
+					passwordInput.placeholder = "Re-enter password";
+					confirmStepInput.value = "true";
+					submitButton.textContent = "Confirm reset";
+					passwordInput.type = "password";
+					passwordInput.focus();
+					return false;
+				}
+
+				/* If the second entry does not match, reset the form back to step one. */
+				if (passwordInput.value !== firstPasswordEntryInput.value) {
+					alert("Passwords do not match");
+					passwordInput.value = "";
+					firstPasswordEntryInput.value = "";
+					passwordInput.placeholder = defaultPlaceholder;
+					confirmStepInput.value = "false";
+					submitButton.textContent = "Reset password";
+					passwordInput.type = "password";
+					passwordInput.focus();
+					return false;
+				}
+
+				/* Matching passwords allow the form to submit to the controller. */
+				return true;
+			}
+
+			/* Sets the correct reset password placeholders when the page loads. */
+			document.addEventListener("DOMContentLoaded", function() {
+				setResetPasswordPlaceholders();
+			});
+		</script>
 
 	</section>
 </body>
