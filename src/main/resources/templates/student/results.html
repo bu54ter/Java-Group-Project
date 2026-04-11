@@ -1,90 +1,94 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head th:replace="~{layout :: head}"></head>
-<link rel="stylesheet" th:href="@{/style.css}">
 
 <body>
 
 	<div th:replace="~{layout :: nav('Results')}"></div>
 	<div sec:authorize="not isAuthenticated()">
-		<div th:replace="layout :: loginModal"></div>
+		<div th:replace="~{layout :: loginModal}"></div>
 	</div>
+
 	<section class="div2">
 		<h2>Student</h2>
 		<p>
 			<strong>Test ID:</strong> <span th:text="${test.testId}"></span>
 		</p>
 		<p>
-			<strong>Date Taken:</strong> <span
-				th:text="${#temporals.format(test.testedAt, 'dd MMM yyyy HH:mm')}"></span>
+			<strong>Date Taken:</strong>
+			<span th:text="${#temporals.format(test.testedAt, 'dd MMM yyyy HH:mm')}"></span>
 		</p>
+
 		<hr>
+
 		<h2>Your Score</h2>
 		<p>
 			<strong th:text="${test.score}"></strong> %
 		</p>
 		<p th:if="${test.score >= 70}">🎉 Well done!</p>
-
 		<p th:if="${test.score < 70}">📘 Keep practicing!</p>
+
 		<hr />
+
 		<section class="div1">
 
 			<h2>Answer Review. EXTRA</h2>
 
 			<div th:each="answer, iterStat : ${answers}">
-				<div
-					style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;">
+				<div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;">
 
 					<!-- Question -->
 					<p>
-						<strong>Question [[${iterStat.count}]]:</strong> <span
-							th:if="${answer.question.questionType.name() == 'GENDER'}">
-							What is the gender of the Welsh noun <strong
-							th:text="${answer.question.noun.welshWord}"></strong>?
-						</span> <span th:if="${answer.question.questionType.name() == 'MEANING'}">
-							What is the meaning of the Welsh noun <strong
-							th:text="${answer.question.noun.welshWord}"></strong>?
-						</span> <span
-							th:if="${answer.question.questionType.name() == 'TRANSLATE'}">
-							What is the Welsh noun for the English word <strong
-							th:text="${answer.question.noun.englishWord}"></strong>?
+						<strong>Question [[${iterStat.count}]]:</strong>
+						<span th:if="${answer.question.questionType.name() == 'GENDER'}">
+							What is the gender of the Welsh noun
+							<strong th:text="${answer.question.noun.welshWord}"></strong>?
+						</span>
+						<span th:if="${answer.question.questionType.name() == 'MEANING'}">
+							What is the meaning of the Welsh noun
+							<strong th:text="${answer.question.noun.welshWord}"></strong>?
+						</span>
+						<span th:if="${answer.question.questionType.name() == 'TRANSLATE'}">
+							What is the Welsh noun for the English word
+							<strong th:text="${answer.question.noun.englishWord}"></strong>?
 						</span>
 					</p>
 
 					<!-- User answer -->
 					<p>
-						<strong>Your answer:</strong> <span th:text="${answer.userAnswer}"></span>
+						<strong>Your answer:</strong>
+						<span th:text="${answer.userAnswer}"></span>
 					</p>
 
 					<!-- Correct answer -->
 					<p>
-						<strong>Correct answer:</strong> <span
-							th:if="${answer.question.questionType.name() == 'GENDER'}"
-							th:text="${answer.question.noun.gender}"> </span> <span
-							th:if="${answer.question.questionType.name() == 'MEANING'}"
-							th:text="${answer.question.noun.englishWord}"> </span> <span
-							th:if="${answer.question.questionType.name() == 'TRANSLATE'}"
-							th:text="${answer.question.noun.welshWord}"> </span>
+						<strong>Correct answer:</strong>
+						<span th:if="${answer.question.questionType.name() == 'GENDER'}"
+							th:text="${answer.question.noun.gender}"></span>
+						<span th:if="${answer.question.questionType.name() == 'MEANING'}"
+							th:text="${answer.question.noun.englishWord}"></span>
+						<span th:if="${answer.question.questionType.name() == 'TRANSLATE'}"
+							th:text="${answer.question.noun.welshWord}"></span>
 					</p>
 
 					<!-- Result -->
 					<p th:if="${answer.correct}">✅ Correct</p>
-
 					<p th:if="${!answer.correct}">❌ Incorrect</p>
 
 				</div>
 			</div>
 
-			<br> <a th:href="@{/student/dashboard}" class="button">back
-				to dash board</a>
-
+			<br>
+			<a th:href="@{/student/dashboard}" class="button">back to dash board</a>
 
 			<hr>
-			<div th:replace="layout :: footer"></div>
-			<div th:replace="layout :: scripts"></div>
+			<div th:replace="~{layout :: footer}"></div>
+			<div th:replace="~{layout :: scripts}"></div>
 
 		</section>
 	</section>
+
 </body>
 
 </html>

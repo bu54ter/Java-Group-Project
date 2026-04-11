@@ -1,14 +1,13 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="~{layout :: head}"></head>
-<link rel="stylesheet" th:href="@{/style.css}">
 
 <body>
 
-	<div th:replace="layout :: heroSection"></div>
+	<div th:replace="~{layout :: heroSection}"></div>
 	<div th:replace="~{layout :: nav('Home')}"></div>
 	<div sec:authorize="not isAuthenticated()">
-		<div th:replace="layout :: loginModal"></div>
+		<div th:replace="~{layout :: loginModal}"></div>
 	</div>
 	<section class="div2">
 		<h1>Croeso</h1>
@@ -40,9 +39,8 @@
 
 		<hr>
 		<section class="div1">
-
-			<div th:replace="layout :: footer"></div>
-			<div th:replace="layout :: scripts"></div>
+			<div th:replace="~{layout :: footer}"></div>
+			<div th:replace="~{layout :: scripts}"></div>
 		</section>
 	</section>
 

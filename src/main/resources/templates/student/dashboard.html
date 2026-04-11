@@ -1,19 +1,21 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="~{layout :: head}"></head>
-<link rel="stylesheet" th:href="@{/style.css}">
 
 <body>
 	<div th:replace="~{layout :: nav('StudentDashboard')}"></div>
 	<div sec:authorize="not isAuthenticated()">
-		<div th:replace="layout :: loginModal"></div>
+		<!-- Updated to Thymeleaf full fragment syntax -->
+		<div th:replace="~{layout :: loginModal}"></div>
 	</div>
 	<section class="div1">
 		<h2>Student Dashboard</h2>
-		<hr><br>
+		<hr>
+		<br>
 		<div class="button-container">
-			<a th:href="@{/student/revision}" class="button">Revise</a>
-			<a th:href="@{/student/test}" class="button">Take a test</a>
+			<a th:href="@{/student/revision}" class="button">Revise</a> <a
+				th:href="@{/student/test}" class="button">Take a test</a>
 		</div>
 		<h2>Previous results</h2>
 		<table>
@@ -28,8 +30,10 @@
 		</table>
 		<br>
 		<hr>
-		<div th:replace="layout :: footer"></div>
-		<div th:replace="layout :: scripts"></div>
+		<!-- Updated to Thymeleaf full fragment syntax -->
+		<div th:replace="~{layout :: footer}"></div>
+		<!-- Updated to Thymeleaf full fragment syntax -->
+		<div th:replace="~{layout :: scripts}"></div>
 	</section>
 
 </body>

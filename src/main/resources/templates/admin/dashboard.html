@@ -2,24 +2,27 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="~{layout :: head}"></head>
-<link rel="stylesheet" th:href="@{/style.css}">
+<!-- CSS link removed from this file because it should now be inside layout.html head fragment -->
 
 <body>
 
 	<div th:replace="~{layout :: nav('AdminDashboard')}"></div>
 	<div sec:authorize="not isAuthenticated()">
-		<div th:replace="layout :: loginModal"></div>
+		<!-- Updated to Thymeleaf full fragment syntax -->
+		<div th:replace="~{layout :: loginModal}"></div>
 	</div>
 
 	<section class="div1">
-		<h2>Admin Dashboard</h2>
-		<hr>
 		<h2>Active users</h2>
 
 		<div th:if="${resetPasswordError}" class="error-message"
 			th:text="${resetPasswordError}"></div>
 
-		<div th:replace="layout :: newUserModal"></div>
+		<div th:if="${resetPasswordSuccess}" class="success-message"
+			th:text="${resetPasswordSuccess}"></div>
+
+		<!-- Updated to Thymeleaf full fragment syntax -->
+		<div th:replace="~{layout :: newUserModal}"></div>
 		<br>
 
 		<table>
@@ -64,8 +67,7 @@
 						<div class="password-input-wrapper">
 							<input type="password" name="newPassword" required
 								class="reset-password-input"
-								th:attr="data-role=${u.role.name()}"
-								placeholder="New password">
+								th:attr="data-role=${u.role.name()}" placeholder="New password">
 							<button type="button" class="toggle-password-btn"
 								onclick="togglePassword(this)" aria-label="Show password"
 								title="Show password">👁</button>
@@ -111,8 +113,10 @@
 		</table>
 		<hr>
 
-		<div th:replace="layout :: footer"></div>
-		<div th:replace="layout :: scripts"></div>
+		<!-- Updated to Thymeleaf full fragment syntax -->
+		<div th:replace="~{layout :: footer}"></div>
+		<!-- Updated to Thymeleaf full fragment syntax -->
+		<div th:replace="~{layout :: scripts}"></div>
 
 		<script>
 			/* Returns the minimum password length required for each user role. */
@@ -142,10 +146,13 @@
 			/* Sets the reset password placeholder based on the user's role
 			   so the table input stays short and does not break the layout. */
 			function setResetPasswordPlaceholders() {
-				document.querySelectorAll('.reset-password-input').forEach(function(input) {
-					const role = input.dataset.role;
-					input.placeholder = getDefaultResetPlaceholder(role);
-				});
+				document
+						.querySelectorAll('.reset-password-input')
+						.forEach(
+								function(input) {
+									const role = input.dataset.role;
+									input.placeholder = getDefaultResetPlaceholder(role);
+								});
 			}
 
 			/* Handles the two-step reset password flow:
@@ -154,12 +161,15 @@
 			   3. asks the admin to re-enter the password
 			   4. only submits if both entries match */
 			function handleResetPasswordSubmit(form) {
-				const passwordInput = form.querySelector('.reset-password-input');
+				const passwordInput = form
+						.querySelector('.reset-password-input');
 				const confirmStepInput = form.querySelector('.confirm-step');
-				const firstPasswordEntryInput = form.querySelector('.first-password-entry');
+				const firstPasswordEntryInput = form
+						.querySelector('.first-password-entry');
 				const submitButton = form.querySelector('.reset-password-btn');
 
-				if (!passwordInput || !confirmStepInput || !firstPasswordEntryInput || !submitButton) {
+				if (!passwordInput || !confirmStepInput
+						|| !firstPasswordEntryInput || !submitButton) {
 					return true;
 				}
 
@@ -170,7 +180,8 @@
 				/* Stop the reset if the entered password is too short for that account type. */
 				if (passwordInput.value.length < minLength) {
 					passwordInput.value = "";
-					passwordInput.placeholder = "Enter at least " + minLength + " characters";
+					passwordInput.placeholder = "Enter at least " + minLength
+							+ " characters";
 					passwordInput.type = "password";
 					passwordInput.focus();
 					return false;
