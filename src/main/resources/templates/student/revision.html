@@ -1,16 +1,17 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="~{layout :: head}"></head>
-<link rel="stylesheet" th:href="@{/style.css}">
 
 <body>
     <div th:replace="~{layout :: nav('Revision')}"></div>
     <div sec:authorize="not isAuthenticated()">
-        <div th:replace="layout :: loginModal"></div>
+        <div th:replace="~{layout :: loginModal}"></div>
     </div>
+
     <section class="div1">
         <h2>Revision</h2>
         <hr>
+
         <div class="revision-card">
             <div class="flashcard-container">
                 <!-- Translation Card -->
@@ -89,13 +90,16 @@
                 Feminine: Dwy gath (2 cats)<br>
                 Masculine: Dau gi (2 dogs)<br></p>
         </div>
+
         <br>
+
         <div class="button-container">
             <a th:href="@{/student/test}" class="button">Take a test</a>
             <a th:href="@{/student/dashboard}" class="button">Back to dashboard</a>
         </div>
+
         <hr>
-        <div th:replace="layout :: footer"></div>
+        <div th:replace="~{layout :: footer}"></div>
 
         <script th:inline="javascript">
             /*<![CDATA[*/
@@ -142,14 +146,16 @@
                     updateCard();
                 } else {
                     document.getElementById('cardQuestion').textContent = "No nouns found. Add some to start revising!";
-                    if (document.getElementById('nextBtn')) document.getElementById('nextBtn').style.display = 'none';
+                    if (document.getElementById('nextBtn')) {
+                        document.getElementById('nextBtn').style.display = 'none';
+                    }
                 }
             });
             /*]]>*/
         </script>
-        <div th:replace="layout :: scripts"></div>
-    </section>
 
+        <div th:replace="~{layout :: scripts}"></div>
+    </section>
 
 </body>
 

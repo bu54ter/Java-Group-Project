@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import jakarta.validation.Valid;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserDeletedRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.UserService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AdminController {
@@ -119,7 +119,8 @@ public class AdminController {
     @PostMapping("/users/{id}/reset-password")
     public String resetPassword(@PathVariable Long id,
             @RequestParam String newPassword,
-            Model model) {
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
         // Find the user so the correct password policy can be applied during reset
         User user = userRepo.findById(id).orElse(null);
@@ -160,12 +161,11 @@ public class AdminController {
 
         // Reset password only if it passes the role-based password policy
         userService.resetPassword(id, newPassword);
-        return "redirect:/admin/dashboard";
-    }
 
-    @PostMapping("/users/{id}/delete")
-    public String deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+        // Temporary success message shown once after redirect
+        redirectAttributes.addFlashAttribute("resetPasswordSuccess",
+                "Password reset successfully for user: " + user.getUsername());
+
         return "redirect:/admin/dashboard";
     }
 }

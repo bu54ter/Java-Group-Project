@@ -296,6 +296,17 @@ textarea {
 	width: 100%;
 }
 
+.success-message {
+  color: #1b553c;
+  background-color: #eaf7ef;
+  border: 1px solid #1b553c;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-family: "EB Garamond", "garamond-premier-pro-display";
+}
+
 .password-input-wrapper input {
 	padding-right: 40px;
 }
