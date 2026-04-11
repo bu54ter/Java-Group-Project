@@ -102,52 +102,65 @@
 
 <div th:fragment="newUserModal">
 
-	<button onclick="openNewUserModal()" class="button">Create new user</button>
+	<button onclick="openNewUserModal()" class="button">Create new
+		user</button>
 
 	<div id="newUserModal" class="modal"
 		th:style="${passwordError} ? 'display:block;' : 'display:none;'">
 
-		<form id="newUserForm" class="modal-content" th:action="@{/createUser}"
-			th:object="${user}" method="post">
+		<form id="newUserForm" class="modal-content"
+			th:action="@{/createUser}" th:object="${user}" method="post">
 			<div class="imgcontainer">
-				<span class="close" onclick="closeNewUserModal()">
-					&times;
-				</span>
+				<span class="close" onclick="closeNewUserModal()"> &times; </span>
 			</div>
 
 			<div class="container">
-				<label>Username:</label>
-				<input type="text" th:field="*{username}" required>
-				<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error"></div>
+				<label>Username:</label> <input type="text" th:field="*{username}"
+					required>
+				<div th:if="${#fields.hasErrors('username')}"
+					th:errors="*{username}" class="error"></div>
 
 				<label>Password:</label>
-				<input type="password" th:field="*{password}" required>
-				<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
+				<div class="password-input-wrapper">
+					<input type="password" th:field="*{password}" required>
+					<button type="button" class="toggle-password-btn"
+						onclick="togglePassword(this)" aria-label="Show password"
+						title="Show password">👁</button>
+				</div>
+				<div th:if="${#fields.hasErrors('password')}"
+					th:errors="*{password}" class="error"></div>
 
 				<label>Confirm Password:</label>
-				<input type="password" name="confirmPassword" required>
+				<div class="password-input-wrapper">
+					<input type="password" name="confirmPassword" required>
+					<button type="button" class="toggle-password-btn"
+						onclick="togglePassword(this)" aria-label="Show password"
+						title="Show password">👁</button>
+				</div>
 
-				<p id="passwordRule" class="password-help">Select a role to see the minimum password length.</p>
+				<p id="passwordRule" class="password-help">Select a role to see
+					the minimum password length.</p>
 
-				<label>First name:</label>
-				<input type="text" th:field="*{firstname}" required>
-				<div th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" class="error"></div>
+				<label>First name:</label> <input type="text"
+					th:field="*{firstname}" required>
+				<div th:if="${#fields.hasErrors('firstname')}"
+					th:errors="*{firstname}" class="error"></div>
 
-				<label>Surname:</label>
-				<input type="text" th:field="*{surname}" required>
-				<div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="error"></div>
+				<label>Surname:</label> <input type="text" th:field="*{surname}"
+					required>
+				<div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"
+					class="error"></div>
 
-				<label>Role:</label><br>
-				<label>
-					<input type="radio" th:field="*{role}" value="ADMIN" required onchange="updatePasswordRule()"> Admin
+				<label>Role:</label><br> <label> <input type="radio"
+					th:field="*{role}" value="ADMIN" required
+					onchange="updatePasswordRule()"> Admin
+				</label> <label> <input type="radio" th:field="*{role}"
+					value="LECTURER" onchange="updatePasswordRule()"> Lecturer
+				</label> <label> <input type="radio" th:field="*{role}"
+					value="STUDENT" onchange="updatePasswordRule()"> Student
 				</label>
-				<label>
-					<input type="radio" th:field="*{role}" value="LECTURER" onchange="updatePasswordRule()"> Lecturer
-				</label>
-				<label>
-					<input type="radio" th:field="*{role}" value="STUDENT" onchange="updatePasswordRule()"> Student
-				</label>
-				<div th:if="${#fields.hasErrors('role')}" th:errors="*{role}" class="error"></div>
+				<div th:if="${#fields.hasErrors('role')}" th:errors="*{role}"
+					class="error"></div>
 			</div>
 
 			<input type="hidden" th:name="${_csrf.parameterName}"
@@ -163,7 +176,7 @@
 	</div>
 
 	<script th:if="${showNewUserModal}">
-		document.addEventListener("DOMContentLoaded", function () {
+		document.addEventListener("DOMContentLoaded", function() {
 			document.getElementById('newUserModal').style.display = 'block';
 		});
 	</script>
@@ -261,7 +274,7 @@
 <div th:fragment="scripts">
 	<script>
 		/* Clears the Create User form when the modal is opened or closed,
-		   so old half-entered values do not remain in the form. P.B 10/04/26 */
+		   so old half-entered values do not remain in the form. */
 		function clearNewUserForm() {
 			const form = document.getElementById('newUserForm');
 			const passwordRule = document.getElementById('passwordRule');
@@ -275,6 +288,19 @@
 				const radioInputs = form.querySelectorAll('input[type="radio"]');
 				radioInputs.forEach(function(input) {
 					input.checked = false;
+				});
+
+				/* Reset password fields back to hidden when the modal is cleared. */
+				const passwordInputs = form.querySelectorAll('.password-input-wrapper input');
+				passwordInputs.forEach(function(input) {
+					input.type = "password";
+				});
+
+				/* Reset eye button labels after the form is cleared. */
+				const toggleButtons = form.querySelectorAll('.toggle-password-btn');
+				toggleButtons.forEach(function(button) {
+					button.setAttribute("aria-label", "Show password");
+					button.setAttribute("title", "Show password");
 				});
 			}
 
@@ -312,6 +338,26 @@
 				passwordRule.textContent = "Minimum 10 characters.";
 			} else if (selectedRole.value === "ADMIN") {
 				passwordRule.textContent = "Minimum 12 characters.";
+			}
+		}
+
+		/* Shows or hides the selected password field when the eye button is clicked. */
+		function togglePassword(button) {
+			const wrapper = button.closest('.password-input-wrapper');
+			const input = wrapper.querySelector('input');
+
+			if (!input) {
+				return;
+			}
+
+			if (input.type === "password") {
+				input.type = "text";
+				button.setAttribute("aria-label", "Hide password");
+				button.setAttribute("title", "Hide password");
+			} else {
+				input.type = "password";
+				button.setAttribute("aria-label", "Show password");
+				button.setAttribute("title", "Show password");
 			}
 		}
 
