@@ -34,7 +34,7 @@ public class UserDeleted {
     private Long userId;
 
     /** Username of the deleted user (must be unique) */
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, length = 50)
     private String username;
 
     /** First name of the deleted user */

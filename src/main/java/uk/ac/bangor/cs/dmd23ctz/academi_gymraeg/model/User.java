@@ -49,7 +49,7 @@ public class User implements UserDetails {
 
     /** Unique username used for login */
     @NotBlank(message = "Username is required")
-    @Size(max = 20, message = "Username must be 20 characters or fewer")
+    @Size(max = 50, message = "Username must be 50 characters or fewer")
     @Column(nullable = false, unique = true)
     private String username;
     
@@ -59,13 +59,13 @@ public class User implements UserDetails {
 
     /** User's first name */
     @NotBlank(message = "First name is required")
-    @Size(max = 20)
+    @Size(max = 50)
     @Column(nullable = false)
     private String firstname;
 
     /** User's surname */
     @NotBlank(message = "Surname is required")
-    @Size(max = 20)
+    @Size(max = 50)
     @Column(nullable = false)
     private String surname;
 

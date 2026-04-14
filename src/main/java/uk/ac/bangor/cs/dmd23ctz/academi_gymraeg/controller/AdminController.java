@@ -168,4 +168,21 @@ public class AdminController {
 
         return "redirect:/admin/dashboard";
     }
+    @PostMapping("/users/{id}/delete")
+    public String deleteUser(@PathVariable Long id, Model model) {
+        try {
+            userService.deleteUser(id);
+            return "redirect:/admin/dashboard";
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            model.addAttribute("user", new User());
+            model.addAttribute("users", userRepo.findAll());
+            model.addAttribute("deletedUsers", userDeletedRepository.findAll());
+            model.addAttribute("deleteUserError",
+                    e.getClass().getSimpleName() + ": " + e.getMessage());
+
+            return "admin/dashboard";
+        }
+    }
 }

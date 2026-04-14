@@ -20,7 +20,7 @@
 
 		<div th:if="${resetPasswordSuccess}" class="success-message"
 			th:text="${resetPasswordSuccess}"></div>
-
+<div th:if="${deleteUserError}" class="error-message" th:text="${deleteUserError}"></div>
 		<!-- Updated to Thymeleaf full fragment syntax -->
 		<div th:replace="~{layout :: newUserModal}"></div>
 		<br>
