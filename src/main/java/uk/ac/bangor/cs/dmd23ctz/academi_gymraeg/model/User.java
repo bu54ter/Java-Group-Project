@@ -23,7 +23,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-
 /**
  * Entity representing a system user.
  *
@@ -42,103 +41,62 @@ public class User implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
-    /** Unique identifier for the user */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
 
-    /** Unique username used for login */
     @NotBlank(message = "Username is required")
-<<<<<<< HEAD
     @Size(max = 50, message = "Username must be 50 characters or fewer")
-=======
-    @Size(max = 20, message = "Username must be 20 characters or fewer")
     @Pattern(
-    	    regexp = "^[A-Za-z0-9._-]+$",
-    	    message = "Username may only contain letters, numbers, dots, underscores, and hyphens"
-    	)
->>>>>>> refs/remotes/origin/fern-inputvalidation2
+        regexp = "^[A-Za-z0-9._-]+$",
+        message = "Username may only contain letters, numbers, dots, underscores, and hyphens"
+    )
     @Column(nullable = false, unique = true)
     private String username;
-    
-    /** Encrypted password (must never be stored in plain text) */
+
     @NotBlank(message = "Password is required")
     private String password;
 
-    /** User's first name */
     @NotBlank(message = "First name is required")
-<<<<<<< HEAD
-    @Size(max = 50)
-=======
-    @Size(max = 20, message = "First name must be 20 characters or fewer")
+    @Size(max = 50, message = "First name must be 50 characters or fewer")
     @Pattern(
         regexp = "^[A-Za-zÀ-ÿ' -]+$",
         message = "First name contains invalid characters"
     )
->>>>>>> refs/remotes/origin/fern-inputvalidation2
     @Column(nullable = false)
     private String firstname;
 
-    /** User's surname */
     @NotBlank(message = "Surname is required")
-<<<<<<< HEAD
-    @Size(max = 50)
-=======
-    @Size(max = 20, message = "Surname must be 20 characters or fewer")
+    @Size(max = 50, message = "Surname must be 50 characters or fewer")
     @Pattern(
         regexp = "^[A-Za-zÀ-ÿ' -]+$",
         message = "Surname contains invalid characters"
     )
->>>>>>> refs/remotes/origin/fern-inputvalidation2
     @Column(nullable = false)
     private String surname;
 
-    /** Role assigned to the user (used for authorisation) */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
-    /**
-     * Timestamp indicating when the user account was created.
-     * Automatically generated and cannot be updated.
-     */
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    /**
-     * Transient list of authorities derived from the user's role.
-     * Not stored in the database.
-     */
     @Transient
     private List<GrantedAuthority> authorities = null;
 
-    /**
-     * Returns the authorities granted to the user.
-     *
-     * <p>This method dynamically constructs a list of roles in the format
-     * required by Spring Security (e.g., ROLE_ADMIN).</p>
-     *
-     * @return a collection of granted authorities
-     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        // Initialise authorities list if not already created
         if (authorities == null) {
             authorities = new LinkedList<>();
-
-            // Add role-based authority if role is defined
             if (role != null) {
                 authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
             }
         }
-
         return authorities;
     }
-
-    // ===== Getters and Setters =====
 
     public Role getRole() {
         return role;
@@ -170,7 +128,6 @@ public class User implements UserDetails {
         return password;
     }
 
-    /** Sets the user's password (should always be encoded before saving) */
     public void setPassword(String password) {
         this.password = password;
     }
@@ -195,9 +152,7 @@ public class User implements UserDetails {
         return createdAt;
     }
 
-    /** Creation timestamp should not normally be modified manually */
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-
 }
