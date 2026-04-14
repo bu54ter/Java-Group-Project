@@ -9,10 +9,10 @@ Testing Table – Welsh Noun Gender Web Application
 Fern
 
 **Reviewed By:**  
-[Name]
+Justin
 
 **Approved By:**  
-[Name]
+Adam
 
 **Date:**  
 1/04/2026
@@ -118,10 +118,9 @@ Testing is complete when:
 
 | Role | Name | Responsibility |
 |---|---|---|
-| Test Owner | [Name] | Oversees testing and sign-off |
-| Tester | [Name] | Executes tests and records results |
-| Developer | [Name] | Fixes defects and supports retesting |
-| Business / Academic Reviewer | [Name] | Confirms the application meets requirements |
+| Test Owner | Justin | Oversees testing and sign-off |
+| Tester | Fern | Executes tests and records results |
+| Reviewer | Adam | Confirms the application meets requirements |
 
 ---
 
@@ -163,10 +162,10 @@ Testing is complete when:
 | STU-003 | Student Test | Verify student can choose masculine | Test started | 1. Select masculine for a noun<br>2. Continue | Selection is saved and next step works |  Selection is saved and next step works | Passed |  |  |
 | STU-004 | Student Test | Verify student can choose feminine | Test started | 1. Select feminine for a noun<br>2. Continue | Selection is saved and next step works |  Selection is saved and next step works | Passed |  |  |
 | STU-005 | Student Test | Verify student can submit completed test | Test completed | 1. Answer all questions<br>2. Submit test | Test submits successfully | Test submits successfully | Passed |  |  |
-| STU-006 | Student Test | Verify score/result is shown after submission | Submitted test exists | 1. Submit test | Student sees final result, score, or feedback | Student sees results and score |  |  |  |
-| STU-007 | Student Test | Verify correct answers are marked accurately | Known noun data exists | 1. Complete test using known correct answers | Score matches expected result |  |  |  |  |
+| STU-006 | Student Test | Verify score/result is shown after submission | Submitted test exists | 1. Submit test | Student sees final result, score, or feedback | Student sees results and score | Students see results and score | Passed |  |
+| STU-007 | Student Test | Verify correct answers are marked accurately | Known noun data exists | 1. Complete test using known correct answers | Score matches expected result | Score matches expected result | Passed |  |  |
 | STU-008 | Validation | Verify student cannot submit without answering required questions | Test started | 1. Leave one or more answers blank<br>2. Submit | Validation message is shown or submission is blocked | Can submit the test blank | Failed |  |  |
-| STU-009 | Session | Verify student progress is handled correctly if page refreshes | Test in progress | 1. Answer some questions<br>2. Refresh page | Application behaves as designed and does not corrupt the test session |  |  |  |  |
+| STU-009 | Session | Verify student progress is handled correctly if page refreshes | Test in progress | 1. Answer some questions<br>2. Refresh page | Application behaves as designed and does not corrupt the test session | Test refreshes a new set of answers | Passed |  |  |
 
 ---
 
@@ -178,9 +177,9 @@ Testing is complete when:
 | LEC-002 | Noun Management | Verify lecturer can create a new noun | Lecturer logged in | 1. Open create noun form<br>2. Enter noun and gender<br>3. Save | New noun is saved successfully | New noun is saved successfully | Passed |  |  |
 | LEC-003 | Noun Management | Verify lecturer can edit an existing noun | Existing noun exists | 1. Select noun<br>2. Edit text or gender<br>3. Save | Changes are saved correctly | Changes are saved correctly  | Passed |  |  |
 | LEC-004 | Noun Management | Verify lecturer can delete or deactivate a noun | Existing noun exists | 1. Select noun<br>2. Delete or deactivate | Noun is removed from active use as designed | Noun is removed from active use as designed | Passed |  |  |
-| LEC-005 | Validation | Verify blank noun cannot be saved | Lecturer logged in | 1. Open create form<br>2. Leave noun blank<br>3. Save | Validation error is shown | Validation error is shown |  |  |  |
-| LEC-006 | Validation | Verify noun must have a gender assigned | Lecturer logged in | 1. Enter noun<br>2. Leave gender blank<br>3. Save | Validation error is shown |  |  |  |  |
-| LEC-007 | Integration | Verify newly added noun appears in student tests | Lecturer can add noun and student test exists | 1. Add new noun<br>2. Log in as student<br>3. Start test | New noun is available in the test set if intended by design |  |  |  |  |
+| LEC-005 | Validation | Verify blank noun cannot be saved | Lecturer logged in | 1. Open create form<br>2. Leave noun blank<br>3. Save | Validation error is shown | Validation error is shown | Passed |  |  |
+| LEC-006 | Validation | Verify noun must have a gender assigned | Lecturer logged in | 1. Enter noun<br>2. Leave gender blank<br>3. Save | Validation error is shown | Passed |  |  |  |
+| LEC-007 | Integration | Verify newly added noun appears in student tests | Lecturer can add noun and student test exists | 1. Add new noun<br>2. Log in as student<br>3. Start test | New noun is available in the test set if intended by design | New noun is in the test | Passed |  |  |
 
 ---
 
@@ -191,10 +190,10 @@ Testing is complete when:
 | ADM-001 | User Management | Verify admin can view user list | Admin logged in | 1. Open user management page | All users are listed | All users are listed | Passed |  |  |
 | ADM-002 | User Management | Verify admin can create a student user | Admin logged in | 1. Open create user form<br>2. Enter details<br>3. Assign Student role<br>4. Save | User is created successfully | User is created successfully | Passed |  |  |
 | ADM-003 | User Management | Verify admin can create a lecturer user | Admin logged in | 1. Open create user form<br>2. Enter details<br>3. Assign Lecturer role<br>4. Save | Lecturer account is created successfully | Lecturer account is created successfully | Passed |  |  |
-| ADM-004 | User Management | Verify admin can edit an existing user | Existing user exists | 1. Select user<br>2. Change details<br>3. Save | User details are updated |  |  |  |  |
-| ADM-005 | User Management | Verify admin can delete a user | Existing user exists | 1. Select user<br>2. Delete account | User can no longer log in | 404 Error | Failed |  |  |
-| ADM-006 | Validation | Verify duplicate username or email is rejected | Existing user exists | 1. Attempt to create second user with same username/email | Validation error is shown |  |  |  |  |
-| ADM-007 | Access Control | Verify only admin can create users | Lecturer or student logged in | 1. Attempt to access create user function | Access is denied |  |  |  |  |
+| ADM-004 | User Management | Verify admin can edit an existing users password | Existing user exists | 1. Select user<br>2. Change details<br>3. Save | User password is updated | User password is updated | Passed |  |  |
+| ADM-005 | User Management | Verify admin can delete a user | Existing user exists | 1. Select user<br>2. Delete account | User can no longer log in | 404 Error | Failed | In issue report |  |
+| ADM-006 | Validation | Verify duplicate username or email is rejected | Existing user exists | 1. Attempt to create second user with same username/email | Validation error is shown | Creates user | Failed | Raised as an issue |  |
+| ADM-007 | Access Control | Verify only admin can create users | Lecturer or student logged in | 1. Attempt to access create user function | Access is denied | Access is denied | Passed |  |  |
 
 ---
 
@@ -203,9 +202,9 @@ Testing is complete when:
 | Test Case ID | Area | Test Description | Preconditions | Steps | Expected Result | Actual Result | Status | Evidence | Comments |
 |---|---|---|---|---|---|---|---|---|---|
 | UI-001 | Navigation | Verify each role sees the correct menu options | Role-based accounts exist | 1. Log in as each role<br>2. Review menus | Each role sees only the correct options | Each role sees only the correct options | Passed |  |  |
-| UI-002 | Error Handling | Verify invalid login shows an error | None | 1. Attempt login with wrong credentials | Clear error message is shown |  |  |  |  |
-| UI-003 | Form Validation | Verify required fields are clearly marked | Forms available | 1. Open key forms | Required fields are visible and clear |  |  |  |  |
-| UI-004 | Responsiveness | Verify application works on common screen sizes | Test devices or browser tools available | 1. Open application on desktop/tablet/mobile widths | Layout remains usable |  |  |  |  |
+| UI-002 | Error Handling | Verify invalid login shows an error | None | 1. Attempt login with wrong credentials | Clear error message is shown | Clear error message is shown | Passed |  |  |
+| UI-003 | Form Validation | Verify required fields are clearly marked | Forms available | 1. Open key forms | Required fields are visible and clear | Required fields are not displayed | Failed |  | Added as an issue |
+| UI-004 | Responsiveness | Verify application works on common screen sizes | Test devices or browser tools available | 1. Open application on desktop/tablet/mobile widths | Layout remains usable | Layout remains usable | Passed |  |  |
 | UI-005 | Logout | Verify users can log out successfully | User logged in | 1. Select logout | User is logged out and session ends correctly | User is logged out and session ends correctly | Passed |  |  |
 
 ---
@@ -216,7 +215,9 @@ Testing is complete when:
 |---|---|---|---|---|---|---|---|---|
 | DEF-001 | There was an unexpected error (type=Forbidden, status=403) when student tried to access admin area.| Low | This will be if a student enters /admin in the URL. Can be resolved with a redirect. | Fern | 10/04/2026| Adam | Closed | Page now redirects |
 | DEF-002 | Can submit a blank test| Low | This has a low impact and can be easily fixed | Fern | 10/04/2026| Adam | Open | Submitted as a bug |
-|DEF--003|404 error when deleting user|High|High|Fern|14/04/2026|Fern|Open||
+| DEF-003 |404 error when deleting user|High|High|Fern|14/04/2026|Fern|Open||
+| DEF-004 |Can create duplicate users|High|High|Fern|08/04/2026|Fern|Closed|Validation added|
+| DEF-005 |Required fields are not displayed|Low|Low|Fern|14/04/2026|Fern|Open||
 
 
 ---
