@@ -1,4 +1,4 @@
-# Testing Table – Admin User Creation and Password Reset
+# Testing Table – User Creation and Password Reset
 
 ## 1. Document Control
 
