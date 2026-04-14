@@ -192,7 +192,7 @@ Testing is complete when:
 | ADM-002 | User Management | Verify admin can create a student user | Admin logged in | 1. Open create user form<br>2. Enter details<br>3. Assign Student role<br>4. Save | User is created successfully | User is created successfully | Passed |  |  |
 | ADM-003 | User Management | Verify admin can create a lecturer user | Admin logged in | 1. Open create user form<br>2. Enter details<br>3. Assign Lecturer role<br>4. Save | Lecturer account is created successfully | Lecturer account is created successfully | Passed |  |  |
 | ADM-004 | User Management | Verify admin can edit an existing user | Existing user exists | 1. Select user<br>2. Change details<br>3. Save | User details are updated |  |  |  |  |
-| ADM-005 | User Management | Verify admin can disable a user | Existing user exists | 1. Select user<br>2. Disable account | User can no longer log in |  |  |  |  |
+| ADM-005 | User Management | Verify admin can delete a user | Existing user exists | 1. Select user<br>2. Delete account | User can no longer log in | 404 Error | Failed |  |  |
 | ADM-006 | Validation | Verify duplicate username or email is rejected | Existing user exists | 1. Attempt to create second user with same username/email | Validation error is shown |  |  |  |  |
 | ADM-007 | Access Control | Verify only admin can create users | Lecturer or student logged in | 1. Attempt to access create user function | Access is denied |  |  |  |  |
 
@@ -216,6 +216,7 @@ Testing is complete when:
 |---|---|---|---|---|---|---|---|---|
 | DEF-001 | There was an unexpected error (type=Forbidden, status=403) when student tried to access admin area.| Low | This will be if a student enters /admin in the URL. Can be resolved with a redirect. | Fern | 10/04/2026| Adam | Closed | Page now redirects |
 | DEF-002 | Can submit a blank test| Low | This has a low impact and can be easily fixed | Fern | 10/04/2026| Adam | Open | Submitted as a bug |
+|DEF--003|404 error when deleting user|High|High|Fern|14/04/2026|Fern|Open||
 
 
 ---
