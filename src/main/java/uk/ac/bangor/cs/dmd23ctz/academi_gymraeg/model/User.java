@@ -20,6 +20,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 
@@ -49,7 +50,15 @@ public class User implements UserDetails {
 
     /** Unique username used for login */
     @NotBlank(message = "Username is required")
+<<<<<<< HEAD
     @Size(max = 50, message = "Username must be 50 characters or fewer")
+=======
+    @Size(max = 20, message = "Username must be 20 characters or fewer")
+    @Pattern(
+    	    regexp = "^[A-Za-z0-9._-]+$",
+    	    message = "Username may only contain letters, numbers, dots, underscores, and hyphens"
+    	)
+>>>>>>> refs/remotes/origin/fern-inputvalidation2
     @Column(nullable = false, unique = true)
     private String username;
     
@@ -59,13 +68,29 @@ public class User implements UserDetails {
 
     /** User's first name */
     @NotBlank(message = "First name is required")
+<<<<<<< HEAD
     @Size(max = 50)
+=======
+    @Size(max = 20, message = "First name must be 20 characters or fewer")
+    @Pattern(
+        regexp = "^[A-Za-zÀ-ÿ' -]+$",
+        message = "First name contains invalid characters"
+    )
+>>>>>>> refs/remotes/origin/fern-inputvalidation2
     @Column(nullable = false)
     private String firstname;
 
     /** User's surname */
     @NotBlank(message = "Surname is required")
+<<<<<<< HEAD
     @Size(max = 50)
+=======
+    @Size(max = 20, message = "Surname must be 20 characters or fewer")
+    @Pattern(
+        regexp = "^[A-Za-zÀ-ÿ' -]+$",
+        message = "Surname contains invalid characters"
+    )
+>>>>>>> refs/remotes/origin/fern-inputvalidation2
     @Column(nullable = false)
     private String surname;
 
