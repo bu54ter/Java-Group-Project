@@ -15,12 +15,12 @@ Phil Bamber
 [Name]
 
 **Date:**  
-14/04/2026
+15/04/2026
 
 ## 2. Test Summary
 
 **Purpose:**  
-To verify that selected Java classes and enums within the application behaved correctly in isolation using JUnit testing.
+To verify that selected Java model classes and enums within the application behaved correctly in isolation using JUnit testing.
 
 **Scope:**  
 This testing covered:
@@ -29,6 +29,9 @@ This testing covered:
 - Gender enum values and conversion
 - QuestionType enum values and count
 - Role enum values and count
+- Nouns class getter and setter behaviour
+- Nouns questions list initialisation
+- Questions class getter and setter behaviour
 
 **Out of Scope:**
 
@@ -48,7 +51,7 @@ April 2026
 
 ## 3. System Overview
 
-This document recorded the JUnit testing carried out on selected classes within the application. The testing focused on confirming that model class getters and setters returned the expected values, and that enum classes contained the correct constants and expected number of values.
+This document recorded the JUnit testing carried out on selected model classes and enums within the application. The testing focused on confirming that getter and setter methods returned the expected values, that enum classes contained the correct constants and expected number of values, and that default list initialisation behaved correctly where required.
 
 ## 4. Preconditions
 
@@ -121,19 +124,42 @@ This section recorded the unit testing completed against selected Java classes a
 | JUT-ROL-003 | Role.java | testStudentRoleExists | Verify the STUDENT enum value exists | `Role.valueOf("STUDENT")` returns `STUDENT` | Returned `STUDENT` | Passed |
 | JUT-ROL-004 | Role.java | testRoleCount | Verify the number of enum values is correct | `Role.values().length` equals `3` | Returned `3` | Passed |
 
+### 8.5 Nouns Class
+
+| Test ID | Class Under Test | Test Method | Description | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|---|
+| JUT-NOU-001 | Nouns.java | testNounIdGetterAndSetter | Verify that `setNounId(1L)` correctly stores the noun ID | `getNounId()` returns `1L` | `1L` was returned | Passed |
+| JUT-NOU-002 | Nouns.java | testWelshWordGetterAndSetter | Verify that `setWelshWord("cath")` correctly stores the Welsh word | `getWelshWord()` returns `"cath"` | `"cath"` was returned | Passed |
+| JUT-NOU-003 | Nouns.java | testEnglishWordGetterAndSetter | Verify that `setEnglishWord("cat")` correctly stores the English word | `getEnglishWord()` returns `"cat"` | `"cat"` was returned | Passed |
+| JUT-NOU-004 | Nouns.java | testCreatedByGetterAndSetter | Verify that `setCreatedBy("phil")` correctly stores the creator name | `getCreatedBy()` returns `"phil"` | `"phil"` was returned | Passed |
+| JUT-NOU-005 | Nouns.java | testCreatedAtGetterAndSetter | Verify that `setCreatedAt()` correctly stores the created date and time | `getCreatedAt()` returns the same `LocalDateTime` value that was set | The same `LocalDateTime` value was returned | Passed |
+| JUT-NOU-006 | Nouns.java | testGenderGetterAndSetter | Verify that `setGender(Gender.MASCULINE)` correctly stores the gender value | `getGender()` returns `Gender.MASCULINE` | `Gender.MASCULINE` was returned | Passed |
+| JUT-NOU-007 | Nouns.java | testQuestionsGetterAndSetter | Verify that `setQuestions()` correctly stores the questions list | `getQuestions()` returns the same list that was set | The same questions list was returned | Passed |
+| JUT-NOU-008 | Nouns.java | testQuestionsListIsInitialised | Verify that the questions list is initialised by default | `getQuestions()` does not return `null` | The questions list was initialised and was not `null` | Passed |
+
+
+### 8.6 Questions Class
+
+| Test ID | Class Under Test | Test Method | Description | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|---|
+| JUT-QUE-001 | Questions.java | testQuestionIdGetterAndSetter | Verify that `setQuestionId(1L)` correctly stores the question ID | `getQuestionId()` returns `1L` | `1L` was returned | Passed |
+| JUT-QUE-002 | Questions.java | testTestGetterAndSetter | Verify that `setTest()` correctly stores the related test object | `getTest()` returns the same `Tests` object that was set | The same `Tests` object was returned | Passed |
+| JUT-QUE-003 | Questions.java | testNounGetterAndSetter | Verify that `setNoun()` correctly stores the related noun object | `getNoun()` returns the same `Nouns` object that was set | The same `Nouns` object was returned | Passed |
+| JUT-QUE-004 | Questions.java | testQuestionTypeGetterAndSetter | Verify that `setQuestionType(QuestionType.GENDER)` correctly stores the question type | `getQuestionType()` returns `QuestionType.GENDER` | `QuestionType.GENDER` was returned | Passed |
+
 ## 9. Defects and Issues Log
 
 | Issue ID | Description | Severity | Impact | Raised By | Date Raised | Owner | Status | Resolution |
 |---|---|---|---|---|---|---|---|---|
-| None | No defects were identified during the recorded JUnit tests | N/A | N/A | Phil Bamber | 14/04/2026 | [Name] | Closed | No action required |
+| None | No defects were identified during the recorded JUnit tests | N/A | N/A | Phil Bamber | 15/04/2026 | [Name] | Closed | No action required |
 
 ## 10. Test Outcome Summary
 
 **Total Test Cases:**  
-14
+26
 
 **Passed:**  
-14
+26
 
 **Failed:**  
 0
@@ -145,7 +171,7 @@ This section recorded the unit testing completed against selected Java classes a
 Pass
 
 **Summary Notes:**  
-JUnit testing confirmed that the selected classes and enums behaved as expected. Getter and setter behaviour in the Answers class worked correctly, and the Gender, QuestionType, and Role enums contained the expected constants and values.
+JUnit testing confirmed that the selected classes and enums behaved as expected. Getter and setter behaviour in the Answers, Nouns, and Questions classes worked correctly, default list initialisation in the Nouns class behaved correctly, and the Gender, QuestionType, and Role enums contained the expected constants and values.
 
 ## 11. Recommendation
 
@@ -159,5 +185,5 @@ The recorded JUnit tests passed successfully and no issues were identified in th
 
 | Name | Role | Decision | Date | Signature |
 |---|---|---|---|---|
-| Phil Bamber | Test Owner | Approved | 14/04/2026 | [Signature] |
+| Phil Bamber | Test Owner | Approved | 15/04/2026 | [Signature] |
 | [Name] | Reviewer | Pending | [DD/MM/YYYY] | [Signature] |
