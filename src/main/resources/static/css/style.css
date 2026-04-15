@@ -104,7 +104,8 @@ a:hover {
 
 /* Dashboard container 1 */
 .div1 {
-  max-width: 1000px;
+  width: 95%;
+  max-width: 1400px;
   margin: auto;
   padding: 5px;
   text-align: left;
@@ -141,6 +142,8 @@ ul.list-inline {
   align-items: center;
   background-color: #1b553c;
   display: flex;
+  flex-wrap: wrap;
+  /* Allows nav to drop to new lines on small screens */
   max-width: 1000px;
   padding: 0;
   justify-content: flex-start;
@@ -279,7 +282,6 @@ textarea {
   box-sizing: border-box;
   margin-top: 5px;
   margin-bottom: 5px;
-  resize: vertical;
 }
 
 /* Password help display  */
@@ -432,7 +434,7 @@ img.avatar {
 /* Full-width dashboard table */
 .div1 table {
   width: 100%;
-  margin: 25px 0;
+  margin: 25px auto;
   border-collapse: collapse;
   background-color: #262626;
   border-radius: 8px;
@@ -442,13 +444,22 @@ img.avatar {
   table-layout: auto;
 }
 
-/* Table cell spacing and alignment */
 th,
 td {
   padding: 10px 2px;
   text-align: left;
   border-bottom: 1px solid #236b4a;
   overflow-wrap: break-word;
+  word-break: break-all; /* Shatters the 58-character word */
+  max-width: 250px;
+  min-width: 85px; /* Protects regular words like FEMININE from shattering */
+}
+
+/* Prevent first column (ID) from ever wrapping */
+.div1 table th:first-child,
+.div1 table td:first-child {
+  white-space: nowrap;
+  min-width: 30px;
 }
 
 /* Red Welsh table header */
@@ -759,7 +770,7 @@ tr:last-child td {
 }
 
 /* Small screen adjustments */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .flashcard {
     width: 280px;
   }
@@ -769,5 +780,41 @@ tr:last-child td {
     width: 40px;
     height: 40px;
   }
-  
+
+  /* Shrink navbar padding so it fits better */
+  ul.list-inline a {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
+
+  /* Center the right-aligned nav items when wrapped */
+  .nav-right {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+    border-top: 1px solid #14422f;
+    /* Visual separation when wrapped */
+  }
+
+  /* Make sure the main UL content distributes nicely when splitting lines */
+  ul.list-inline {
+    justify-content: center;
+  }
+}
+
+/* Rigid table squish for smaller screens (no stretching, no scrollbars) */
+@media screen and (max-width: 950px) {
+  .div1 table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  th, td {
+    min-width: 0;
+    max-width: none;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    font-size: 11px;
+    padding: 5px 1px;
+  }
 }
