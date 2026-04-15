@@ -66,7 +66,7 @@ public class Tests {
      * contains multiple questions. CascadeType.ALL ensures that
      * operations on the test propagate to its questions.</p>
      */
-    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Questions> questions = new ArrayList<>();
 
     /** Default constructor required by JPA */

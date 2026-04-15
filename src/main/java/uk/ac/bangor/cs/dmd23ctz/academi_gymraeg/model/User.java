@@ -47,11 +47,11 @@ public class User implements UserDetails {
     private Long userId;
 
     @NotBlank(message = "Username is required")
-    @Size(max = 50, message = "Username must be 50 characters or fewer")
+    @Size(max = 20, message = "Username must be 20 characters or fewer")
     @Pattern(
-        regexp = "^[A-Za-z0-9._-]+$",
-        message = "Username may only contain letters, numbers, dots, underscores, and hyphens"
-    )
+    	    regexp = "^[A-Za-z0-9._-]+$",
+    	    message = "Username may only contain letters, numbers, dots, underscores, and hyphens"
+    	)
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -59,7 +59,7 @@ public class User implements UserDetails {
     private String password;
 
     @NotBlank(message = "First name is required")
-    @Size(max = 50, message = "First name must be 50 characters or fewer")
+    @Size(max = 20, message = "First name must be 20 characters or fewer")
     @Pattern(
         regexp = "^[A-Za-zÀ-ÿ' -]+$",
         message = "First name contains invalid characters"
@@ -68,7 +68,7 @@ public class User implements UserDetails {
     private String firstname;
 
     @NotBlank(message = "Surname is required")
-    @Size(max = 50, message = "Surname must be 50 characters or fewer")
+    @Size(max = 20, message = "Surname must be 20 characters or fewer")
     @Pattern(
         regexp = "^[A-Za-zÀ-ÿ' -]+$",
         message = "Surname contains invalid characters"
