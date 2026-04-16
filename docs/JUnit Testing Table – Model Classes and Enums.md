@@ -34,6 +34,8 @@ This testing covered:
 - Questions class getter and setter behaviour
 - Tests class getter, setter, default value, list initialisation, and addQuestion behaviour
 - User class getter, setter, and authority generation behaviour
+- NounsDeleted class getter and setter behaviour
+- UserDeleted class getter and setter behaviour
 
 **Out of Scope:**
 
@@ -53,7 +55,7 @@ April 2026
 
 ## 3. System Overview
 
-This document recorded the JUnit testing carried out on selected model classes and enums within the application. The testing focused on confirming that getter and setter methods returned the expected values, that enum classes contained the correct constants and expected number of values, that default list initialisation and boolean defaults behaved correctly where required, that bidirectional relationship behaviour in the Tests class worked correctly, and that authority generation in the User class behaved as expected based on role.
+This document recorded the JUnit testing carried out on selected model classes and enums within the application. The testing focused on confirming that getter and setter methods returned the expected values, that enum classes contained the correct constants and expected number of values, that default list initialisation and boolean defaults behaved correctly where required, that bidirectional relationship behaviour in the Tests class worked correctly, that authority generation in the User class behaved as expected based on role, and that deleted entity classes correctly stored and returned audit-related values.
 
 ## 4. Preconditions
 
@@ -179,6 +181,32 @@ This section recorded the unit testing completed against selected Java classes a
 | JUT-USR-010 | User.java | testStudentAuthorityIsReturned | Verify that a STUDENT user receives the correct authority | `getAuthorities()` contains `ROLE_STUDENT` | `ROLE_STUDENT` was returned | Passed |
 | JUT-USR-011 | User.java | testAuthoritiesAreEmptyWhenRoleIsNull | Verify that `getAuthorities()` is empty when no role is set | `getAuthorities()` returns an empty collection | An empty collection was returned | Passed |
 
+### 8.9 NounsDeleted Class
+
+| Test ID | Class Under Test | Test Method | Description | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|---|
+| JUT-NDL-001 | NounsDeleted.java | testNounIdGetterAndSetter | Verify that `setNounId(1L)` correctly stores the noun ID | `getNounId()` returns `1L` | `1L` was returned | Passed |
+| JUT-NDL-002 | NounsDeleted.java | testWelshWordGetterAndSetter | Verify that `setWelshWord("cath")` correctly stores the Welsh word | `getWelshWord()` returns `"cath"` | `"cath"` was returned | Passed |
+| JUT-NDL-003 | NounsDeleted.java | testEnglishWordGetterAndSetter | Verify that `setEnglishWord("cat")` correctly stores the English word | `getEnglishWord()` returns `"cat"` | `"cat"` was returned | Passed |
+| JUT-NDL-004 | NounsDeleted.java | testWelshSentGetterAndSetter | Verify that `setWelshSent("Mae gen i gath.")` correctly stores the Welsh sentence | `getWelshSent()` returns `"Mae gen i gath."` | `"Mae gen i gath."` was returned | Passed |
+| JUT-NDL-005 | NounsDeleted.java | testEnglishSentGetterAndSetter | Verify that `setEnglishSent("I have a cat.")` correctly stores the English sentence | `getEnglishSent()` returns `"I have a cat."` | `"I have a cat."` was returned | Passed |
+| JUT-NDL-006 | NounsDeleted.java | testCreatedByGetterAndSetter | Verify that `setCreatedBy("phil")` correctly stores the creator name | `getCreatedBy()` returns `"phil"` | `"phil"` was returned | Passed |
+| JUT-NDL-007 | NounsDeleted.java | testCreatedAtGetterAndSetter | Verify that `setCreatedAt()` correctly stores the created date and time | `getCreatedAt()` returns the same `LocalDateTime` value that was set | The same `LocalDateTime` value was returned | Passed |
+| JUT-NDL-008 | NounsDeleted.java | testDeletedByGetterAndSetter | Verify that `setDeletedBy("phil")` correctly stores the deleted by value | `getDeletedBy()` returns `"phil"` | `"phil"` was returned | Passed |
+| JUT-NDL-009 | NounsDeleted.java | testDeletedAtGetterAndSetter | Verify that `setDeletedAt()` correctly stores the deleted date and time | `getDeletedAt()` returns the same `LocalDateTime` value that was set | The same `LocalDateTime` value was returned | Passed |
+| JUT-NDL-010 | NounsDeleted.java | testGenderGetterAndSetter | Verify that `setGender(Gender.MASCULINE)` correctly stores the gender value | `getGender()` returns `Gender.MASCULINE` | `Gender.MASCULINE` was returned | Passed |
+
+### 8.10 UserDeleted Class
+
+| Test ID | Class Under Test | Test Method | Description | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|---|
+| JUT-UDL-001 | UserDeleted.java | testUserIdGetterAndSetter | Verify that `setUserId(1L)` correctly stores the user ID | `getUserId()` returns `1L` | `1L` was returned | Passed |
+| JUT-UDL-002 | UserDeleted.java | testUsernameGetterAndSetter | Verify that `setUsername("phil")` correctly stores the username | `getUsername()` returns `"phil"` | `"phil"` was returned | Passed |
+| JUT-UDL-003 | UserDeleted.java | testFirstnameGetterAndSetter | Verify that `setFirstname("Phil")` correctly stores the first name | `getFirstname()` returns `"Phil"` | `"Phil"` was returned | Passed |
+| JUT-UDL-004 | UserDeleted.java | testSurnameGetterAndSetter | Verify that `setSurname("Bamber")` correctly stores the surname | `getSurname()` returns `"Bamber"` | `"Bamber"` was returned | Passed |
+| JUT-UDL-005 | UserDeleted.java | testRoleGetterAndSetter | Verify that `setRole(Role.ADMIN)` correctly stores the role | `getRole()` returns `Role.ADMIN` | `Role.ADMIN` was returned | Passed |
+| JUT-UDL-006 | UserDeleted.java | testDeletedAtGetterAndSetter | Verify that `setDeletedAt()` correctly stores the deleted date and time | `getDeletedAt()` returns the same `LocalDateTime` value that was set | The same `LocalDateTime` value was returned | Passed |
+
 ## 9. Defects and Issues Log
 
 | Issue ID | Description | Severity | Impact | Raised By | Date Raised | Owner | Status | Resolution |
@@ -188,10 +216,10 @@ This section recorded the unit testing completed against selected Java classes a
 ## 10. Test Outcome Summary
 
 **Total Test Cases:**  
-47
+63
 
 **Passed:**  
-47
+63
 
 **Failed:**  
 0
@@ -203,7 +231,7 @@ This section recorded the unit testing completed against selected Java classes a
 Pass
 
 **Summary Notes:**  
-JUnit testing confirmed that the selected classes and enums behaved as expected. Getter and setter behaviour in the Answers, Nouns, Questions, Tests, and User classes worked correctly. Default list initialisation in the Nouns and Tests classes behaved correctly, the submitted flag in the Tests class defaulted correctly, bidirectional relationship behaviour in `addQuestion()` worked correctly, and the Gender, QuestionType, and Role enums contained the expected constants and values. User authority generation also behaved correctly based on role.
+JUnit testing confirmed that the selected classes and enums behaved as expected. Getter and setter behaviour in the Answers, Nouns, Questions, Tests, User, NounsDeleted, and UserDeleted classes worked correctly. Default list initialisation in the Nouns and Tests classes behaved correctly, the submitted flag in the Tests class defaulted correctly, bidirectional relationship behaviour in `addQuestion()` worked correctly, the Gender, QuestionType, and Role enums contained the expected constants and values, and deleted entity audit fields were stored and returned correctly. User authority generation also behaved correctly based on role.
 
 ## 11. Recommendation
 
