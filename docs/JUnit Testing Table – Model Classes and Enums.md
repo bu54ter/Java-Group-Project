@@ -216,6 +216,6 @@ The recorded JUnit tests passed successfully and no issues were identified in th
 ## 12. Sign-Off
 
 | Name | Role | Decision | Date |
-|---|---|---|---|---|
+|---|---|---|---|
 | Phil Bamber | Test Owner | Approved | 16/04/2026 |
 | Fern | Reviewer | Approved | 17/04/2026 |
