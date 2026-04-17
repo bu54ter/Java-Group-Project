@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{layout :: head}"></head>
+
+<body>
+
+    <div th:replace="~{layout :: nav('LecturerResults')}"></div>
+    <div sec:authorize="not isAuthenticated()">
+        <div th:replace="~{layout :: loginModal}"></div>
+    </div>
+
+    <section class="div1">
+        <h2>Student Test Results</h2>
+        <hr>
+
+        <p th:if="${#lists.isEmpty(tests)}">No submitted tests found.</p>
+
+        <table th:if="${!#lists.isEmpty(tests)}" style="width: 75%;">
+            <tr>
+                <th>Test ID</th>
+                <th>Student</th>
+                <th>Date Taken</th>
+                <th>Score (%)</th>
+                <th style="text-align: center;">Detail</th>
+            </tr>
+            <tr th:each="t : ${tests}">
+                <td th:text="${t.testId}"></td>
+                <td th:text="${studentNames[t.userId]}"></td>
+                <td th:text="${#temporals.format(t.testedAt, 'dd MMM yyyy HH:mm')}"></td>
+                <td th:text="${t.score}"></td>
+                <td style="text-align: center;">
+                    <form th:action="@{/lecturer/results/{id}(id=${t.testId})}" method="get" style="display:inline;">
+                        <button type="submit" class="smlbtn">View</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+
+        <hr>
+        <div th:replace="~{layout :: footer}"></div>
+        <div th:replace="~{layout :: scripts}"></div>
+    </section>
+
+</body>
+</html>

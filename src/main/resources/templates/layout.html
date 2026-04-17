@@ -40,6 +40,11 @@
 			   th:classappend="${activePage == 'LecturerDashboard'} ? 'active' : ''">Lecturer Dashboard</a>
 		</li>
 
+		<li sec:authorize="hasRole('LECTURER')">
+			<a th:href="@{/lecturer/results}"
+			   th:classappend="${activePage == 'LecturerResults'} ? 'active' : ''">Student Results</a>
+		</li>
+
 		<li sec:authorize="hasRole('STUDENT')">
 			<a th:href="@{/student/dashboard}"
 			   th:classappend="${activePage == 'StudentDashboard'} ? 'active' : ''">Student Dashboard</a>

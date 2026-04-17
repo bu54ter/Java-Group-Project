@@ -36,6 +36,8 @@ public interface TestRepository extends JpaRepository<Tests, Long> {
      */
     List<Tests> findAllByUserId(Long userId);
 
+    List<Tests> findAllBySubmittedTrueOrderByTestedAtDesc();
+
     @org.springframework.data.jpa.repository.Query("SELECT COUNT(t) > 0 FROM Tests t WHERE t.userId = :userId AND (t.submitted = false OR t.submitted IS NULL) AND t.testedAt > :after")
     boolean existsActiveTestForUser(@org.springframework.data.repository.query.Param("userId") Long userId, @org.springframework.data.repository.query.Param("after") java.time.LocalDateTime after);
 
