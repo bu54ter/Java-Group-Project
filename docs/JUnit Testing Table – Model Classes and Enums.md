@@ -9,10 +9,10 @@ JUnit Testing Table – Model Classes and Enums
 Phil Bamber
 
 **Reviewed By:**  
-[Name]
+Fern
 
 **Approved By:**  
-[Name]
+Fern
 
 **Date:**  
 16/04/2026
@@ -215,7 +215,7 @@ The recorded JUnit tests passed successfully and no issues were identified in th
 
 ## 12. Sign-Off
 
-| Name | Role | Decision | Date | Signature |
+| Name | Role | Decision | Date |
 |---|---|---|---|---|
-| Phil Bamber | Test Owner | Approved | 16/04/2026 | [Signature] |
-| [Name] | Reviewer | Pending | [DD/MM/YYYY] | [Signature] |
+| Phil Bamber | Test Owner | Approved | 16/04/2026 |
+| Fern | Reviewer | Approved | 17/04/2026 |
