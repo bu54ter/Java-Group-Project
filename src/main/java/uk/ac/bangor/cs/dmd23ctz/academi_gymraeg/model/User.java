@@ -1,15 +1,14 @@
 package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -49,9 +48,9 @@ public class User implements UserDetails {
     @NotBlank(message = "Username is required")
     @Size(max = 20, message = "Username must be 20 characters or fewer")
     @Pattern(
-    	    regexp = "^[A-Za-z0-9._-]+$",
-    	    message = "Username may only contain letters, numbers, dots, underscores, and hyphens"
-    	)
+        regexp = "^[A-Za-z0-9._-]+$",
+        message = "Username may only contain letters, numbers, dots, underscores, and hyphens"
+    )
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -83,6 +82,18 @@ public class User implements UserDetails {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    /* Current number of consecutive days where the student has completed a test */
+    @Column(name = "current_streak")
+    private Integer currentStreak = 0;
+
+    /* Highest streak the student has reached */
+    @Column(name = "best_streak")
+    private Integer bestStreak = 0;
+
+    /* Date the student last completed a test */
+    @Column(name = "last_test_date")
+    private LocalDate lastTestDate;
 
     @Transient
     private List<GrantedAuthority> authorities = null;
@@ -154,5 +165,29 @@ public class User implements UserDetails {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Integer getCurrentStreak() {
+        return currentStreak;
+    }
+
+    public void setCurrentStreak(Integer currentStreak) {
+        this.currentStreak = currentStreak;
+    }
+
+    public Integer getBestStreak() {
+        return bestStreak;
+    }
+
+    public void setBestStreak(Integer bestStreak) {
+        this.bestStreak = bestStreak;
+    }
+
+    public LocalDate getLastTestDate() {
+        return lastTestDate;
+    }
+
+    public void setLastTestDate(LocalDate lastTestDate) {
+        this.lastTestDate = lastTestDate;
     }
 }
