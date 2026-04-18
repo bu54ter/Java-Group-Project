@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,8 +20,11 @@ import org.springframework.ui.Model;
 
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Nouns;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.AnswerRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.NounDeletedRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.NounRepository;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserDeletedRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.NounService;
 
@@ -48,9 +53,18 @@ class LecturerControllerTests {
     @Mock
     private NounDeletedRepository nounDeletedRepository;
 
-    /** Mock repository used to retrieve user records */
+    /** Mock repository used to retrieve deleted nouns */
     @Mock
     private UserRepository userRepository;
+    /** Mock repository used to retrieve deleted nouns */
+    @Mock
+    private UserDeletedRepository userDeletedRepository;
+    /** Mock repository used to retrieve deleted nouns */
+    @Mock
+    private TestRepository testRepository;
+    /** Mock repository used to retrieve user records */
+    @Mock
+    private AnswerRepository answerRepository;
 
     /** Mock model used to verify attributes added by the controller */
     @Mock
@@ -68,14 +82,8 @@ class LecturerControllerTests {
      */
     @BeforeEach
     void setUp() {
-        lecturerController = new LecturerController(
-                nounRepository,
-                nounService,
-                nounDeletedRepository,
-                userRepository
-        );
-    }
-
+        lecturerController = new LecturerController(nounRepository,nounService,nounDeletedRepository,userRepository,userDeletedRepository,testRepository,answerRepository);
+        }
     /**
      * Verifies that the lecturer dashboard returns the correct
      * view and adds the expected noun-related model attributes.
