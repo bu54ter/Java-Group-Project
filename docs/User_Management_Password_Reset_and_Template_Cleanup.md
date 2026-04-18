@@ -1,9 +1,9 @@
-# Testing Table – User Management, Password Reset and Template Cleanup
+# Testing Table – User Management, Password Reset, Template Cleanup and Personal Streak
 
 ## 1. Document Control
 
 **Document Title:**  
-Testing Table – User Management, Password Reset and Template Cleanup
+Testing Table – User Management, Password Reset, Template Cleanup and Personal Streak
 
 **Prepared By:**  
 Phil Bamber
@@ -15,14 +15,14 @@ Phil Bamber
 [Name]
 
 **Date:**  
-14/04/2026
+18/04/2026
 
 ---
 
 ## 2. Test Summary
 
 **Purpose:**  
-To verify that the changes made to user management, password reset, and Thymeleaf template cleanup were working as intended. Testing covered password confirmation, role-based password rules, duplicate username handling, username normalisation, show or hide password controls, modal behaviour, reset password validation, shared template rendering, stylesheet loading, and removal of deprecated Thymeleaf fragment warnings.
+To verify that the changes made to user management, password reset, Thymeleaf template cleanup, and the Student Dashboard Personal Streak feature were working as intended. Testing covered password confirmation, role-based password rules, duplicate username handling, username normalisation, show or hide password controls, modal behaviour, reset password validation, shared template rendering, stylesheet loading, removal of deprecated Thymeleaf fragment warnings, and streak rebuilding from submitted test history.
 
 **Scope:**  
 This testing covered:
@@ -40,6 +40,10 @@ This testing covered:
 - Shared layout rendering across Home, Admin, Student Dashboard, Revision, Test, and Results pages
 - Shared stylesheet loading from the layout head fragment
 - Verification that deprecated Thymeleaf fragment warnings no longer appeared for corrected templates
+- Personal Streak section display on the Student Dashboard
+- Streak updates after test submission
+- Historical streak rebuilding from submitted test records
+- Unique-date streak logic so multiple tests on the same day count as one day only
 
 **Out of Scope:**  
 - Browser compatibility testing outside the normal development browser used during testing
@@ -61,7 +65,7 @@ April 2026
 
 ## 3. System Overview
 
-The system allowed an administrator to create and manage user accounts, and allowed student users to access dashboard, revision, test, and results pages. The recent changes introduced stronger password validation, clearer user feedback during account creation and password reset, and cleanup of shared Thymeleaf templates to improve consistency and remove deprecated fragment syntax warnings.
+The system allowed an administrator to create and manage user accounts, and allowed student users to access dashboard, revision, test, and results pages. The recent changes introduced stronger password validation, clearer user feedback during account creation and password reset, cleanup of shared Thymeleaf templates to improve consistency and remove deprecated fragment syntax warnings, and a Personal Streak feature on the Student Dashboard to encourage regular test activity.
 
 The key changes under test were:
 - Confirm Password field added to Create User
@@ -76,6 +80,10 @@ The key changes under test were:
 - Thymeleaf fragment syntax cleanup
 - Shared stylesheet loading through the layout head fragment
 - Shared footer, script, modal, and layout fragment rendering across affected templates
+- Personal Streak panel added to the Student Dashboard
+- Current streak, best streak, and last test completed display
+- Historical submitted test rebuild logic for streak calculation
+- Unique-date streak calculation so repeated tests on the same day do not inflate the streak
 
 ---
 
@@ -87,11 +95,12 @@ Before testing begins, confirm the following:
 - A Student test account was available and working
 - At least one Student, Lecturer and Admin user record already existed
 - At least one completed student test record existed for results page testing
+- Historical submitted test records existed across more than one date for streak testing
 - The Admin dashboard loaded without error
 - The Student dashboard, Revision, Test, and Results pages loaded without error
 - The Create User modal opened correctly
 - Existing users were visible in the Active Users table
-- The latest password validation and template cleanup changes had been deployed
+- The latest password validation, template cleanup, and personal streak changes had been deployed
 
 ---
 
@@ -104,6 +113,7 @@ Testing may start only when:
 - The Admin and Student pages loaded correctly
 - Test accounts were present in the database
 - At least one completed student test existed for results testing
+- Historical submitted student tests existed for streak rebuild testing
 - The application database is reachable
 - No blocking deployment issues remain
 
@@ -142,12 +152,13 @@ Testing was considered complete when:
 | Lecturer Password | lecturer10 | 10-character valid Lecturer password |
 | Admin Password | adminpass123 | 12-character valid Admin password |
 | Completed Test Record | Existing student result | Used to verify results page rendering |
+| Historical Submitted Tests | Tests on 10 Apr, 11 Apr, 11 Apr, 11 Apr, and 12 Apr | Used to verify streak rebuild and unique-date logic |
 
 ---
 
 ## 9. Test Cases
 
-This section recorded the functional testing completed against the Create User, Reset Password, and Thymeleaf template cleanup changes made to the system. Testing focused on password confirmation, role-based password policy, duplicate username handling, username normalisation, password visibility controls, modal behaviour, reset password validation, shared template rendering, stylesheet loading, and verification that deprecated Thymeleaf fragment warnings no longer appeared for corrected templates.
+This section recorded the functional testing completed against the Create User, Reset Password, Thymeleaf template cleanup, and Student Dashboard Personal Streak changes made to the system. Testing focused on password confirmation, role-based password policy, duplicate username handling, username normalisation, password visibility controls, modal behaviour, reset password validation, shared template rendering, personal streak display, historical streak rebuilding, and verification that multiple tests on the same day counted as one day only.
 
 ### 9.1 Admin User Creation and Password Management
 
@@ -191,6 +202,7 @@ This section recorded the functional testing completed against the Create User, 
 | ADM-PWD-036 | Reset Password Validation | Verify server-side reset password policy blocks short Admin password | Existing Admin user account | 1. Attempt reset with password shorter than 12 characters<br>2. Submit form | Password reset is rejected and server-side validation message is shown | Server-side Admin password rule rejected the short value correctly | Passed | Visual check | Worked as expected |
 | ADM-PWD-037 | Error Handling | Verify reset password error message area is displayed on the admin dashboard when reset fails | Admin logged in | 1. Trigger a failed reset password attempt<br>2. Review Active users section | Visible error message is displayed on the admin dashboard | Error message area displayed correctly when reset validation failed | Passed | Visual check | Useful because the user remained on the same page |
 | ADM-PWD-038 | UI / Layout | Verify reset password placeholder text fits correctly within the reset password field | Admin logged in and at least one user exists | 1. Open Admin Dashboard<br>2. Review reset password fields for different user roles<br>3. Trigger short-password validation to display the longer guidance text | Placeholder and validation guidance fit within the field without being cut off or harming layout | On the first test the placeholder and validation guidance text were too long for the field and were visually cut off. The placeholder text was shortened and retested successfully | Passed after retest | Screenshot / visual check | Placeholder wording was reduced to keep the field readable and maintain the table layout |
+
 ### 9.2 Thymeleaf Template and Layout Cleanup
 
 | Test Case ID | Area | Test Description | Preconditions | Steps | Expected Result | Actual Result | Status | Evidence | Comments |
@@ -204,6 +216,17 @@ This section recorded the functional testing completed against the Create User, 
 | TPL-007 | Shared Styling | Verify stylesheet still applies correctly after moving CSS link into shared layout head fragment | Application running | 1. Open Home, Admin, Student Dashboard, Revision, Test, and Results pages<br>2. Review layout and styling | Styling remains applied correctly across all affected pages | Styling remained consistent across all updated templates | Passed | Visual check | Confirmed shared CSS loading still worked |
 | TPL-008 | Warning Check | Verify deprecated Thymeleaf fragment warnings no longer appear for updated templates | Application running and console available | 1. Open updated pages<br>2. Review Spring Boot console output | No deprecated unwrapped Thymeleaf fragment warnings are shown for the corrected templates | Deprecated fragment warnings were no longer shown for the tested updated templates | Passed | Console check | Confirmed cleanup resolved the warning messages |
 
+### 9.3 Student Dashboard Personal Streak
+
+| Test Case ID | Area | Test Description | Preconditions | Steps | Expected Result | Actual Result | Status | Evidence | Comments |
+| ------------ | ---- | ---------------- | ------------- | ----- | --------------- | ------------- | ------ | -------- | -------- |
+| STR-001 | Student Dashboard | Verify Personal Streak panel is displayed on the Student Dashboard | Student logged in | 1. Log in as Student<br>2. Open Student Dashboard | Personal Streak section is visible and displays current streak, best streak, and last test completed | Personal Streak panel displayed correctly on the Student Dashboard | Passed | Visual check | Panel loaded in the correct location above previous results |
+| STR-002 | Streak Logic | Verify first completed test creates a 1-day streak | Student account with no current streak value | 1. Log in as Student<br>2. Complete and submit one test<br>3. Return to Student Dashboard | Current streak shows 1 day, best streak shows 1 day, and last test completed shows today’s date | After the first submitted test, the dashboard showed a 1-day current streak and 1-day best streak | Passed | Visual check | Worked correctly after first test submission |
+| STR-003 | Streak Logic | Verify multiple tests completed on the same day count as one day only | Student already completed one test today | 1. Complete and submit another test on the same day<br>2. Return to Student Dashboard | Current streak remains unchanged and does not increase for multiple tests on the same date | Multiple tests on the same day did not increase the streak beyond one day | Passed | Visual check | Correctly counted unique test dates rather than total test attempts |
+| STR-004 | Historical Data | Verify historical submitted tests are used to rebuild streak on dashboard load | Student account with completed submitted tests across multiple dates | 1. Log in as Student<br>2. Open Student Dashboard | Historical submitted tests are read and used to calculate the streak | Historical test data was loaded and used to rebuild the streak on the dashboard | Passed | Visual check | This fixed the earlier issue where only newer streak data was being shown |
+| STR-005 | Historical Data | Verify multiple historical tests on the same date count as one day only | Student account with more than one historical test on the same date | 1. Log in as Student<br>2. Open Student Dashboard<br>3. Compare streak with previous results dates | Multiple tests on one historical date count as one streak day only | Historical tests from the same date were treated as one day and did not inflate the streak | Passed | Visual check | Example checked using repeated tests on the same date |
+| STR-006 | Streak Logic | Verify consecutive historical dates produce the correct streak length | Student account with completed tests on three consecutive dates | 1. Log in as Student<br>2. Open Student Dashboard | Consecutive dates are counted as a continuous streak | Tests completed on 10 Apr, 11 Apr and 12 Apr were counted as a 3-day streak rather than 5 tests | Passed | Visual check | Confirmed that streak was date-based rather than test-count-based |
+
 ---
 
 ## 10. Defects and Issues Log
@@ -214,7 +237,9 @@ This section recorded the functional testing completed against the Create User, 
 | DEF-ADM-002 | Password helper text for Admin role did not always update immediately after role selection | Low | Could confuse admin user about the current password rule | Phil Bamber | 11/04/2026 | [Name] | Closed | JavaScript updated so helper text refreshed on role change |
 | DEF-ADM-003 | Password eye icon spacing looked uneven on a narrower screen width | Low | Minor layout issue only | Phil Bamber | 11/04/2026 | [Name] | Closed | CSS spacing adjusted and retested |
 | DEF-TPL-001 | Deprecated Thymeleaf fragment syntax warnings were shown in the console for shared template includes | Low | Did not stop the application working, but indicated outdated template syntax and created unnecessary console noise | Phil Bamber | 12/04/2026 | [Name] | Closed | Templates were updated to use full Thymeleaf fragment syntax and retested successfully |
- DEF-ADM-004 | Reset password placeholder and validation guidance text was too long for the field and became visually cut off | Low | Minor usability and layout issue in the Admin dashboard | Phil Bamber | 13/04/2026 | [Name] | Closed | Placeholder wording was shortened and retested successfully |
+| DEF-ADM-004 | Reset password placeholder and validation guidance text was too long for the field and became visually cut off | Low | Minor usability and layout issue in the Admin dashboard | Phil Bamber | 13/04/2026 | [Name] | Closed | Placeholder wording was shortened and retested successfully |
+| DEF-STR-001 | Personal Streak initially updated only from newly submitted tests and did not rebuild fully from older submitted test history | Medium | Historical streak values on the Student Dashboard were incomplete and could misrepresent previous student activity | Phil Bamber | 18/04/2026 | [Name] | Closed | Dashboard streak logic was updated to rebuild from historical submitted tests using unique test dates only |
+
 ---
 
 ## 11. Risks and Assumptions
@@ -224,12 +249,14 @@ This section recorded the functional testing completed against the Create User, 
 - Admin users may become confused if helper text and actual validation do not match
 - Minor UI issues in the modal could lead to repeated failed attempts or unnecessary support queries
 - Shared template changes could unintentionally affect multiple pages if not retested carefully
+- Streak data could be misrepresented if repeated tests on the same day are counted as separate days
 
 **Assumptions:**
 - Test accounts used during testing matched the correct roles in the database
 - The development environment reflected the latest version of the code under test
 - Password reset actions were being performed only against test accounts during testing
 - The updated templates used the shared layout fragments consistently across the affected pages
+- Historical submitted test records used during streak testing were valid and correctly dated
 
 ---
 
@@ -242,16 +269,17 @@ This section recorded the functional testing completed against the Create User, 
 | TPL-004 | Screenshot | [File name / link] | Phil Bamber | 14/04/2026 |
 | TPL-005 | Screenshot | [File name / link] | Phil Bamber | 14/04/2026 |
 | TPL-008 | Console capture | [File name / link] | Phil Bamber | 14/04/2026 |
+| STR-004 | Screenshot | [File name / link] | Phil Bamber | 18/04/2026 |
 
 ---
 
 ## 13. Test Outcome Summary
 
 **Total Test Cases:**  
-45
+51
 
 **Passed:**  
-42
+48
 
 **Passed after retest:**  
 3
@@ -266,7 +294,7 @@ This section recorded the functional testing completed against the Create User, 
 Pass
 
 **Summary Notes:**  
-Testing confirmed that the Create User, Reset Password, and Thymeleaf template cleanup changes were working as expected after a small number of front-end issues were corrected. The main defects found during testing were related to modal behaviour, helper text refresh, eye icon layout spacing, and deprecated Thymeleaf fragment syntax warnings. These were fixed and retested successfully. No blocking issues remained at the end of testing.
+Testing confirmed that the Create User, Reset Password, Thymeleaf template cleanup, and Student Dashboard Personal Streak changes were working as expected after a small number of front-end and logic issues were corrected. The main defects found during testing were related to modal behaviour, helper text refresh, eye icon layout spacing, deprecated Thymeleaf fragment syntax warnings, and the initial Personal Streak behaviour not rebuilding correctly from historical submitted tests. These were fixed and retested successfully. No blocking issues remained at the end of testing.
 
 ---
 
@@ -276,7 +304,7 @@ Testing confirmed that the Create User, Reset Password, and Thymeleaf template c
 Proceed to release
 
 **Reason:**  
-The main functional requirements for user management, password reset, and template cleanup were met. The issues found during testing were minor and were corrected during the test cycle. Retesting confirmed that the updated behaviour worked as expected and that the cleaned templates continued to render correctly.
+The main functional requirements for user management, password reset, template cleanup, and the Personal Streak feature were met. The issues found during testing were minor and were corrected during the test cycle. Retesting confirmed that the updated behaviour worked as expected and that the cleaned templates continued to render correctly.
 
 ---
 
@@ -284,5 +312,5 @@ The main functional requirements for user management, password reset, and templa
 
 | Name | Role | Decision | Date | Signature |
 |---|---|---|---|---|
-| Phil Bamber | Test Owner | Approved | 14/04/2026 | [Signature] |
+| Phil Bamber | Test Owner | Approved | 18/04/2026 | [Signature] |
 | [Name] | Reviewer | Pending | [DD/MM/YYYY] | [Signature] |
