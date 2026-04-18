@@ -5,19 +5,48 @@
 
 <body>
 	<div th:replace="~{layout :: nav('StudentDashboard')}"></div>
+
 	<div sec:authorize="not isAuthenticated()">
-		<!-- Updated to Thymeleaf full fragment syntax -->
+		<!-- Show login modal if user is not signed in -->
 		<div th:replace="~{layout :: loginModal}"></div>
 	</div>
+
 	<section class="div1">
 		<h2>Student Dashboard</h2>
 		<hr>
-		<br>
-		<div class="button-container">
-			<a th:href="@{/student/revision}" class="button">Revise</a> <a
-				th:href="@{/student/test}" class="button">Take a test</a>
+
+		<!-- Personal streak box -->
+		<div style="margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
+			<h3>Personal Streak</h3>
+
+			<p>
+				<strong>Current streak:</strong>
+				<span th:text="${user.currentStreak}"></span> day(s)
+			</p>
+
+			<p>
+				<strong>Best streak:</strong>
+				<span th:text="${user.bestStreak}"></span> day(s)
+			</p>
+
+			<p>
+				<strong>Last test completed:</strong>
+				<span th:if="${user.lastTestDate != null}"
+					th:text="${#temporals.format(user.lastTestDate, 'dd MMM yyyy')}"></span>
+				<span th:if="${user.lastTestDate == null}">No tests completed yet</span>
+			</p>
 		</div>
+
+		<br>
+
+		<!-- Main student actions -->
+		<div class="button-container">
+			<a th:href="@{/student/revision}" class="button">Revise</a>
+			<a th:href="@{/student/test}" class="button">Take a test</a>
+		</div>
+
 		<h2>Previous results</h2>
+
 		<table>
 			<tr>
 				<th>Date of test</th>
@@ -28,11 +57,14 @@
 				<td th:text="${t.score}"></td>
 			</tr>
 		</table>
+
 		<br>
 		<hr>
-		<!-- Updated to Thymeleaf full fragment syntax -->
+
+		<!-- Footer -->
 		<div th:replace="~{layout :: footer}"></div>
-		<!-- Updated to Thymeleaf full fragment syntax -->
+
+		<!-- Scripts -->
 		<div th:replace="~{layout :: scripts}"></div>
 	</section>
 

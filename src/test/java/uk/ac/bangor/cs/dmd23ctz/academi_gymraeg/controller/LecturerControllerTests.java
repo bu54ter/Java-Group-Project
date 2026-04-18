@@ -53,16 +53,19 @@ class LecturerControllerTests {
     @Mock
     private NounDeletedRepository nounDeletedRepository;
 
-    /** Mock repository used to retrieve deleted nouns */
+    /** Mock repository used to retrieve user records */
     @Mock
     private UserRepository userRepository;
-    /** Mock repository used to retrieve deleted nouns */
+
+    /** Mock repository used to retrieve deleted user records */
     @Mock
     private UserDeletedRepository userDeletedRepository;
-    /** Mock repository used to retrieve deleted nouns */
+
+    /** Mock repository used to retrieve test records */
     @Mock
     private TestRepository testRepository;
-    /** Mock repository used to retrieve user records */
+
+    /** Mock repository used to retrieve answer records */
     @Mock
     private AnswerRepository answerRepository;
 
@@ -82,8 +85,17 @@ class LecturerControllerTests {
      */
     @BeforeEach
     void setUp() {
-        lecturerController = new LecturerController(nounRepository,nounService,nounDeletedRepository,userRepository,userDeletedRepository,testRepository,answerRepository);
-        }
+        lecturerController = new LecturerController(
+                nounRepository,
+                nounService,
+                nounDeletedRepository,
+                userRepository,
+                userDeletedRepository,
+                testRepository,
+                answerRepository
+        );
+    }
+
     /**
      * Verifies that the lecturer dashboard returns the correct
      * view and adds the expected noun-related model attributes.
@@ -98,7 +110,8 @@ class LecturerControllerTests {
         assertEquals("lecturer/dashboard", viewName);
         verify(model).addAttribute("nouns", Collections.emptyList());
         verify(model).addAttribute("nounsDeleted", Collections.emptyList());
-        verify(model).addAttribute(org.mockito.ArgumentMatchers.eq("noun"), org.mockito.ArgumentMatchers.any(Nouns.class));
+        verify(model).addAttribute(org.mockito.ArgumentMatchers.eq("noun"),
+                org.mockito.ArgumentMatchers.any(Nouns.class));
     }
 
     /**
