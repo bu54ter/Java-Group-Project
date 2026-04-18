@@ -1,4 +1,5 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="~{layout :: head}"></head>
 
@@ -11,7 +12,8 @@
 	</div>
 	<section class="div2">
 		<h1>Croeso</h1>
-		<p>This website is designed to help students learn new Welsh nouns and test their knowledge.</p>
+		<p>This website is designed to help students learn new Welsh nouns
+			and test their knowledge.</p>
 		<hr />
 		<div th:if="${wordOfTheDay != null}" id="nounCard">
 			<div class="noun-badge">Gair y Dydd</div>
@@ -23,9 +25,7 @@
 				<p class="noun-details">
 					<span class="gender-tag"
 						th:text="${wordOfTheDay.gender.name() == 'MASCULINE' ? 'Masculine' : 'Feminine'}"></span>
-					<br />
-					<span class="sentence-section">
-						<strong>Example:</strong><br />
+					<br /> <span class="sentence-section"> <strong>Example:</strong><br />
 						<span class="sentence-welsh" th:text="${wordOfTheDay.welshSent}"></span><br />
 						<i class="sentence-english" th:text="${wordOfTheDay.englishSent}"></i>
 					</span>
