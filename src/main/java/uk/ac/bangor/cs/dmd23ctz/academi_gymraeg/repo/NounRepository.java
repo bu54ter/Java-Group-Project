@@ -26,21 +26,37 @@ import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Nouns;
 public interface NounRepository extends JpaRepository<Nouns, Long> {
 
     /**
-     * Retrieves a random selection of 20 nouns from the database.
+     * Retrieves a random selection of 20 nouns that have NOT been copied
+     * to the deleted nouns table.
      *
-     * <p>This method uses a native SQL query with ORDER BY RAND()
-     * to shuffle the results and LIMIT to restrict the number of
-     * returned records.</p>
+     * <p>This excludes any noun whose ID exists in ag_nouns_deleted,
+     * ensuring only active nouns are used.</p>
      *
-     * <p>This is useful for generating dynamic and varied content
-     * such as quizzes or learning exercises.</p>
-     *
-     * @return a list of 20 randomly selected nouns
+     * @return a list of 20 randomly selected active nouns
      */
-    @Query(
-        value = "SELECT * FROM ag_nouns ORDER BY RAND() LIMIT 20",
-        nativeQuery = true
-    )
-    List<Nouns> findRandomNouns();
+	@Query(
+		    value = """
+		        SELECT *
+		        FROM ag_nouns n
+		        WHERE NOT EXISTS (
+		            SELECT 1
+		            FROM ag_deleted_nouns d
+		            WHERE d.noun_id = n.noun_id
+		        )
+		        ORDER BY RAND()
+		        LIMIT 20
+		    """,
+		    nativeQuery = true
+		)
+		List<Nouns> findRandomActiveNouns();
+    
+    @Query("""
+    	    SELECT n FROM Nouns n
+    	    WHERE NOT EXISTS (
+    	        SELECT 1 FROM NounsDeleted d
+    	        WHERE d.nounId = n.nounId
+    	    )
+    	""")
+    	List<Nouns> findAllActiveNouns();
     boolean existsBy();
 }

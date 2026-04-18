@@ -91,9 +91,6 @@ public class NounService {
 	    deleted.setDeletedAt(LocalDateTime.now());
 	    // Persist deleted record
 	    nounDeletedRepository.saveAndFlush(deleted);
-	    // Remove original noun from active table
-	    nounRepository.delete(noun);
-	    nounRepository.flush();
 	}
 	
     /**

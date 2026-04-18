@@ -93,8 +93,5 @@ public class UserService {
 	    deleted.setDeletedAt(LocalDateTime.now());
 	    // Persist archived user
 	    userDeletedRepository.saveAndFlush(deleted);
-	    // Remove original user from active table
-	    userRepository.delete(user);
-	    userRepository.flush();
 	}
 }

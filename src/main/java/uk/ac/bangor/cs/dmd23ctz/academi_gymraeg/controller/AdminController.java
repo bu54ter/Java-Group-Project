@@ -35,7 +35,7 @@ public class AdminController {
     @GetMapping("/admin/dashboard")
     public String adminPage(Model model) {
         model.addAttribute("user", new User());
-        model.addAttribute("users", userRepo.findAll());
+        model.addAttribute("users", userRepo.findAllActiveUsers());
         model.addAttribute("deletedUsers", userDeletedRepository.findAll());
         return "admin/dashboard";
     }

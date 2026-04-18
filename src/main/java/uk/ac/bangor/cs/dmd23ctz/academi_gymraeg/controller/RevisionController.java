@@ -54,7 +54,7 @@ public class RevisionController {
             return "redirect:/student/test?from=revision";
         }
 
-        model.addAttribute("nouns", nounRepository.findRandomNouns().stream().map(noun -> Map.of(
+        model.addAttribute("nouns", nounRepository.findRandomActiveNouns().stream().map(noun -> Map.of(
                 "welshWord", noun.getWelshWord(),
                 "englishWord", noun.getEnglishWord(),
                 "gender", noun.getGender().name())).collect(Collectors.toList()));

@@ -85,7 +85,7 @@ class RevisionControllerTests {
         when(authentication.getName()).thenReturn("bob");
         when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
         when(testRepository.existsActiveTestForUser(anyLong(), any(LocalDateTime.class))).thenReturn(false);
-        when(nounRepository.findRandomNouns()).thenReturn(List.of(noun));
+        when(nounRepository.findRandomActiveNouns()).thenReturn(List.of(noun));
 
         String viewName = revisionController.revision(model, authentication);
 
@@ -110,7 +110,7 @@ class RevisionControllerTests {
         String viewName = revisionController.revision(model, authentication);
 
         assertEquals("redirect:/student/test?from=revision", viewName);
-        verify(nounRepository, never()).findRandomNouns();
+        verify(nounRepository, never()).findRandomActiveNouns();
         verify(model, never()).addAttribute(org.mockito.ArgumentMatchers.eq("nouns"), org.mockito.ArgumentMatchers.any());
     }
 
@@ -128,7 +128,7 @@ class RevisionControllerTests {
 
         assertEquals("User not found", exception.getMessage());
         verify(testRepository, never()).existsActiveTestForUser(anyLong(), any(LocalDateTime.class));
-        verify(nounRepository, never()).findRandomNouns();
+        verify(nounRepository, never()).findRandomActiveNouns();
     }
 
     /**
@@ -151,7 +151,7 @@ class RevisionControllerTests {
         when(authentication.getName()).thenReturn("bob");
         when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
         when(testRepository.existsActiveTestForUser(anyLong(), any(LocalDateTime.class))).thenReturn(false);
-        when(nounRepository.findRandomNouns()).thenReturn(List.of(noun));
+        when(nounRepository.findRandomActiveNouns()).thenReturn(List.of(noun));
 
         revisionController.revision(model, authentication);
 

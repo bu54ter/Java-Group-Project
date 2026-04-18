@@ -61,7 +61,7 @@ public class LecturerController {
 	 */
 	@GetMapping("/lecturer/dashboard")
 	public String lecturerDashboard(Model model) {
-		List<Nouns> nouns = nounRepository.findAll();
+		List<Nouns> nouns = nounRepository.findAllActiveNouns();
 		model.addAttribute("nouns", nouns);
 		List<NounsDeleted> nounsDeleted = nounDeletedRepository.findAll();
 		model.addAttribute("nounsDeleted", nounsDeleted);
