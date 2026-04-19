@@ -70,14 +70,14 @@ class QuestionServiceTests {
 
         // Simulate finding the test and returning enough nouns
         when(testRepository.findById(1L)).thenReturn(Optional.of(test));
-        when(nounRepository.findRandomNouns()).thenReturn(nouns);
+        when(nounRepository.findRandomActiveNouns()).thenReturn(nouns);
 
         // Run the method being tested
         questionService.generateQuestionsForTest(1L);
 
         // Check the repositories were called
         verify(testRepository).findById(1L);
-        verify(nounRepository).findRandomNouns();
+        verify(nounRepository).findRandomActiveNouns();
         verify(questionRepository).saveAll(questionListCaptor.capture());
 
         // Get the saved questions so they can be checked
@@ -112,7 +112,7 @@ class QuestionServiceTests {
 
         // Make sure nothing else happens after the failure
         verify(testRepository).findById(99L);
-        verify(nounRepository, never()).findRandomNouns();
+        verify(nounRepository, never()).findRandomActiveNouns();
         verify(questionRepository, never()).saveAll(questionListCaptor.capture());
     }
 
@@ -126,7 +126,7 @@ class QuestionServiceTests {
 
         // Simulate finding the test but not having enough nouns
         when(testRepository.findById(1L)).thenReturn(Optional.of(test));
-        when(nounRepository.findRandomNouns()).thenReturn(nouns);
+        when(nounRepository.findRandomActiveNouns()).thenReturn(nouns);
 
         // Check the correct exception is thrown
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
@@ -137,7 +137,7 @@ class QuestionServiceTests {
 
         // Check the question save never happens
         verify(testRepository).findById(1L);
-        verify(nounRepository).findRandomNouns();
+        verify(nounRepository).findRandomActiveNouns();
         verify(questionRepository, never()).saveAll(questionListCaptor.capture());
     }
 }

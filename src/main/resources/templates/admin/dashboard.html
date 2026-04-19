@@ -101,6 +101,7 @@
 				<th>First Name</th>
 				<th>Surname</th>
 				<th>Date Deleted</th>
+				<th>Undo Delete</th>
 			</tr>
 			<tr th:each="ud : ${deletedUsers}">
 				<td th:text="${ud.userId}"></td>
@@ -109,6 +110,16 @@
 				<td th:text="${ud.firstname}"></td>
 				<td th:text="${ud.surname}"></td>
 				<td th:text="${ud.deletedAt}"></td>
+				<td>
+					<form th:action="@{/userDeleted/{id}/undelete(id=${ud.userId})}"
+						method="post" style="display: inline;">
+						<input type="hidden" th:name="${_csrf.parameterName}"
+							th:value="${_csrf.token}" />
+						<button type="submit" class="smlbtn"
+							onclick="return confirm('Restore this user?')">Undelete
+						</button>
+					</form>
+				</td>
 			</tr>
 		</table>
 		<hr>

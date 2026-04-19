@@ -74,7 +74,7 @@ public class QuestionService {
 		// Retrieve test entity
 		Tests test = testRepository.findById(testId).orElseThrow(() -> new RuntimeException("Test not found"));
 		// Fetch random nouns from repository
-		List<Nouns> randomNouns = nounRepository.findRandomNouns();
+		List<Nouns> randomNouns = nounRepository.findRandomActiveNouns();
 		// Ensure sufficient nouns are available (minimum 20)
 		if (randomNouns.size() < 20) {
 			throw new RuntimeException("Not enough nouns to create a full test");

@@ -1,5 +1,6 @@
 package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,8 +35,24 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @param username the username to search for
      * @return an Optional containing the user if found, or empty if not
      */
-    @Query("SELECT u FROM User u WHERE u.username = :username")
-    Optional<User> findByUsername(String username);
+	@Query("""
+		    SELECT u FROM User u
+		    WHERE u.username = :username
+		    AND NOT EXISTS (
+		        SELECT 1 FROM UserDeleted d
+		        WHERE d.userId = u.userId
+		    )
+		""")
+		Optional<User> findByUsername(String username);
+    
+    @Query("""
+            SELECT u FROM User u
+            WHERE NOT EXISTS (
+                SELECT 1 FROM UserDeleted d
+                WHERE d.userId = u.userId
+            )
+        """)
+        List<User> findAllActiveUsers();
 
     /**
      * Checks whether a user exists with the given username.
