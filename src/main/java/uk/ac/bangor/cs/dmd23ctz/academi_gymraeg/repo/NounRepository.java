@@ -50,7 +50,18 @@ public interface NounRepository extends JpaRepository<Nouns, Long> {
 		)
 		List<Nouns> findRandomActiveNouns();
     
-    @Query("""
+    /**
+     * Retrieves all active nouns.
+     *
+     * <p>This query excludes any noun whose ID exists in the
+     * {@link uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.NounsDeleted}
+     * entity.</p>
+     *
+     * <p>No ordering or limit is applied.</p>
+     *
+     * @return a list of all active nouns
+     */
+	@Query("""
     	    SELECT n FROM Nouns n
     	    WHERE NOT EXISTS (
     	        SELECT 1 FROM NounsDeleted d
@@ -58,5 +69,13 @@ public interface NounRepository extends JpaRepository<Nouns, Long> {
     	    )
     	""")
     	List<Nouns> findAllActiveNouns();
-    boolean existsBy();
+    
+    /**
+     * Checks if any {@link Nouns} entity exists.
+     *
+     * <p> Check if any item in the noun table, if not an auto load will take place.</p>
+     *
+     * @return {@code true} if at least one record exists (if implemented correctly)
+     */
+	boolean existsBy();
 }

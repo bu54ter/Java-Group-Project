@@ -15,49 +15,56 @@ import java.util.Map;
 /**
  * Controller responsible for handling the student revision section.
  * 
- * <p>This controller provides a way for students to access revision materials,
- * specifically generating a random list of nouns (Welsh word, English meaning, and gender)
- * for flashcard-style studying.</p>
+ * <p>
+ * This controller provides a way for students to access revision materials,
+ * specifically generating a random list of nouns (Welsh word, English meaning,
+ * and gender) for flashcard-style studying.
+ * </p>
  */
 
 @Controller
 public class RevisionController {
 
-    private final NounRepository nounRepository;
-    private final TestRepository testRepository;
-    private final UserRepository userRepository;
+	private final NounRepository nounRepository;
+	private final TestRepository testRepository;
+	private final UserRepository userRepository;
 
-    public RevisionController(NounRepository nounRepository, TestRepository testRepository, UserRepository userRepository) {
-        this.nounRepository = nounRepository;
-        this.testRepository = testRepository;
-        this.userRepository = userRepository;
-    }
+	public RevisionController(NounRepository nounRepository, TestRepository testRepository,
+			UserRepository userRepository) {
+		this.nounRepository = nounRepository;
+		this.testRepository = testRepository;
+		this.userRepository = userRepository;
+	}
 
-    /**
-     * Displays the student revision page populated with random nouns.
-     *
-     * <p>This method retrieves a random selection of active nouns from the repository,
-     * maps their key attributes into a simplified structure, and adds them to the 
-     * model so the front end can render them as interactive flashcards.</p>
-     *
-     * @param model the {@link Model} used to pass attributes to the view
-     * @return the name of the student revision view ("student/revision")
-     */   
-    
-    @GetMapping("/student/revision")
-    public String revision(Model model, Authentication authentication) {
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+	/**
+	 * Displays the student revision page populated with random nouns.
+	 *
+	 * <p>
+	 * This method retrieves a random selection of active nouns from the repository,
+	 * maps their key attributes into a simplified structure, and adds them to the
+	 * model so the front end can render them as interactive flashcards.
+	 * </p>
+	 *
+	 * @param model the {@link Model} used to pass attributes to the view
+	 * @return the name of the student revision view ("student/revision")
+	 */
 
-        LocalDateTime twoHoursAgo = LocalDateTime.now().minusHours(2);
-        if (testRepository.existsActiveTestForUser(user.getUserId(), twoHoursAgo)) {
-            return "redirect:/student/test?from=revision";
-        }
-
-        model.addAttribute("nouns", nounRepository.findRandomActiveNouns().stream().map(noun -> Map.of(
-                "welshWord", noun.getWelshWord(),
-                "englishWord", noun.getEnglishWord(),
-                "gender", noun.getGender().name())).collect(Collectors.toList()));
-        return "student/revision";
-    }
+	@GetMapping("/student/revision")
+	public String revision(Model model, Authentication authentication) {
+		// Retrieve currently logged-in user
+		String username = authentication.getName();
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+		// Prevent access if the user has an active test within the last 2 hours
+		LocalDateTime twoHoursAgo = LocalDateTime.now().minusHours(2);
+		if (testRepository.existsActiveTestForUser(user.getUserId(), twoHoursAgo)) {
+			return "redirect:/student/test?from=revision";
+		}
+		// Load random nouns and map to simplified structure for frontend flashcards
+		model.addAttribute("nouns",
+				nounRepository
+						.findRandomActiveNouns().stream().map(noun -> Map.of("welshWord", noun.getWelshWord(),
+								"englishWord", noun.getEnglishWord(), "gender", noun.getGender().name()))
+						.collect(Collectors.toList()));
+		return "student/revision";
+	}
 }

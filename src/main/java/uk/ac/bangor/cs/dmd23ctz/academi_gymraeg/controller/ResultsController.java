@@ -44,16 +44,16 @@ public class ResultsController {
 	 */
 	@GetMapping("/student/results/{testId}")
 	public String showResults(@PathVariable Long testId, Model model, Authentication authentication) {
-
+		// Retrieve test or fail if it doesn't exist
 		Tests test = testRepository.findById(testId).orElseThrow(() -> new RuntimeException("Test not found"));
-
+		// Get currently logged-in user
 		String username = authentication.getName();
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
-
+		 // Prevent users from accessing other users' test results
 		if (!test.getUserId().equals(user.getUserId())) {
 			return "redirect:/student/dashboard";
 		}
-
+		// Load answers with related question and noun data
 		List<Answers> answers = answerRepository.findByTestIdWithQuestionAndNoun(testId);
 		model.addAttribute("test", test);
 		model.addAttribute("answers", answers);

@@ -91,7 +91,31 @@ public class UserService {
 	    deleted.setSurname(user.getSurname());
 	    deleted.setRole(user.getRole());
 	    deleted.setDeletedAt(LocalDateTime.now());
+	    deleted.setPassword(user.getPassword());
+	    deleted.setCreatedAt(user.getCreatedAt());
 	    // Persist archived user
 	    userDeletedRepository.saveAndFlush(deleted);
+	}
+	
+	/**
+	 * Restores a previously deleted user by removing their record
+	 * from the deleted users table.
+	 *
+	 * <p>This method assumes the user already exists in the main users table
+	 * and only removes the corresponding entry from the deleted users table.</p>
+	 *
+	 * @param id the unique identifier of the user to restore
+	 * @throws RuntimeException if the user is not found in the deleted table
+	 */
+	@Transactional
+	public void undeleteUser(Long id) {
+
+	    // Ensure the user exists in the deleted users table
+	    if (!userDeletedRepository.existsById(id)) {
+	        throw new RuntimeException("Deleted user not found: " + id);
+	    }
+
+	    // Remove the user from the deleted table (restore action)
+	    userDeletedRepository.deleteById(id);
 	}
 }

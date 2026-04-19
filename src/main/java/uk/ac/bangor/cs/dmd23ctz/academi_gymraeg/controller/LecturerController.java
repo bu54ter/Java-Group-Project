@@ -16,7 +16,7 @@ import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Nouns;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.NounsDeleted;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Tests;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.UserDeleted;
+
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.AnswerRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.NounDeletedRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.NounRepository;
@@ -108,6 +108,27 @@ public class LecturerController {
 	public String deleteNoun(@PathVariable Long id, Authentication authentication) {
 		nounService.deleteNoun(id, authentication);
 		return "redirect:/lecturer/dashboard";
+	}
+	
+	/**
+	 * Handles the restoration (undelete) of a {@link Nouns} entry.
+	 *
+	 * <p>This method processes a POST request to restore a noun that was
+	 * previously deleted. It delegates the undelete operation to the
+	 * {@code nounService}, which removes the corresponding record from
+	 * the {@code nouns_deleted} table.</p>
+	 *
+	 * <p>After the operation completes, the user is redirected back to
+	 * the lecturer dashboard.</p>
+	 *
+	 * @param id the unique identifier of the noun to be restored
+	 * @return a redirect to the lecturer dashboard page
+	 *         ("redirect:/lecturer/dashboard")
+	 */
+	@PostMapping("/nounsDeleted/{id}/undelete")
+	public String undeleteNoun(@PathVariable Long id) {
+	    nounService.undeleteNoun(id);
+	    return "redirect:/lecturer/dashboard";
 	}
 
 	/**

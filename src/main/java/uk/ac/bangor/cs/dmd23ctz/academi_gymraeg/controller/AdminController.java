@@ -32,6 +32,15 @@ public class AdminController {
         this.userDeletedRepository = userDeletedRepository;
     }
 
+    /**
+     * Displays the admin dashboard.
+     *
+     * <p>This method retrieves all active and deleted users and prepares
+     * a new {@link User} object for the create user form.</p>
+     *
+     * @param model the {@link Model} used to pass attributes to the view
+     * @return the admin dashboard view ("admin/dashboard")
+     */
     @GetMapping("/admin/dashboard")
     public String adminPage(Model model) {
         model.addAttribute("user", new User());
@@ -39,7 +48,18 @@ public class AdminController {
         model.addAttribute("deletedUsers", userDeletedRepository.findAll());
         return "admin/dashboard";
     }
-
+    /**
+     * Handles creation of a new user.
+     *
+     * <p>This method validates user input, enforces role-based password policies,
+     * ensures username uniqueness, and encodes the password before saving.</p>
+     *
+     * @param user the {@link User} object from the form
+     * @param bindingResult validation results
+     * @param confirmPassword confirmation password field
+     * @param model the {@link Model} used to return errors to the view
+     * @return redirect to dashboard on success, or reload dashboard with errors
+     */
     @PostMapping("/createUser")
     public String createUser(@Valid @ModelAttribute("user") User user,
             BindingResult bindingResult,
@@ -115,7 +135,18 @@ public class AdminController {
         userRepo.save(user);
         return "redirect:/admin/dashboard";
     }
-
+    /**
+     * Handles password reset for a user.
+     *
+     * <p>This method validates the new password against role-based policies
+     * and updates the password if valid.</p>
+     *
+     * @param id the user ID
+     * @param newPassword the new password
+     * @param model the {@link Model} for error handling
+     * @param redirectAttributes used for success messages after redirect
+     * @return redirect to dashboard on success, or reload with error
+     */
     @PostMapping("/users/{id}/reset-password")
     public String resetPassword(@PathVariable Long id,
             @RequestParam String newPassword,
@@ -168,6 +199,16 @@ public class AdminController {
 
         return "redirect:/admin/dashboard";
     }
+    /**
+     * Handles deletion of a user.
+     *
+     * <p>This method delegates deletion logic to the {@code userService}.
+     * If an error occurs, it reloads the dashboard with an error message.</p>
+     *
+     * @param id the user ID to delete
+     * @param model the {@link Model} used to return errors if deletion fails
+     * @return redirect to dashboard on success, or reload with error
+     */
     @PostMapping("/users/{id}/delete")
     public String deleteUser(@PathVariable Long id, Model model) {
         try {
@@ -182,7 +223,21 @@ public class AdminController {
             model.addAttribute("deleteUserError",
                     e.getClass().getSimpleName() + ": " + e.getMessage());
 
-            return "admin/dashboard";
+            return "redirect:/admin/dashboard";
         }
     }
+    /**
+     * Handles restoration (undelete) of a previously deleted user.
+     *
+     * <p>This method removes the user from the deleted users table
+     * via the {@code userService}.</p>
+     *
+     * @param id the unique identifier of the user to restore
+     * @return redirect to the admin dashboard after completion
+     */
+	@PostMapping("/userDeleted/{id}/undelete")
+	public String undeleteUser(@PathVariable Long id) {
+	    userService.undeleteUser(id);
+	    return "redirect:/admin/dashboard";
+	}
 }

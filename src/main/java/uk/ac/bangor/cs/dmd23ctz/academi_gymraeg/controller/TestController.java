@@ -42,14 +42,18 @@ public class TestController {
 	/**
 	 * Initiates a new test session for the authenticated student.
 	 *
-	 * <p>This method retrieves the currently authenticated user, creates a new
+	 * <p>
+	 * This method retrieves the currently authenticated user, creates a new
 	 * {@link Tests} instance with an initial score (0), and persists it. It then
-	 * generates questions for the test and loads them into the model for display.</p>
+	 * generates questions for the test and loads them into the model for display.
+	 * </p>
 	 *
-	 * @param model the {@link Model} used to pass attributes to the view
-	 * @param authentication the {@link Authentication} object containing the current user's details
+	 * @param model          the {@link Model} used to pass attributes to the view
+	 * @param authentication the {@link Authentication} object containing the
+	 *                       current user's details
 	 * @return the name of the student test view ("student/test")
-	 * @throws RuntimeException if the authenticated user cannot be found in the repository
+	 * @throws RuntimeException if the authenticated user cannot be found in the
+	 *                          repository
 	 */
 	@GetMapping("/student/test")
 	public String startTest(Model model, Authentication authentication,
@@ -86,14 +90,17 @@ public class TestController {
 	/**
 	 * Handles the submission of a completed test.
 	 *
-	 * <p>This method processes the student's answers by delegating to the
+	 * <p>
+	 * This method processes the student's answers by delegating to the
 	 * {@code answerService}. It receives the test identifier, a list of question
 	 * IDs, and all submitted request parameters (which may include user responses).
-	 * After processing, the user is redirected to the test results page.</p>
+	 * After processing, the user is redirected to the test results page.
+	 * </p>
 	 *
-	 * @param testId the unique identifier of the submitted test
+	 * @param testId      the unique identifier of the submitted test
 	 * @param questionIds the list of question IDs included in the test
-	 * @param allParams a map containing all request parameters, including user responses
+	 * @param allParams   a map containing all request parameters, including user
+	 *                    responses
 	 * @return a redirect to the results page for the submitted test
 	 *         ("redirect:/student/results/{testId}")
 	 */
@@ -119,7 +126,8 @@ public class TestController {
 		String username = authentication.getName();
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
 
-		// Delete all unsubmitted tests for this user — answers first, then questions, then tests to satisfy FK constraints
+		// Delete all unsubmitted tests for this user — answers first, then questions,
+		// then tests to satisfy FK constraints
 		List<Tests> unsubmitted = testRepository.findUnsubmittedTestsByUserId(user.getUserId());
 		for (Tests t : unsubmitted) {
 			answerRepository.deleteByQuestionTestTestId(t.getTestId());

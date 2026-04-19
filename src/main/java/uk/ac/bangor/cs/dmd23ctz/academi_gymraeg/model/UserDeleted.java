@@ -49,6 +49,7 @@ public class UserDeleted {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+    private String password;
 
     /**
      * Timestamp indicating when the user was deleted.
@@ -59,6 +60,8 @@ public class UserDeleted {
     @CreationTimestamp
     @Column(name = "deleted_at", nullable = false, updatable = false)
     private LocalDateTime deletedAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     // ===== Getters and Setters =====
 
@@ -108,5 +111,18 @@ public class UserDeleted {
 
     public void setDeletedAt(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
