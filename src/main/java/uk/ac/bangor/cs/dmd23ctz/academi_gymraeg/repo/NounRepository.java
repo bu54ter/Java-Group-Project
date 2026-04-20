@@ -78,4 +78,6 @@ public interface NounRepository extends JpaRepository<Nouns, Long> {
      * @return {@code true} if at least one record exists (if implemented correctly)
      */
 	boolean existsBy();
+	
+	boolean existsByWelshWordIgnoreCase(String welshWord);
 }

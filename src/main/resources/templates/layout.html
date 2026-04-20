@@ -197,6 +197,7 @@
 		class="button">Create new noun</button>
 
 	<div id="newNounModal" class="modal">
+
 		<form class="modal-content" th:action="@{/createNoun}" th:object="${noun}" method="post">
 
 			<div class="imgcontainer">
@@ -209,15 +210,19 @@
 			<div class="container">
 				<label>Welsh noun:</label>
 				<input type="text" th:field="*{welshWord}" required>
+				<div th:if="${#fields.hasErrors('welshWord')}" th:errors="*{welshWord}" class="error"></div>
 
 				<label>English translation:</label>
 				<input type="text" th:field="*{englishWord}" required>
+				<div th:if="${#fields.hasErrors('englishWord')}" th:errors="*{englishWord}" class="error"></div>
 
 				<label>Welsh example sentence:</label>
 				<input type="text" th:field="*{welshSent}" required>
+				<div th:if="${#fields.hasErrors('welshSent')}" th:errors="*{welshSent}" class="error"></div>
 
 				<label>English example sentence:</label>
 				<input type="text" th:field="*{englishSent}" required>
+				<div th:if="${#fields.hasErrors('englishSent')}" th:errors="*{englishSent}" class="error"></div>
 
 				<label>Gender:</label>
 				<label>
@@ -228,6 +233,7 @@
 					<input type="radio" th:field="*{gender}" value="FEMININE">
 					Feminine
 				</label>
+				<div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" class="error"></div>
 			</div>
 
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
@@ -237,6 +243,12 @@
 			</div>
 		</form>
 	</div>
+
+	<script th:if="${showNewNounModal}">
+		document.addEventListener("DOMContentLoaded", function() {
+			document.getElementById('newNounModal').style.display = 'block';
+		});
+	</script>
 </div>
 
 <div th:fragment="editNounModal">
