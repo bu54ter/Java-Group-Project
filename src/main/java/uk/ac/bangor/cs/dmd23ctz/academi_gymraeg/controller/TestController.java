@@ -183,33 +183,91 @@ public class TestController {
 	 * @return a redirect to the results page for the submitted test
 	 */
 	@PostMapping("/student/test/submit")
-	public String submitTest(@RequestParam Long testId, @RequestParam List<Long> questionIds,
-			@RequestParam Map<String, String> allParams) {
+	public String submitTest(@RequestParam Long testId,
+	                         @RequestParam List<Long> questionIds,
+	                         @RequestParam Map<String, String> allParams,
+	                         Authentication authentication,
+	                         Model model) {
 
-		Tests test = testRepository.findById(testId)
-				.orElseThrow(() -> new RuntimeException("Test not found"));
+	    String username = authentication.getName();
+	    User user = userRepository.findByUsername(username)
+	            .orElseThrow(() -> new RuntimeException("User not found"));
 
-		// Stop the same test being submitted twice
-		if (test.isSubmitted()) {
-			return "redirect:/student/results/" + testId;
-		}
+	    Tests test = testRepository.findById(testId)
+	            .orElseThrow(() -> new RuntimeException("Test not found"));
 
-		// Mark and save the submitted answers
-		answerService.processTestSubmission(testId, questionIds, allParams);
+	    // Stop students submitting someone else's test
+	    if (!test.getUserId().equals(user.getUserId())) {
+	        throw new RuntimeException("Unauthorised test submission");
+	    }
 
-		// Find the student who owns this test
-		User user = userRepository.findById(test.getUserId())
-				.orElseThrow(() -> new RuntimeException("User not found"));
+	    // Stop the same test being submitted twice
+	    if (test.isSubmitted()) {
+	        return "redirect:/student/results/" + testId;
+	    }
 
-		// Update the student's streak after a completed test
-		updateStudentStreak(user);
-		userRepository.save(user);
+	    List<uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Questions> questions =
+	            questionRepository.findQuestionsWithNounByTestId(testId);
 
-		// Mark the test as submitted
-		test.setSubmitted(true);
-		testRepository.save(test);
+	    Map<Long, String> answerErrors = new java.util.HashMap<>();
+	    Map<Long, String> submittedAnswers = new java.util.HashMap<>();
 
-		return "redirect:/student/results/" + testId;
+	    for (uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Questions question : questions) {
+	        Long questionId = question.getQuestionId();
+
+	        // Ensure submitted questionIds only contain questions from this test
+	        if (!questionIds.contains(questionId)) {
+	            answerErrors.put(questionId, "Missing question submission");
+	            continue;
+	        }
+
+	        String paramName = "answers_" + questionId;
+	        String answer = allParams.get(paramName);
+
+	        if (answer != null) {
+	            answer = answer.trim();
+	            submittedAnswers.put(questionId, answer);
+	        }
+
+	        // Answer validation
+	        if (answer == null || answer.isBlank()) {
+	            // unanswered is allowed
+	            continue;
+	        }
+
+	        switch (question.getQuestionType()) {
+	        case GENDER:
+	            if (!answer.equals("MASCULINE") && !answer.equals("FEMININE")) {
+	                answerErrors.put(questionId, "Invalid gender selection");
+	            }
+	            break;
+
+	        case MEANING:
+	        case TRANSLATE:
+	            if (answer.length() > 50) {
+	                answerErrors.put(questionId, "Answer must be 50 characters or fewer");
+	            }
+	            break;
+	        }
+	    }
+
+	    if (!answerErrors.isEmpty()) {
+	        model.addAttribute("test", test);
+	        model.addAttribute("questions", questions);
+	        model.addAttribute("answerErrors", answerErrors);
+	        model.addAttribute("submittedAnswers", submittedAnswers);
+	        return "student/test";
+	    }
+
+	    answerService.processTestSubmission(testId, questionIds, allParams);
+
+	    updateStudentStreak(user);
+	    userRepository.save(user);
+
+	    test.setSubmitted(true);
+	    testRepository.save(test);
+
+	    return "redirect:/student/results/" + testId;
 	}
 
 	/**
