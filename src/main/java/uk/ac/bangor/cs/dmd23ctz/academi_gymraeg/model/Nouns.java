@@ -13,6 +13,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 /**
  * Entity representing a noun within the system.
@@ -42,19 +45,43 @@ public class Nouns {
     private Long nounId;
 
     /** Welsh representation of the noun */
-    @Column(name = "welsh_word", nullable = false)
+    @NotBlank(message = "Welsh noun is required")
+    @Size(max = 50, message = "Welsh noun must be 50 characters or fewer")
+    @Pattern(
+        regexp = "^[A-Za-zÀ-ÿ' -]+$",
+        message = "Welsh word contains invalid characters"
+    )
+    @Column(name = "welsh_word", nullable = false, length = 50)
     private String welshWord;
 
     /** English translation of the noun */
-    @Column(name = "english_word", nullable = false)
+    @NotBlank(message = "English translation is required")
+    @Size(max = 50, message = "English translation must be 50 characters or fewer")
+    @Pattern(
+        regexp = "^[A-Za-zÀ-ÿ' -]+$",
+        message = "English word contains invalid characters"
+    )
+    @Column(name = "english_word", nullable = false, length = 50)
     private String englishWord;
 
     /** Example sentence in Welsh */
-    @Column(name = "welsh_sent")
+    @NotBlank(message = "Welsh example sentence is required")
+    @Size(max = 255, message = "Welsh example sentence must be 255 characters or fewer")
+    @Pattern(
+    	    regexp = "^[A-Za-zÀ-ÿ0-9'\",.!?;:()\\-\\s]+$",
+    	    message = "Sentence contains invalid characters"
+    	)
+    @Column(name = "welsh_sent", length = 255)
     private String welshSent;
 
     /** Example sentence in English */
-    @Column(name = "english_sent")
+    @NotBlank(message = "English example sentence is required")
+    @Size(max = 255, message = "English example sentence must be 255 characters or fewer")
+    @Pattern(
+    	    regexp = "^[A-Za-zÀ-ÿ0-9'\",.!?;:()\\-\\s]+$",
+    	    message = "Sentence contains invalid characters"
+    	)
+    @Column(name = "english_sent", length = 255)
     private String englishSent;
 
     /** Username of the user who created the noun */
