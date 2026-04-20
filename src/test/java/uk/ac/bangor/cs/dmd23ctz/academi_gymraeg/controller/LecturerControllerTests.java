@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Nouns;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
@@ -77,6 +78,10 @@ class LecturerControllerTests {
     @Mock
     private Authentication authentication;
 
+    /** Mock binding result used for form validation */
+    @Mock
+    private BindingResult bindingResult;
+
     /** Controller under test */
     private LecturerController lecturerController;
 
@@ -102,7 +107,7 @@ class LecturerControllerTests {
      */
     @Test
     void lecturerDashboard_ShouldReturnDashboardViewAndAddModelAttributes() {
-        when(nounRepository.findAll()).thenReturn(Collections.emptyList());
+        when(nounRepository.findAllActiveNouns()).thenReturn(Collections.emptyList());
         when(nounDeletedRepository.findAll()).thenReturn(Collections.emptyList());
 
         String viewName = lecturerController.lecturerDashboard(model);
@@ -131,8 +136,10 @@ class LecturerControllerTests {
 
         when(authentication.getName()).thenReturn("bob");
         when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
+        when(nounRepository.existsByWelshWordIgnoreCase("cath")).thenReturn(false);
+        when(bindingResult.hasErrors()).thenReturn(false);
 
-        String viewName = lecturerController.createNoun(noun, authentication);
+        String viewName = lecturerController.createNoun(noun, bindingResult, authentication, model);
 
         assertEquals("redirect:/lecturer/dashboard", viewName);
 
@@ -156,9 +163,10 @@ class LecturerControllerTests {
 
         when(authentication.getName()).thenReturn("bob");
         when(userRepository.findByUsername("bob")).thenReturn(Optional.empty());
+        when(bindingResult.hasErrors()).thenReturn(false);
 
         RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> lecturerController.createNoun(noun, authentication));
+                () -> lecturerController.createNoun(noun, bindingResult, authentication, model));
 
         assertEquals("User not found", exception.getMessage());
     }

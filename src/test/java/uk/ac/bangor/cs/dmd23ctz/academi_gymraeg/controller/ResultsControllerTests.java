@@ -2,11 +2,9 @@ package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,10 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Answers;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Tests;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.AnswerRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
 
@@ -36,10 +32,6 @@ class ResultsControllerTests {
     /** Mock repository used to retrieve test records */
     @Mock
     private TestRepository testRepository;
-
-    /** Mock repository used to retrieve answer records */
-    @Mock
-    private AnswerRepository answerRepository;
 
     /** Mock repository used to retrieve user records */
     @Mock
@@ -61,13 +53,12 @@ class ResultsControllerTests {
      */
     @BeforeEach
     void setUp() {
-        resultsController = new ResultsController(testRepository, answerRepository, userRepository);
+        resultsController = new ResultsController(testRepository, userRepository);
     }
 
     /**
      * Verifies that the results page is returned for the student
-     * who owns the test, and that the expected test and answer
-     * data is added to the model.
+     * who owns the test, and that the test data is added to the model.
      */
     @Test
     void showResults_ShouldReturnStudentResultsView_WhenUserOwnsTest() {
@@ -79,19 +70,14 @@ class ResultsControllerTests {
         user.setUserId(10L);
         user.setUsername("bob");
 
-        Answers answer = new Answers();
-        List<Answers> answers = List.of(answer);
-
         when(testRepository.findById(1L)).thenReturn(Optional.of(test));
         when(authentication.getName()).thenReturn("bob");
         when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
-        when(answerRepository.findByTestIdWithQuestionAndNoun(1L)).thenReturn(answers);
 
         String viewName = resultsController.showResults(1L, model, authentication);
 
         assertEquals("student/results", viewName);
         verify(model).addAttribute("test", test);
-        verify(model).addAttribute("answers", answers);
     }
 
     /**
@@ -107,7 +93,6 @@ class ResultsControllerTests {
 
         assertEquals("Test not found", exception.getMessage());
         verify(userRepository, never()).findByUsername(org.mockito.ArgumentMatchers.anyString());
-        verify(answerRepository, never()).findByTestIdWithQuestionAndNoun(anyLong());
     }
 
     /**
@@ -128,7 +113,6 @@ class ResultsControllerTests {
                 () -> resultsController.showResults(1L, model, authentication));
 
         assertEquals("User not found", exception.getMessage());
-        verify(answerRepository, never()).findByTestIdWithQuestionAndNoun(anyLong());
     }
 
     /**
@@ -152,8 +136,6 @@ class ResultsControllerTests {
         String viewName = resultsController.showResults(1L, model, authentication);
 
         assertEquals("redirect:/student/dashboard", viewName);
-        verify(answerRepository, never()).findByTestIdWithQuestionAndNoun(anyLong());
         verify(model, never()).addAttribute(org.mockito.ArgumentMatchers.eq("test"), org.mockito.ArgumentMatchers.any());
-        verify(model, never()).addAttribute(org.mockito.ArgumentMatchers.eq("answers"), org.mockito.ArgumentMatchers.any());
     }
 }
