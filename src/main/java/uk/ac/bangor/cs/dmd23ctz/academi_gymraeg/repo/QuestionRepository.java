@@ -39,8 +39,10 @@ public interface QuestionRepository extends JpaRepository<Questions, Long> {
     @Query("""
         SELECT q
         FROM Questions q
-        JOIN FETCH q.noun              
-        WHERE q.test.testId = :testId  
+        JOIN FETCH q.noun
+        WHERE q.test.testId = :testId
     """)
     List<Questions> findQuestionsWithNounByTestId(@Param("testId") Long testId);
+
+    void deleteByTestTestId(Long testId);
 }

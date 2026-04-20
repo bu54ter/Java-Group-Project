@@ -1,0 +1,189 @@
+# JUnit Testing Table – Controller Classes
+
+## 1. Document Control
+
+**Document Title:**  
+JUnit Testing Table – Controller Classes
+
+**Prepared By:**  
+Phil Bamber
+
+**Reviewed By:**  
+[Name]
+
+**Approved By:**  
+[Name]
+
+**Date:**  
+17/04/2026
+
+## 2. Test Summary
+
+**Purpose:**  
+To verify that selected Java controller classes within the application behaved correctly in isolation using JUnit testing.
+
+**Scope:**  
+This testing covered:
+
+- HomeController home page view return behaviour
+- HomeController word of the day model attribute behaviour when nouns existed
+- HomeController behaviour when no nouns were available
+- ResultsController results page return behaviour for the correct student
+- ResultsController redirect behaviour for unauthorised access attempts
+- ResultsController exception handling for missing test records
+- ResultsController exception handling for missing user records
+- RevisionController revision page return behaviour where no active test existed
+- RevisionController redirect behaviour where an active test already existed
+- RevisionController exception handling for missing user records
+- RevisionController noun data mapping behaviour for the revision model
+- TestController resume test behaviour where an unsubmitted test already existed
+- TestController blocked from revision behaviour
+- TestController new test creation behaviour
+- TestController continue test behaviour
+- TestController start new test behaviour after deleting unsubmitted test data
+- TestController test submission behaviour
+- TestController redirect behaviour where a test had already been submitted
+- TestController exception handling for missing user records
+- TestController exception handling for missing test records
+
+**Out of Scope:**
+
+- Front-end interface testing
+- Thymeleaf template rendering
+- Full integration and database testing
+- Browser-based manual testing
+- Spring Security access control testing
+
+**Test Type:**  
+Unit Testing
+
+**Environment:**  
+Development
+
+**Test Window:**  
+April 2026
+
+## 3. System Overview
+
+This document recorded the JUnit testing carried out on selected controller classes within the application. The testing focused on confirming that controller methods returned the correct view names, redirected users correctly where required, added model attributes only where expected, and raised the correct exceptions where invalid conditions were encountered. Mockito was used to mock dependent repositories, authentication, and model objects so that controller behaviour could be tested in isolation without relying on a live database or full application context. The testing also confirmed that the main student controller flow for home page access, revision access, test start and continuation, test submission, and results viewing behaved as expected.
+
+## 4. Preconditions
+
+Before testing began, the following were confirmed:
+
+- The project compiled successfully
+- The application test structure under `src/test/java` was available
+- JUnit was available in the project
+- Mockito was available in the project
+- The selected test classes had been created successfully
+- The tests could be executed in Eclipse using **Run As > JUnit Test**
+
+## 5. Entry Criteria
+
+Testing started only when:
+
+- The latest code changes had been saved
+- The project showed no blocking compile errors
+- The test classes were present in the correct test package
+- The relevant controller classes compiled without error
+
+## 6. Exit Criteria
+
+Testing was considered complete when:
+
+- All planned JUnit test methods had been executed
+- All failed tests had either been corrected or recorded
+- A final pass or fail outcome could be recorded
+
+## 7. Roles and Responsibilities
+
+| Role | Name | Responsibility |
+|---|---|---|
+| Test Owner | Phil Bamber | Created and executed JUnit tests and recorded results |
+| Reviewer | [Name] | Reviewed testing outcome |
+
+## 8. Test Cases
+
+This section recorded the unit testing completed against selected Java controller classes using JUnit and Mockito.
+
+### 8.1 HomeController Class
+
+| Test ID | Class Under Test | Test Method | Description | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|---|
+| JUT-CON-001 | HomeController.java | home_ShouldReturnIndexView | Verify that the home controller method returns the correct home page view name | The method returns `index` | `index` was returned | Passed |
+| JUT-CON-002 | HomeController.java | home_ShouldAddWordOfTheDay_WhenNounsExist | Verify that the controller adds a `wordOfTheDay` attribute to the model when noun data exists | The method returns `index` and the model receives the `wordOfTheDay` attribute | `index` was returned and the `wordOfTheDay` attribute was added correctly | Passed |
+| JUT-CON-003 | HomeController.java | home_ShouldNotAddWordOfTheDay_WhenNoNounsExist | Verify that the controller does not add a `wordOfTheDay` attribute when no nouns are available | The method returns `index` and no `wordOfTheDay` attribute is added to the model | `index` was returned and no `wordOfTheDay` attribute was added | Passed |
+
+### 8.2 ResultsController Class
+
+| Test ID | Class Under Test | Test Method | Description | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|---|
+| JUT-CON-004 | ResultsController.java | showResults_ShouldReturnStudentResultsView_WhenUserOwnsTest | Verify that the results page is returned when the authenticated user owns the selected test | The method returns `student/results` and adds the expected test and answer data to the model | `student/results` was returned and the correct model attributes were added | Passed |
+| JUT-CON-005 | ResultsController.java | showResults_ShouldThrowException_WhenTestNotFound | Verify that requesting results for a missing test throws the expected exception | A `RuntimeException` is thrown with the message `Test not found` and no further repository calls occur | The expected exception was thrown and no answer retrieval took place | Passed |
+| JUT-CON-006 | ResultsController.java | showResults_ShouldThrowException_WhenUserNotFound | Verify that requesting results when the authenticated user cannot be found throws the expected exception | A `RuntimeException` is thrown with the message `User not found` and no answer retrieval occurs | The expected exception was thrown and no answer retrieval took place | Passed |
+| JUT-CON-007 | ResultsController.java | showResults_ShouldRedirectToStudentDashboard_WhenUserDoesNotOwnTest | Verify that a user is redirected when attempting to view a test that does not belong to them | The method returns `redirect:/student/dashboard` and no result data is added to the model | The redirect occurred correctly and no model attributes were added | Passed |
+
+### 8.3 RevisionController Class
+
+| Test ID | Class Under Test | Test Method | Description | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|---|
+| JUT-CON-008 | RevisionController.java | revision_ShouldReturnStudentRevisionView_WhenNoActiveTestExists | Verify that the revision page is returned when the user exists and has no active test | The method returns `student/revision` and adds noun data to the model | `student/revision` was returned and the noun data was added correctly | Passed |
+| JUT-CON-009 | RevisionController.java | revision_ShouldRedirectToStudentTest_WhenActiveTestExists | Verify that the user is redirected to the test page when an active test already exists | The method returns `redirect:/student/test?from=revision` and no noun data is added to the model | The redirect occurred correctly and no noun data was added | Passed |
+| JUT-CON-010 | RevisionController.java | revision_ShouldThrowException_WhenUserNotFound | Verify that revision access throws the expected exception when the authenticated user cannot be found | A `RuntimeException` is thrown with the message `User not found` and no test or noun lookup continues | The expected exception was thrown and no further repository calls took place | Passed |
+| JUT-CON-011 | RevisionController.java | revision_ShouldAddMappedNounDataToModel | Verify that revision noun data is mapped correctly for Welsh word, English word, and gender | The model receives correctly mapped noun data values | The mapped noun data was added correctly to the model | Passed |
+
+### 8.4 TestController Class
+
+| Test ID | Class Under Test | Test Method | Description | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|---|
+| JUT-CON-012 | TestController.java | startTest_ShouldReturnResumeTestView_WhenUnsubmittedTestExists | Verify that an existing unsubmitted test returns the resume test view | The method returns `student/resume-test` and adds the formatted test date to the model | `student/resume-test` was returned and the formatted date was added correctly | Passed |
+| JUT-CON-013 | TestController.java | startTest_ShouldAddBlockedFrom_WhenComingFromRevision | Verify that the blocked from revision attribute is added when the request originated from revision | The method returns `student/resume-test` and adds `blockedFrom` with the value `revision` | `blockedFrom` was added correctly | Passed |
+| JUT-CON-014 | TestController.java | startTest_ShouldCreateNewTest_WhenNoUnsubmittedTestExists | Verify that a fresh test is created when no unsubmitted test exists | A new test is saved, questions are generated, the correct model attributes are added, and the method returns `student/test` | The new test was created correctly and `student/test` was returned | Passed |
+| JUT-CON-015 | TestController.java | startTest_ShouldThrowException_WhenUserNotFound | Verify that starting a test throws the expected exception when the authenticated user cannot be found | A `RuntimeException` is thrown with the message `User not found` | The expected exception was thrown | Passed |
+| JUT-CON-016 | TestController.java | continueTest_ShouldRedirectToStartTest_WhenNoUnsubmittedTestExists | Verify that continuing a test redirects to the start test page when no unsubmitted test exists | The method returns `redirect:/student/test` | The redirect occurred correctly | Passed |
+| JUT-CON-017 | TestController.java | continueTest_ShouldReturnStudentTestView_WhenUnsubmittedTestExists | Verify that continuing a test returns the student test view and adds the expected model data | The method returns `student/test` and adds the existing test and questions to the model | `student/test` was returned and the correct model attributes were added | Passed |
+| JUT-CON-018 | TestController.java | startNewTest_ShouldDeleteOldUnsubmittedTestsAndCreateNewTest | Verify that starting a new test deletes old unsubmitted data and creates a fresh test | Existing unsubmitted answers, questions, and tests are deleted, a new test is created, and the method returns `student/test` | Old unsubmitted data was removed and the new test was created correctly | Passed |
+| JUT-CON-019 | TestController.java | submitTest_ShouldRedirectToResults_WhenTestAlreadySubmitted | Verify that submitting an already submitted test redirects directly to the results page | The method returns `redirect:/student/results/1` and no submission processing occurs | The redirect occurred correctly and no duplicate processing took place | Passed |
+| JUT-CON-020 | TestController.java | submitTest_ShouldProcessAnswersAndSaveSubmittedTest | Verify that submitting a valid unfinished test processes answers, marks the test as submitted, and saves it | Answers are processed, the test is marked submitted, saved, and redirected to the results page | The answers were processed, the test was saved as submitted, and the redirect occurred correctly | Passed |
+| JUT-CON-021 | TestController.java | submitTest_ShouldThrowException_WhenTestNotFound | Verify that submitting a missing test throws the expected exception | A `RuntimeException` is thrown with the message `Test not found` and no answer processing occurs | The expected exception was thrown and no answer processing took place | Passed |
+
+## 9. Defects and Issues Log
+
+| Issue ID | Description | Severity | Impact | Raised By | Date Raised | Owner | Status | Resolution |
+|---|---|---|---|---|---|---|---|---|
+| None | No defects were identified during the recorded JUnit controller tests | N/A | N/A | Phil Bamber | 17/04/2026 | [Name] | Closed | No action required |
+
+## 10. Test Outcome Summary
+
+**Total Test Cases:**  
+21
+
+**Passed:**  
+21
+
+**Failed:**  
+0
+
+**Blocked:**  
+0
+
+**Overall Result:**  
+Pass
+
+**Summary Notes:**  
+JUnit testing confirmed that the selected controller classes behaved as expected in isolation. HomeController returned the correct home page view and handled the word of the day model attribute correctly. ResultsController returned the correct results view for the owning student, redirected unauthorised access attempts correctly, and raised the expected exceptions for missing test or user records. RevisionController returned the correct revision view, redirected users correctly where an active test already existed, mapped noun data correctly for the model, and raised the expected exception where the user could not be found. TestController correctly handled resume test behaviour, revision blocking behaviour, new test creation, continuation of existing tests, deletion of unsubmitted test data when starting a fresh test, test submission, redirect behaviour where tests had already been submitted, and the expected exceptions for missing user or test records.
+
+## 11. Recommendation
+
+**Recommendation:**  
+Accept
+
+**Reason:**  
+The recorded JUnit tests passed successfully and no issues were identified in the tested controller classes.
+
+## 12. Sign-Off
+
+| Name | Role | Decision | Date |
+|---|---|---|---|
+| Phil Bamber | Test Owner | Approved | 17/04/2026 |
+| [Name] | Reviewer | Pending | [DD/MM/YYYY] |

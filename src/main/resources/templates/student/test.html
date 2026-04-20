@@ -82,39 +82,7 @@
 		<div th:replace="~{layout :: scripts}"></div>
 	</section>
 
-	<script>
-		document.querySelector('form').addEventListener('submit', function(e) {
-			const questionBlocks = document.querySelectorAll('.question-block');
-			let total = questionBlocks.length;
-			let answered = 0;
-
-			questionBlocks.forEach(function(block) {
-				const radios = block.querySelectorAll('input[type="radio"]');
-				const texts = block.querySelectorAll('input[type="text"]');
-
-				if (radios.length > 0) {
-					const radioName = radios[0].name;
-					if (document.querySelector('input[name="' + radioName + '"]:checked')) {
-						answered++;
-					}
-				} else if (texts.length > 0) {
-					if (texts[0].value.trim() !== '') {
-						answered++;
-					}
-				}
-			});
-
-			if (answered < total) {
-				const unanswered = total - answered;
-				const message = 'You have ' + unanswered + ' unanswered question' +
-					(unanswered > 1 ? 's' : '') + ' out of ' + total +
-					'. Are you sure you want to submit?';
-				if (!confirm(message)) {
-					e.preventDefault();
-				}
-			}
-		});
-	</script>
+	<script th:src="@{/js/test.js}"></script>
 </body>
 
 </html>

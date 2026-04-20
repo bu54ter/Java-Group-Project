@@ -1,8 +1,7 @@
-package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg;
+package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Gender;
 
 public class GenderTest {
 

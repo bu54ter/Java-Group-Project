@@ -51,4 +51,6 @@ public interface AnswerRepository extends JpaRepository<Answers, Long> {
         ORDER BY q.questionId            
     """)
     List<Answers> findByTestIdWithQuestionAndNoun(@Param("testId") Long testId);
+
+    void deleteByQuestionTestTestId(Long testId);
 }

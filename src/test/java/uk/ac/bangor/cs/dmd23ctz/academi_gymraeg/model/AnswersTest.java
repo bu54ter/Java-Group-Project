@@ -1,9 +1,8 @@
-package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg;
+package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.Test;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Answers;
 
 public class AnswersTest {
 

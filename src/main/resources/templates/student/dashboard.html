@@ -24,7 +24,7 @@
 				<th>Score (%)</th>
 			</tr>
 			<tr th:each="t : ${tests}">
-				<td th:text="${t.testedAt}"></td>
+				<td th:text="${#temporals.format(t.testedAt, 'dd MMM yyyy HH:mm')}"></td>
 				<td th:text="${t.score}"></td>
 			</tr>
 		</table>

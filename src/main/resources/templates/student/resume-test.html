@@ -1,0 +1,74 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{layout :: head}"></head>
+<link rel="stylesheet" th:href="@{/style.css}">
+
+<body>
+    <div th:replace="~{layout :: nav('Test')}"></div>
+    <div sec:authorize="not isAuthenticated()">
+        <div th:replace="~{layout :: loginModal}"></div>
+    </div>
+    <section class="div2">
+        <h2>Unsubmitted Test Found</h2>
+        <hr>
+        <div th:if="${blockedFrom == 'revision'}" style="background:#fff3cd; border:1px solid #ffc107; padding:0.75rem 1rem; margin-bottom:1rem; border-radius:4px; color:#533f03;">
+            Revision is unavailable while a test is in progress. Please complete or start a new test first.
+        </div>
+        <p>You have an unsubmitted test from <strong th:text="${testDate}"></strong>.</p>
+        <p>Your progress has been saved. Continue where you left off, or start a fresh test.</p>
+
+        <div th:if="${cooldownSeconds != null}" id="cooldown-notice" style="background:#fff3cd; border:1px solid #ffc107; padding:0.75rem 1rem; margin-bottom:1rem; border-radius:4px; color:#533f03;">
+            You must wait <strong id="cooldown-display"></strong> before starting a new test.
+        </div>
+
+        <br>
+        <div class="button-container">
+            <a th:href="@{/student/test/continue}" class="button">Continue Test</a>
+
+            <form method="post" th:action="@{/student/test/new}" style="display:contents;" id="new-test-form">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="button" id="new-test-btn" th:disabled="${cooldownSeconds != null}">Start New Test</button>
+            </form>
+        </div>
+
+        <script th:if="${cooldownSeconds != null}" th:inline="javascript">
+            var seconds = [[${cooldownSeconds}]];
+            var display = document.getElementById('cooldown-display');
+            var btn = document.getElementById('new-test-btn');
+            var notice = document.getElementById('cooldown-notice');
+
+            function updateDisplay() {
+                var m = Math.floor(seconds / 60);
+                var s = seconds % 60;
+                display.textContent = m + 'm ' + (s < 10 ? '0' + s : s) + 's';
+            }
+
+            updateDisplay();
+
+            var timer = setInterval(function() {
+                seconds--;
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    notice.style.display = 'none';
+                    btn.disabled = false;
+                } else {
+                    updateDisplay();
+                }
+            }, 1000);
+        </script>
+
+        <script>
+            document.getElementById('new-test-form').addEventListener('submit', function() {
+                // Clear any saved answers for all tests so old answers don't carry over
+                Object.keys(localStorage).forEach(function(key) {
+                    if (key.startsWith('test_answers_')) localStorage.removeItem(key);
+                });
+            });
+        </script>
+        <hr>
+        <div th:replace="~{layout :: footer}"></div>
+        <div th:replace="~{layout :: scripts}"></div>
+    </section>
+</body>
+
+</html>
