@@ -189,11 +189,7 @@
 		</form>
 	</div>
 
-	<script th:if="${showNewUserModal}">
-		document.addEventListener("DOMContentLoaded", function() {
-			document.getElementById('newUserModal').style.display = 'block';
-		});
-	</script>
+	<span id="show-new-user-modal-flag" th:if="${showNewUserModal}" style="display:none;"></span>
 </div>
 
 <div th:fragment="newNounModal">
