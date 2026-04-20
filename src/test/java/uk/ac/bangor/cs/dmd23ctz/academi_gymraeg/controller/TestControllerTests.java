@@ -284,13 +284,20 @@ class TestControllerTests {
      */
     @Test
     void submitTest_ShouldRedirectToResults_WhenTestAlreadySubmitted() {
+        User user = new User();
+        user.setUserId(10L);
+        user.setUsername("bob");
+
         Tests test = new Tests();
         test.setTestId(1L);
+        test.setUserId(10L);
         test.setSubmitted(true);
 
+        when(authentication.getName()).thenReturn("bob");
+        when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
         when(testRepository.findById(1L)).thenReturn(Optional.of(test));
 
-        String viewName = testController.submitTest(1L, List.of(10L, 20L), Map.of("answer_10", "cat"));
+        String viewName = testController.submitTest(1L, List.of(10L, 20L), Map.of("answer_10", "cat"), authentication, model);
 
         assertEquals("redirect:/student/results/1", viewName);
         verify(answerService, never()).processTestSubmission(anyLong(), any(), any());
@@ -303,13 +310,21 @@ class TestControllerTests {
      */
     @Test
     void submitTest_ShouldProcessAnswersAndSaveSubmittedTest() {
+        User user = new User();
+        user.setUserId(10L);
+        user.setUsername("bob");
+
         Tests test = new Tests();
         test.setTestId(1L);
+        test.setUserId(10L);
         test.setSubmitted(false);
 
+        when(authentication.getName()).thenReturn("bob");
+        when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
         when(testRepository.findById(1L)).thenReturn(Optional.of(test));
+        when(questionRepository.findQuestionsWithNounByTestId(1L)).thenReturn(Collections.emptyList());
 
-        String viewName = testController.submitTest(1L, List.of(10L, 20L), Map.of("answer_10", "cat"));
+        String viewName = testController.submitTest(1L, List.of(10L, 20L), Map.of("answer_10", "cat"), authentication, model);
 
         assertEquals("redirect:/student/results/1", viewName);
         verify(answerService).processTestSubmission(1L, List.of(10L, 20L), Map.of("answer_10", "cat"));
@@ -325,10 +340,16 @@ class TestControllerTests {
      */
     @Test
     void submitTest_ShouldThrowException_WhenTestNotFound() {
+        User user = new User();
+        user.setUserId(10L);
+        user.setUsername("bob");
+
+        when(authentication.getName()).thenReturn("bob");
+        when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
         when(testRepository.findById(99L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> testController.submitTest(99L, List.of(1L), Map.of()));
+                () -> testController.submitTest(99L, List.of(1L), Map.of(), authentication, model));
 
         assertEquals("Test not found", exception.getMessage());
         verify(answerService, never()).processTestSubmission(anyLong(), any(), any());
