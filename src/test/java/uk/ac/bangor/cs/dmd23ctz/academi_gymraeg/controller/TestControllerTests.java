@@ -22,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Tests;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
@@ -75,6 +76,10 @@ class TestControllerTests {
     /** Mock authentication object representing the logged-in user */
     @Mock
     private Authentication authentication;
+
+    /** Mock redirect attributes used for flash messages */
+    @Mock
+    private RedirectAttributes redirectAttributes;
 
     /** Controller under test */
     private TestController testController;
@@ -249,6 +254,7 @@ class TestControllerTests {
         Tests oldTest = new Tests();
         oldTest.setTestId(1L);
         oldTest.setUserId(10L);
+        oldTest.setTestedAt(LocalDateTime.now().minusMinutes(20)); // older than 15 min cooldown so it passes
 
         Tests savedTest = new Tests();
         savedTest.setTestId(2L);
@@ -261,7 +267,7 @@ class TestControllerTests {
         when(testRepository.save(any(Tests.class))).thenReturn(savedTest);
         when(questionRepository.findQuestionsWithNounByTestId(2L)).thenReturn(Collections.emptyList());
 
-        String viewName = testController.startNewTest(model, authentication);
+        String viewName = testController.startNewTest(model, authentication, redirectAttributes);
 
         assertEquals("student/test", viewName);
         verify(answerRepository).deleteByQuestionTestTestId(1L);

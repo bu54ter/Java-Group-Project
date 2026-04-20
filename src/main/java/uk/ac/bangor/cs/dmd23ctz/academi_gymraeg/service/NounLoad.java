@@ -21,71 +21,126 @@ import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Gender;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Nouns;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.NounRepository;
 
+/**
+ * Configuration class responsible for loading initial noun data from a CSV
+ * file.
+ *
+ * <p>
+ * This runs automatically on application startup using a
+ * {@link CommandLineRunner}. If noun data already exists in the database, the
+ * CSV import is skipped to prevent duplicates.
+ * </p>
+ *
+ * <p>
+ * The CSV file is expected to be located in the classpath and contain columns
+ * such as: welshWord, englishWord, welshSent, englishSent, and gender.
+ * </p>
+ */
 @Configuration
 public class NounLoad {
 
-    @Bean
-    CommandLineRunner loadNounsFromCsv(NounRepository nounRepository) {
-        return args -> {
+	/**
+	 * Loads nouns from a CSV file into the database on application startup.
+	 *
+	 * <p>
+	 * This method:
+	 * <ul>
+	 * <li>Checks if noun data already exists</li>
+	 * <li>Skips loading if data is present</li>
+	 * <li>Otherwise reads from CSV and persists all records</li>
+	 * </ul>
+	 *
+	 * @param nounRepository the repository used to persist noun data
+	 * @return a {@link CommandLineRunner} that executes on startup
+	 */
+	@Bean
+	CommandLineRunner loadNounsFromCsv(NounRepository nounRepository) {
+		return args -> {
 
-            if (nounRepository.existsBy()) {
-                System.out.println("Nouns already exist. Skipping CSV load.");
-                return;
-            }
+			// Skip loading if nouns already exist in the database
+			if (nounRepository.existsBy()) {
+				System.out.println("Nouns already exist. Skipping CSV load.");
+				return;
+			}
 
-            List<Nouns> nouns = readCsv("data/InitialNouns.csv");
-            nounRepository.saveAll(nouns);
+			// Read nouns from CSV file
+			List<Nouns> nouns = readCsv("data/InitialNouns.csv");
 
-            System.out.println("Loaded " + nouns.size() + " nouns from CSV.");
-        };
-    }
+			// Persist all loaded nouns
+			nounRepository.saveAll(nouns);
 
-    private List<Nouns> readCsv(String path) throws IOException {
+			System.out.println("Loaded " + nouns.size() + " nouns from CSV.");
+		};
+	}
 
-        List<Nouns> list = new ArrayList<>();
-        ClassPathResource resource = new ClassPathResource(path);
+	/**
+	 * Reads noun data from a CSV file and converts it into a list of {@link Nouns}.
+	 *
+	 * <p>
+	 * This method parses the CSV file using Apache Commons CSV, maps each record to
+	 * a {@link Nouns} object, and applies basic transformations such as trimming
+	 * and handling optional fields.
+	 * </p>
+	 *
+	 * @param path the classpath location of the CSV file
+	 * @return a list of populated {@link Nouns} entities
+	 * @throws IOException if the file cannot be read
+	 */
+	private List<Nouns> readCsv(String path) throws IOException {
 
-        try (
-            InputStream is = resource.getInputStream();
-            Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
-        ) {
+		List<Nouns> list = new ArrayList<>();
+		ClassPathResource resource = new ClassPathResource(path);
 
-            Iterable<CSVRecord> records = CSVFormat.DEFAULT
-                    .builder()
-                    .setHeader()
-                    .setSkipHeaderRecord(true)
-                    .setTrim(true)
-                    .build()
-                    .parse(reader);
+		try (
+				// Open file input stream from classpath
+				InputStream is = resource.getInputStream();
 
-            for (CSVRecord record : records) {
+				// Wrap in reader with UTF-8 encoding
+				Reader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 
-                Nouns noun = new Nouns();
+			// Parse CSV with header row and trimmed values
+			Iterable<CSVRecord> records = CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true)
+					.setTrim(true).build().parse(reader);
 
-                noun.setWelshWord(record.get("welshWord"));
-                noun.setEnglishWord(record.get("englishWord"));
+			for (CSVRecord record : records) {
 
-                // Handle optional sentences safely
-                noun.setWelshSent(emptyToNull(record.get("welshSent")));
-                noun.setEnglishSent(emptyToNull(record.get("englishSent")));
+				Nouns noun = new Nouns();
 
-                noun.setGender(Gender.valueOf(record.get("gender").toUpperCase()));
+				// Map basic fields
+				noun.setWelshWord(record.get("welshWord"));
+				noun.setEnglishWord(record.get("englishWord"));
 
-                // 🔹 Your requirements
-                noun.setCreatedAt(LocalDateTime.now());
-                noun.setCreatedBy("Auto Load");
+				// Handle optional sentence fields safely
+				noun.setWelshSent(emptyToNull(record.get("welshSent")));
+				noun.setEnglishSent(emptyToNull(record.get("englishSent")));
 
-                // Optional
-                noun.setEditedBy(null);
+				// Convert gender string to enum (uppercase required)
+				noun.setGender(Gender.valueOf(record.get("gender").toUpperCase()));
 
-                list.add(noun);
-            }
-        }
+				// Set audit fields
+				noun.setCreatedAt(LocalDateTime.now());
+				noun.setCreatedBy("Auto Load");
 
-        return list;
-    }
+				// Optional audit field
+				noun.setEditedBy(null);
 
-    private String emptyToNull(String value) {
-        return (value == null || value.isBlank()) ? null : value;
-    }
+				list.add(noun);
+			}
+		}
+		return list;
+	}
+	/**
+	 * Converts empty or blank strings to {@code null}.
+	 *
+	 * <p>
+	 * This helps avoid storing empty strings in the database for optional fields.
+	 * </p>
+	 *
+	 * @param value the input string
+	 * @return {@code null} if the value is blank, otherwise the original string
+	 */
+	private String emptyToNull(String value) {
+		// Return null if value is null or contains only whitespace
+		return (value == null || value.isBlank()) ? null : value;
+	}
 }

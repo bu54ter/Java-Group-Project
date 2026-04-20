@@ -1,11 +1,9 @@
 package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.time.LocalDate;import java.time.LocalDateTime;import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;import java.util.List;
 import java.util.Map;
-
-import org.springframework.security.core.Authentication;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -127,19 +125,31 @@ public class TestController {
 	 *
 	 * @param model the {@link Model} used to pass data to the view
 	 * @param authentication the {@link Authentication} object containing the current user's details
+	 * @param redirectAttributes used to pass the cooldown value back to the resume page if applicable
 	 * @return the student test page with a fresh test loaded
 	 */
 	@Transactional
 	@PostMapping("/student/test/new")
-	public String startNewTest(Model model, Authentication authentication) {
+	public String startNewTest(Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
 
 		String username = authentication.getName();
 		User user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new RuntimeException("User not found"));
 
-		// Delete all unfinished tests for this student
+		// Enforce 15-minute cooldown — prevent students from repeatedly discarding tests to get a preferred set of questions
 		List<Tests> unsubmitted = testRepository.findUnsubmittedTestsByUserId(user.getUserId());
+		if (!unsubmitted.isEmpty()) {
+			LocalDateTime createdAt = unsubmitted.get(0).getTestedAt();
+			long secondsElapsed = ChronoUnit.SECONDS.between(createdAt, LocalDateTime.now());
+			long cooldownSeconds = (15 * 60) - secondsElapsed;
+			if (cooldownSeconds > 0) {
+				redirectAttributes.addFlashAttribute("cooldownSeconds", cooldownSeconds);
+				return "redirect:/student/test";
+			}
+		}
 
+
+		// Delete all unfinished tests for this student — answers first, then questions, then tests to satisfy FK constraints
 		for (Tests t : unsubmitted) {
 			answerRepository.deleteByQuestionTestTestId(t.getTestId());
 			questionRepository.deleteByTestTestId(t.getTestId());
