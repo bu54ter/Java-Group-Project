@@ -122,27 +122,5 @@
 		<div th:replace="~{layout :: scripts}"></div>
 	</section>
 
-	<script>
-        function openEdit(button) {
-            const id = button.getAttribute('data-id');
-            const welshWord = button.getAttribute('data-welsh');
-            const englishWord = button.getAttribute('data-english');
-            const welshSent = button.getAttribute('data-welshsent');
-            const englishSent = button.getAttribute('data-englishsent');
-            const gender = button.getAttribute('data-gender');
-
-            document.getElementById('editNounForm').action = '/nouns/' + id + '/update';
-            document.getElementById('editWelshWord').value = welshWord || '';
-            document.getElementById('editEnglishWord').value = englishWord || '';
-            document.getElementById('editWelshSent').value = welshSent || '';
-            document.getElementById('editEnglishSent').value = englishSent || '';
-
-            document.getElementById('editGenderMasculine').checked = (gender === 'MASCULINE');
-            document.getElementById('editGenderFeminine').checked = (gender === 'FEMININE');
-
-            document.getElementById('editNounModal').style.display = 'block';
-        }
-    </script>
-
 </body>
 </html>
