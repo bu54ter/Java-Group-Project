@@ -1,161 +1,134 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="~{layout :: head}"></head>
 
 <body>
-    <div th:replace="~{layout :: nav('Revision')}"></div>
-    <div sec:authorize="not isAuthenticated()">
-        <div th:replace="~{layout :: loginModal}"></div>
-    </div>
+	<div th:replace="~{layout :: nav('Revision')}"></div>
+	<div sec:authorize="not isAuthenticated()">
+		<div th:replace="~{layout :: loginModal}"></div>
+	</div>
 
-    <section class="div1">
-        <h2>Revision</h2>
-        <hr>
+	<section class="div1">
+		<h2>Revision</h2>
+		<hr>
 
-        <div class="revision-card">
-            <div class="flashcard-container">
-                <!-- Translation Card -->
-                <div class="flashcard" id="revisionCard" onclick="toggleFlashcardAnswer('revisionCard')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <h3 id="cardHeader">Translation Question</h3>
-                            <p id="cardQuestion">Loading questions...</p>
-                            <button class="smlbtn"
-                                onclick="event.stopPropagation(); toggleFlashcardAnswer('revisionCard')">
-                                Show Answer
-                            </button>
-                        </div>
-                        <div class="flashcard-back">
-                            <p class="answer-text" id="cardAnswer"></p>
-                            <button class="smlbtn"
-                                onclick="event.stopPropagation(); toggleFlashcardAnswer('revisionCard')">
-                                Back to Question
-                            </button>
-                        </div>
-                    </div>
-                </div>
+		<div class="revision-card">
+			<div class="flashcard-container">
+				<!-- Translation Card -->
+				<div class="flashcard" id="revisionCard"
+					onclick="toggleFlashcardAnswer('revisionCard')">
+					<div class="flashcard-inner">
+						<div class="flashcard-front">
+							<h3 id="cardHeader">Translation Question</h3>
+							<p id="cardQuestion">Loading questions...</p>
+							<button class="smlbtn"
+								onclick="event.stopPropagation(); toggleFlashcardAnswer('revisionCard')">
+								Show Answer</button>
+						</div>
+						<div class="flashcard-back">
+							<p class="answer-text" id="cardAnswer"></p>
+							<button class="smlbtn"
+								onclick="event.stopPropagation(); toggleFlashcardAnswer('revisionCard')">
+								Back to Question</button>
+						</div>
+					</div>
+				</div>
 
-                <!-- Gender Card -->
-                <div class="flashcard" id="genderCard" onclick="toggleFlashcardAnswer('genderCard')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <h3 id="genderHeader">Gender Question</h3>
-                            <p id="genderQuestion">Loading questions...</p>
-                            <button class="smlbtn"
-                                onclick="event.stopPropagation(); toggleFlashcardAnswer('genderCard')">
-                                Show Answer
-                            </button>
-                        </div>
-                        <div class="flashcard-back">
-                            <p class="answer-text" id="genderAnswer"></p>
-                            <button class="smlbtn"
-                                onclick="event.stopPropagation(); toggleFlashcardAnswer('genderCard')">
-                                Back to Question
-                            </button>
-                        </div>
-                    </div>
-                </div>
+				<!-- Gender Card -->
+				<div class="flashcard" id="genderCard"
+					onclick="toggleFlashcardAnswer('genderCard')">
+					<div class="flashcard-inner">
+						<div class="flashcard-front">
+							<h3 id="genderHeader">Gender Question</h3>
+							<p id="genderQuestion">Loading questions...</p>
+							<button class="smlbtn"
+								onclick="event.stopPropagation(); toggleFlashcardAnswer('genderCard')">
+								Show Answer</button>
+						</div>
+						<div class="flashcard-back">
+							<p class="answer-text" id="genderAnswer"></p>
+							<button class="smlbtn"
+								onclick="event.stopPropagation(); toggleFlashcardAnswer('genderCard')">
+								Back to Question</button>
+						</div>
+					</div>
+				</div>
 
-                <button class="nav-arrow next" onclick="nextCard()" id="nextBtn" title="Next Card">
-                    <span class="arrow-icon">&#10140;</span>
-                </button>
-            </div>
+				<button class="nav-arrow next" onclick="nextCard()" id="nextBtn"
+					title="Next Card">
+					<span class="arrow-icon">&#10140;</span>
+				</button>
+			</div>
+		</div>
+
+		<div class="rulesbox">
+			<h3>Tips and tricks</h3>
+			<p>
+				<strong>Gender Rules of Thumb</strong>
+			</p>
+			<p>
+				Time & Weather: Days of the week, months, and seasons are generally
+				masculine.<br> Natural Features & Locations: Rivers, towns, and
+				trees are often feminine.<br> Words ending in -en, -aeth, -fa,
+				-es, or -ell are often feminine (e.g., cacen, swyddfa).<br>
+				Words ending in -yn, -wr, -deb, or -der are often masculine (e.g.,
+				pysgodyn, cyflymder).<br>
+			</p>
+			<br>
+			<p>
+				<strong>The Mutation Trick</strong>
+			</p>
+			<p>
+				Singular feminine nouns mutate after the definite article y (the),
+				while masculine nouns do not.<br> Feminine: cath (cat) = y gath
+				(the cat - 'c' mutates to 'g')<br> Masculine: ci (dog) = y ci
+				(the dog - no mutation)<br> Note: Feminine words starting with
+				"ll" or "rh" are exceptions and do not mutate after "y" (e.g., y
+				llyfrgell).<br>
+			</p>
+			<br>
+			<p>
+				<strong>The Adjective Trick</strong>
+			</p>
+			<p>
+				Use Adjectives: Learn the noun with an adjective. If the adjective
+				changes (mutates), the noun is feminine.<br> Feminine: merch
+				dda (good girl, 'd' of 'da' changed to 'dd')<br> Masculine:
+				bachgen da (good boy, 'd' stays 'd')<br>
+			</p>
+			<br>
+			<p>
+				<strong>The Number Trick</strong>
+			</p>
+			<p>
+				Use Numbers 2, 3, 4:<br> Dwy (2), Tair (3), Pedair (4) are used
+				with feminine nouns.<br> Dau (2), Tri (3), Pedwar (4) are used
+				with masculine nouns.<br> Feminine: Dwy gath (2 cats)<br>
+				Masculine: Dau gi (2 dogs)<br>
+			</p>
+		</div>
+
+		<br>
+
+		<div class="button-container">
+			<a th:href="@{/student/test}" class="button">Take a test</a> <a
+				th:href="@{/student/dashboard}" class="button">Back to dashboard</a>
+		</div>
+
+		<hr>
+		<div th:replace="~{layout :: footer}"></div>
+
+
+        <div id="nouns-data" style="display:none;">
+            <div th:each="noun : ${nouns}" class="noun-item" 
+                 th:data-welsh="${noun.welshWord}" 
+                 th:data-english="${noun.englishWord}" 
+                 th:data-gender="${noun.gender}"></div>
         </div>
 
-        <div class="rulesbox">
-            <h3>Tips and tricks</h3>
-            <p><strong>Gender Rules of Thumb</strong></p>
-            <p>Time & Weather: Days of the week, months, and seasons are generally masculine.<br>
-                Natural Features & Locations: Rivers, towns, and trees are often feminine.<br>
-                Words ending in -en, -aeth, -fa, -es, or -ell are often feminine (e.g., cacen, swyddfa).<br>
-                Words ending in -yn, -wr, -deb, or -der are often masculine (e.g., pysgodyn, cyflymder).<br></p>
-            <br>
-            <p><strong>The Mutation Trick</strong></p>
-            <p>Singular feminine nouns mutate after the definite article y (the), while masculine nouns do not.<br>
-                Feminine: cath (cat) = y gath (the cat - 'c' mutates to 'g')<br>
-                Masculine: ci (dog) = y ci (the dog - no mutation)<br>
-                Note: Feminine words starting with "ll" or "rh" are exceptions and do not mutate after "y" (e.g., y
-                llyfrgell).<br></p>
-            <br>
-            <p><strong>The Adjective Trick</strong></p>
-            <p>Use Adjectives: Learn the noun with an adjective. If the adjective changes (mutates), the noun is
-                feminine.<br>
-                Feminine: merch dda (good girl, 'd' of 'da' changed to 'dd')<br>
-                Masculine: bachgen da (good boy, 'd' stays 'd')<br></p>
-            <br>
-            <p><strong>The Number Trick</strong></p>
-            <p>Use Numbers 2, 3, 4:<br>
-                Dwy (2), Tair (3), Pedair (4) are used with feminine nouns.<br>
-                Dau (2), Tri (3), Pedwar (4) are used with masculine nouns.<br>
-                Feminine: Dwy gath (2 cats)<br>
-                Masculine: Dau gi (2 dogs)<br></p>
-        </div>
-
-        <br>
-
-        <div class="button-container">
-            <a th:href="@{/student/test}" class="button">Take a test</a>
-            <a th:href="@{/student/dashboard}" class="button">Back to dashboard</a>
-        </div>
-
-        <hr>
-        <div th:replace="~{layout :: footer}"></div>
-
-        <script th:inline="javascript">
-            /*<![CDATA[*/
-            const rawNouns = /*[[${nouns}]]*/[];
-            const nouns = Array.isArray(rawNouns) ? rawNouns : [];
-            let currentIndex = 0;
-
-            function updateCard() {
-                if (!nouns || nouns.length === 0) return;
-
-                const noun = nouns[currentIndex];
-                const card = document.getElementById('revisionCard');
-                const genderCard = document.getElementById('genderCard');
-
-                // Flip back to front if flipped
-                card.classList.remove('is-flipped');
-                genderCard.classList.remove('is-flipped');
-
-                setTimeout(() => {
-                    document.getElementById('cardQuestion').textContent = `How do you say "${noun.welshWord}" in English?`;
-                    document.getElementById('cardAnswer').textContent = noun.englishWord;
-
-                    document.getElementById('genderQuestion').textContent = `What is the gender of "${noun.welshWord}"?`;
-                    document.getElementById('genderAnswer').textContent = noun.gender;
-
-                    const headers = ['Translation Question'];
-                    document.getElementById('cardHeader').textContent = headers[currentIndex % headers.length];
-                }, 150);
-            }
-
-            function toggleFlashcardAnswer(cardId) {
-                const card = document.getElementById(cardId);
-                card.classList.toggle('is-flipped');
-            }
-
-            function nextCard() {
-                if (!nouns || nouns.length === 0) return;
-                currentIndex = (currentIndex + 1) % nouns.length;
-                updateCard();
-            }
-
-            document.addEventListener('DOMContentLoaded', () => {
-                if (nouns && nouns.length > 0) {
-                    updateCard();
-                } else {
-                    document.getElementById('cardQuestion').textContent = "No nouns found. Add some to start revising!";
-                    if (document.getElementById('nextBtn')) {
-                        document.getElementById('nextBtn').style.display = 'none';
-                    }
-                }
-            });
-            /*]]>*/
-        </script>
-
-        <div th:replace="~{layout :: scripts}"></div>
-    </section>
+		<div th:replace="~{layout :: scripts}"></div>
+	</section>
 
 </body>
 

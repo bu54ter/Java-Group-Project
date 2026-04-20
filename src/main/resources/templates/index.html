@@ -44,11 +44,7 @@
 		</section>
 	</section>
 
-	<script th:if="${param.error}">
-		document.addEventListener("DOMContentLoaded", function () {
-			document.getElementById('loginModal').style.display = 'block';
-		});
-	</script>
+	<span id="login-error-flag" th:if="${param.error}" style="display:none;"></span>
 </body>
 
 </html>

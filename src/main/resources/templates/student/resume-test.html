@@ -31,40 +31,7 @@
             </form>
         </div>
 
-        <script th:if="${cooldownSeconds != null}" th:inline="javascript">
-            var seconds = [[${cooldownSeconds}]];
-            var display = document.getElementById('cooldown-display');
-            var btn = document.getElementById('new-test-btn');
-            var notice = document.getElementById('cooldown-notice');
-
-            function updateDisplay() {
-                var m = Math.floor(seconds / 60);
-                var s = seconds % 60;
-                display.textContent = m + 'm ' + (s < 10 ? '0' + s : s) + 's';
-            }
-
-            updateDisplay();
-
-            var timer = setInterval(function() {
-                seconds--;
-                if (seconds <= 0) {
-                    clearInterval(timer);
-                    notice.style.display = 'none';
-                    btn.disabled = false;
-                } else {
-                    updateDisplay();
-                }
-            }, 1000);
-        </script>
-
-        <script>
-            document.getElementById('new-test-form').addEventListener('submit', function() {
-                // Clear any saved answers for all tests so old answers don't carry over
-                Object.keys(localStorage).forEach(function(key) {
-                    if (key.startsWith('test_answers_')) localStorage.removeItem(key);
-                });
-            });
-        </script>
+        <input type="hidden" id="cooldown-seconds" th:if="${cooldownSeconds != null}" th:value="${cooldownSeconds}">
         <hr>
         <div th:replace="~{layout :: footer}"></div>
         <div th:replace="~{layout :: scripts}"></div>
