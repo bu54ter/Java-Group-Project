@@ -1,19 +1,22 @@
+<!-- Root HTML element with Thymeleaf and Spring Security namespaces -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+<!-- Injects shared <head> content from layout -->
 <head th:replace="~{layout :: head}"></head>
 
 <body>
-
+	<!-- Injects navigation bar fragment; sets Test as active page -->
 	<div th:replace="~{layout :: nav('Test')}"></div>
+	<!-- Conditional rendering: login modal shown only when user is not authenticated -->
 	<div sec:authorize="not isAuthenticated()">
-		<!-- Updated to Thymeleaf full fragment syntax -->
 		<div th:replace="~{layout :: loginModal}"></div>
 	</div>
 
 	<section class="div1">
+		<!-- Page title for student test interface -->
 		<h2>Student Test Page</h2>
 		<hr>
+		<!-- Instructional note for correct input (Welsh keyboard usage) -->
 		<p>
 			Don't forget to use the Welsh alphabet when answering questions. <br />
 			For more information on changing your keyboard layout, click <a
@@ -23,29 +26,35 @@
 			for windows users!
 		</p>
 		<hr />
-
+		<!-- Test submission form:
+		     - POST request to submit answers
+		     - novalidate disables default browser validation -->
 		<form method="post" th:action="@{/student/test/submit}">
+			<!-- Hidden test identifier -->
 			<input type="hidden" name="testId" th:value="${test.testId}" />
-
+			<!-- Iterates over all questions in the test -->
 			<div th:each="question, iterStat : ${questions}"
 				class="question-block">
+				<!-- Question numbering -->
 				<h4 th:text="'Question ' + ${iterStat.count}"></h4>
+				<!-- Question rendering based on type -->
 
+				<!-- Gender question -->
 				<p th:if="${question.questionType.name() == 'GENDER'}">
 					What is the gender of the Welsh noun <strong
 						th:text="${question.noun.welshWord}"></strong>?
 				</p>
-
+				<!-- Meaning question -->
 				<p th:if="${question.questionType.name() == 'MEANING'}">
 					What is the meaning of the Welsh noun <strong
 						th:text="${question.noun.welshWord}"></strong>?
 				</p>
-
+				<!-- Translation question -->
 				<p th:if="${question.questionType.name() == 'TRANSLATE'}">
 					What is the Welsh noun for the English word <strong
 						th:text="${question.noun.englishWord}"></strong>?
 				</p>
-
+				<!-- Hidden input to track question IDs for submission -->
 				<input type="hidden" name="questionIds"
 					th:value="${question.questionId}" />
 
@@ -86,14 +95,15 @@
 						th:text="${answerErrors[question.questionId]}" class="error"></div>
 				</div>
 			</div>
+			<!-- Submits completed test -->
 
 			<button type="submit" class="button">Submit test</button>
 		</form>
 
 		<hr>
-		<!-- Updated to Thymeleaf full fragment syntax -->
+		<!-- Injects shared footer fragment -->
 		<div th:replace="~{layout :: footer}"></div>
-		<!-- Updated to Thymeleaf full fragment syntax -->
+		<!-- Injects shared JavaScript used across the application -->
 		<div th:replace="~{layout :: scripts}"></div>
 	</section>
 

@@ -1,39 +1,44 @@
+<!-- Root HTML element with Thymeleaf and Spring Security namespaces -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+<!-- Injects shared <head> content from layout -->
 <head th:replace="~{layout :: head}"></head>
 
 <body>
+	<!-- Injects navigation bar fragment; sets StudentDashboard as active page -->
 	<div th:replace="~{layout :: nav('StudentDashboard')}"></div>
-
+	<!-- Conditional rendering: login modal shown only when user is not authenticated -->
 	<div sec:authorize="not isAuthenticated()">
 		<!-- Show login modal if user is not signed in -->
 		<div th:replace="~{layout :: loginModal}"></div>
 	</div>
 
 	<section class="div1">
+		<!-- Page title for student dashboard -->
 		<h2>Student Dashboard</h2>
 		<hr>
 
 		<!-- Personal streak box -->
-		<div style="margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
+		<div
+			style="margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
 			<h3>Personal Streak</h3>
 
 			<p>
-				<strong>Current streak:</strong>
-				<span th:text="${user.currentStreak}"></span> day(s)
+				<strong>Current streak:</strong> <span
+					th:text="${user.currentStreak}"></span> day(s)
 			</p>
 
 			<p>
-				<strong>Best streak:</strong>
-				<span th:text="${user.bestStreak}"></span> day(s)
+				<strong>Best streak:</strong> <span th:text="${user.bestStreak}"></span>
+				day(s)
 			</p>
 
 			<p>
-				<strong>Last test completed:</strong>
-				<span th:if="${user.lastTestDate != null}"
+				<strong>Last test completed:</strong> <span
+					th:if="${user.lastTestDate != null}"
 					th:text="${#temporals.format(user.lastTestDate, 'dd MMM yyyy')}"></span>
-				<span th:if="${user.lastTestDate == null}">No tests completed yet</span>
+				<span th:if="${user.lastTestDate == null}">No tests completed
+					yet</span>
 			</p>
 		</div>
 
@@ -41,17 +46,19 @@
 
 		<!-- Main student actions -->
 		<div class="button-container">
-			<a th:href="@{/student/revision}" class="button">Revise</a>
-			<a th:href="@{/student/test}" class="button">Take a test</a>
+			<a th:href="@{/student/revision}" class="button">Revise</a> <a
+				th:href="@{/student/test}" class="button">Take a test</a>
 		</div>
 
 		<h2>Previous results</h2>
 
 		<table>
+			<!-- Table header for test history -->
 			<tr>
 				<th>Date of test</th>
 				<th>Score (%)</th>
 			</tr>
+			<!-- Iterates over student test history -->
 			<tr th:each="t : ${tests}">
 				<td th:text="${#temporals.format(t.testedAt, 'dd MMM yyyy HH:mm')}"></td>
 				<td th:text="${t.score}"></td>
@@ -61,10 +68,10 @@
 		<br>
 		<hr>
 
-		<!-- Footer -->
+		<!-- Injects shared footer fragment -->
 		<div th:replace="~{layout :: footer}"></div>
 
-		<!-- Scripts -->
+		<!-- Injects shared JavaScript used across the application -->
 		<div th:replace="~{layout :: scripts}"></div>
 	</section>
 

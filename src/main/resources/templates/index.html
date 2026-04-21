@@ -1,20 +1,27 @@
+<!-- Root HTML element with Thymeleaf and Spring Security namespaces -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+<!-- Injects shared <head> content from layout -->
 <head th:replace="~{layout :: head}"></head>
 
 <body>
-
+	<!-- Injects hero section (e.g., banner/intro content) -->
 	<div th:replace="~{layout :: heroSection}"></div>
+	<!-- Injects navigation bar fragment; sets Home as active page -->
 	<div th:replace="~{layout :: nav('Home')}"></div>
+	<!-- Conditional rendering: login modal shown only when user is not authenticated -->
 	<div sec:authorize="not isAuthenticated()">
 		<div th:replace="~{layout :: loginModal}"></div>
 	</div>
 	<section class="div2">
+		<!-- Page heading (Welsh greeting) -->
 		<h1>Croeso</h1>
+		<!-- Introductory description of the application -->
 		<p>This website is designed to help students learn new Welsh nouns
 			and test their knowledge.</p>
 		<hr />
+		<!-- Word of the Day card:
+		     - Rendered only when a noun is available -->
 		<div th:if="${wordOfTheDay != null}" id="nounCard">
 			<div class="noun-badge">Gair y Dydd</div>
 			<div class="noun-content">
@@ -25,26 +32,31 @@
 				<p class="noun-details">
 					<span class="gender-tag"
 						th:text="${wordOfTheDay.gender.name() == 'MASCULINE' ? 'Masculine' : 'Feminine'}"></span>
-					<br /> <span class="sentence-section"> <strong>Example:</strong><br />
+					<br />
+					<!-- Example sentence section -->
+					<span class="sentence-section"> <strong>Example:</strong><br />
 						<span class="sentence-welsh" th:text="${wordOfTheDay.welshSent}"></span><br />
 						<i class="sentence-english" th:text="${wordOfTheDay.englishSent}"></i>
 					</span>
 				</p>
 			</div>
 		</div>
-
+		<!-- Fallback when no word of the day is available -->
 		<div th:if="${wordOfTheDay == null}">
 			<p>No nouns available.</p>
 		</div>
 
 		<hr>
 		<section class="div1">
+			<!-- Injects shared footer fragment -->
 			<div th:replace="~{layout :: footer}"></div>
+			<!-- Injects shared JavaScript used across the application -->
 			<div th:replace="~{layout :: scripts}"></div>
 		</section>
 	</section>
-
-	<span id="login-error-flag" th:if="${param.error}" style="display:none;"></span>
+	<!-- Hidden flag used to trigger login error handling in JS -->
+	<span id="login-error-flag" th:if="${param.error}"
+		style="display: none;"></span>
 </body>
 
 </html>
