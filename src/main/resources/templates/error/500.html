@@ -1,21 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<!-- Root HTML element with Thymeleaf and Spring Security namespaces -->
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Injects shared <head> content from layout -->
 <head th:replace="~{layout :: head}"></head>
 
 <body>
 
-<div th:replace="~{layout :: nav('Home')}"></div>
+	<!-- Injects navigation bar fragment; sets Home as active page -->
+	<div th:replace="~{layout :: nav('Home')}"></div>
 
-<section class="div2">
-    <h1>500 - Something Went Wrong</h1>
-    <p>Sorry, an unexpected error occurred. Please try again.</p>
-    <a th:href="@{/}">Return to Home</a>
-    <hr>
-    <div th:replace="layout :: footer"></div>
-    <div th:replace="layout :: scripts"></div>
-</section>
+	<section class="div2">
+
+		<!-- Error heading indicating HTTP 500 (server-side failure) -->
+		<h1>500 - Something Went Wrong</h1>
+
+		<!-- User-facing generic error message for unexpected server issues -->
+		<p>Sorry, an unexpected error occurred. Please try again.</p>
+
+		<!-- Redirect link back to application home page -->
+		<a th:href="@{/}">Return to Home</a>
+
+		<hr>
+
+		<!-- Injects shared footer fragment -->
+		<div th:replace="layout :: footer"></div>
+
+		<!-- Injects shared JavaScript used across the application -->
+		<div th:replace="layout :: scripts"></div>
+	</section>
 
 </body>
 </html>

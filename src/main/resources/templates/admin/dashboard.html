@@ -1,31 +1,46 @@
+<!-- Root HTML element with Thymeleaf and Spring Security namespaces -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<!-- Injects shared <head> content from layout -->
 <head th:replace="~{layout :: head}"></head>
-<!-- CSS link removed from this file because it should now be inside layout.html head fragment -->
+
 
 <body>
 
+	<!-- Navigation bar fragment; highlights AdminDashboard as active -->
 	<div th:replace="~{layout :: nav('AdminDashboard')}"></div>
+
+	<!-- Conditional rendering: only show login modal if user is not authenticated -->
 	<div sec:authorize="not isAuthenticated()">
-		<!-- Updated to Thymeleaf full fragment syntax -->
+		<!-- Login modal fragment -->
 		<div th:replace="~{layout :: loginModal}"></div>
 	</div>
 
 	<section class="div1">
+
+		<!-- Section header for active users -->
 		<h2>Active users</h2>
 
+		<!-- Feedback message: password reset error -->
 		<div th:if="${resetPasswordError}" class="error-message"
 			th:text="${resetPasswordError}"></div>
 
+		<!-- Feedback message: password reset success -->
 		<div th:if="${resetPasswordSuccess}" class="success-message"
 			th:text="${resetPasswordSuccess}"></div>
-<div th:if="${deleteUserError}" class="error-message" th:text="${deleteUserError}"></div>
-		<!-- Updated to Thymeleaf full fragment syntax -->
+
+		<!-- Feedback message: delete user error -->
+		<div th:if="${deleteUserError}" class="error-message"
+			th:text="${deleteUserError}"></div>
+
+		<!-- Modal fragment for creating a new user -->
 		<div th:replace="~{layout :: newUserModal}"></div>
 		<br>
 
 		<table>
+
+			<!-- Table header for active users -->
 			<tr>
 				<th>ID</th>
 				<th>Username</th>
@@ -37,7 +52,10 @@
 				<th>Delete User</th>
 			</tr>
 
+			<!-- Iterates over active users collection provided by controller -->
 			<tr th:each="u : ${users}">
+
+				<!-- User core attributes -->
 				<td th:text="${u.userId}"></td>
 				<td th:text="${u.username}"></td>
 				<td th:text="${u.role}"></td>
@@ -45,43 +63,56 @@
 				<td th:text="${u.surname}"></td>
 				<td th:text="${u.createdAt}"></td>
 				<td>
-					<!-- Reset password form with:
-					     1. eye icon to show or hide password
-					     2. role-based minimum length hint
-					     3. two-step re-enter password check
-					     all kept inside the same table cell -->
+					<!-- Password reset form:
+					     - POST to user-specific endpoint
+					     - CSRF protected
+					     - JS handles validation and confirmation flow -->
 					<form th:action="@{/users/{id}/reset-password(id=${u.userId})}"
 						method="post" class="resetpwd"
 						onsubmit="return handleResetPasswordSubmit(this)">
+
+						<!-- CSRF protection token -->
 						<input type="hidden" th:name="${_csrf.parameterName}"
 							th:value="${_csrf.token}" />
 
-						<!-- Tracks whether the reset form is on the first entry or re-enter step -->
+						<!-- Tracks confirmation step in client-side workflow -->
 						<input type="hidden" name="confirmStep" value="false"
 							class="confirm-step">
 
-						<!-- Temporarily stores the first password entry for front-end comparison -->
+						<!-- Stores initial password entry for comparison -->
 						<input type="hidden" name="firstPasswordEntry" value=""
 							class="first-password-entry">
 
 						<div class="password-input-wrapper">
+
+							<!-- Password input with role metadata for validation -->
 							<input type="password" name="newPassword" required
 								class="reset-password-input"
 								th:attr="data-role=${u.role.name()}" placeholder="New password">
+
+							<!-- Toggles password visibility -->
 							<button type="button" class="toggle-password-btn"
 								onclick="togglePassword(this)" aria-label="Show password"
 								title="Show password">👁</button>
 						</div>
 
-						<button type="submit" class="smlbtn reset-password-btn">Reset
-							password</button>
+						<!-- Submit password reset -->
+						<button type="submit" class="smlbtn reset-password-btn">
+							Reset password</button>
 					</form>
 				</td>
 				<td>
+					<!-- Delete user form:
+					     - POST request
+					     - Confirmation prompt prevents accidental deletion -->
 					<form th:action="@{/users/{id}/delete(id=${u.userId})}"
 						method="post" style="display: inline;">
+
+						<!-- CSRF protection token -->
 						<input type="hidden" th:name="${_csrf.parameterName}"
 							th:value="${_csrf.token}" />
+
+						<!-- Delete action with confirmation -->
 						<button type="submit" class="smlbtn"
 							onclick="return confirm('Delete this user?')">Delete</button>
 					</form>
@@ -92,8 +123,12 @@
 		<br>
 		<hr>
 
+		<!-- Section header for soft-deleted users -->
 		<h2>Deleted Users</h2>
+
 		<table>
+
+			<!-- Table header for deleted users -->
 			<tr>
 				<th>ID</th>
 				<th>Username</th>
@@ -103,7 +138,11 @@
 				<th>Date Deleted</th>
 				<th>Undo Delete</th>
 			</tr>
+
+			<!-- Iterates over soft-deleted users collection -->
 			<tr th:each="ud : ${deletedUsers}">
+
+				<!-- Deleted user attributes -->
 				<td th:text="${ud.userId}"></td>
 				<td th:text="${ud.username}"></td>
 				<td th:text="${ud.role}"></td>
@@ -111,22 +150,29 @@
 				<td th:text="${ud.surname}"></td>
 				<td th:text="${ud.deletedAt}"></td>
 				<td>
+					<!-- Restore (undelete) form:
+					     - POST request to restore endpoint
+					     - Confirmation guard -->
 					<form th:action="@{/userDeleted/{id}/undelete(id=${ud.userId})}"
 						method="post" style="display: inline;">
+
+						<!-- CSRF protection token -->
 						<input type="hidden" th:name="${_csrf.parameterName}"
 							th:value="${_csrf.token}" />
+
+						<!-- Restore action with confirmation -->
 						<button type="submit" class="smlbtn"
-							onclick="return confirm('Restore this user?')">Undelete
-						</button>
+							onclick="return confirm('Restore this user?')">Restore</button>
 					</form>
 				</td>
 			</tr>
 		</table>
 		<hr>
 
-		<!-- Updated to Thymeleaf full fragment syntax -->
+		<!-- Shared footer fragment -->
 		<div th:replace="~{layout :: footer}"></div>
-		<!-- Updated to Thymeleaf full fragment syntax -->
+
+		<!-- Injects shared JavaScript used across the application -->
 		<div th:replace="~{layout :: scripts}"></div>
 
 	</section>

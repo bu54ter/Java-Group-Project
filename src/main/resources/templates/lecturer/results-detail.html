@@ -1,76 +1,117 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<!-- Root HTML element with Thymeleaf and Spring Security namespaces -->
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Injects shared <head> content from layout -->
 <head th:replace="~{layout :: head}"></head>
 
 <body>
 
-    <div th:replace="~{layout :: nav('LecturerResults')}"></div>
-    <div sec:authorize="not isAuthenticated()">
-        <div th:replace="~{layout :: loginModal}"></div>
-    </div>
+	<!-- Injects navigation bar fragment; sets LecturerResults as active page -->
+	<div th:replace="~{layout :: nav('LecturerResults')}"></div>
 
-    <section class="div1">
-        <h2>Test Detail</h2>
-        <hr>
+	<!-- Conditional rendering: login modal shown only when user is not authenticated -->
+	<div sec:authorize="not isAuthenticated()">
+		<div th:replace="~{layout :: loginModal}"></div>
+	</div>
 
-        <p><strong>Student:</strong> <span th:text="${studentName}"></span></p>
-        <p><strong>Test ID:</strong> <span th:text="${test.testId}"></span></p>
-        <p><strong>Date Taken:</strong> <span th:text="${#temporals.format(test.testedAt, 'dd MMM yyyy HH:mm')}"></span></p>
-        <p><strong>Score:</strong> <span th:text="${test.score}"></span> %</p>
+	<section class="div1">
 
-        <hr>
+		<!-- Page title for test detail view -->
+		<h2>Test Detail</h2>
+		<hr>
 
-        <div th:each="answer, iterStat : ${answers}">
-            <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;">
+		<!-- Summary section: test metadata -->
+		<p>
+			<strong>Student:</strong> <span th:text="${studentName}"></span>
+		</p>
+		<p>
+			<strong>Test ID:</strong> <span th:text="${test.testId}"></span>
+		</p>
+		<p>
+			<strong>Date Taken:</strong> <span
+				th:text="${#temporals.format(test.testedAt, 'dd MMM yyyy HH:mm')}"></span>
+		</p>
+		<p>
+			<strong>Score:</strong> <span th:text="${test.score}"></span> %
+		</p>
 
-                <p>
-                    <strong>Question <span th:text="${iterStat.count}"></span>:</strong>
-                    <span th:if="${answer.question.questionType.name() == 'GENDER'}">
-                        What is the gender of the Welsh noun
-                        <strong th:text="${answer.question.noun.welshWord}"></strong>?
-                    </span>
-                    <span th:if="${answer.question.questionType.name() == 'MEANING'}">
-                        What is the meaning of the Welsh noun
-                        <strong th:text="${answer.question.noun.welshWord}"></strong>?
-                    </span>
-                    <span th:if="${answer.question.questionType.name() == 'TRANSLATE'}">
-                        What is the Welsh noun for the English word
-                        <strong th:text="${answer.question.noun.englishWord}"></strong>?
-                    </span>
-                </p>
+		<hr>
 
-                <p>
-                    <strong>Student's answer:</strong>
-                    <span th:text="${answer.userAnswer}"></span>
-                </p>
+		<!-- Iterates over all answers for this test -->
+		<div th:each="answer, iterStat : ${answers}">
 
-                <p>
-                    <strong>Correct answer:</strong>
-                    <span th:if="${answer.question.questionType.name() == 'GENDER'}"
-                          th:text="${answer.question.noun.gender}"></span>
-                    <span th:if="${answer.question.questionType.name() == 'MEANING'}"
-                          th:text="${answer.question.noun.englishWord}"></span>
-                    <span th:if="${answer.question.questionType.name() == 'TRANSLATE'}"
-                          th:text="${answer.question.noun.welshWord}"></span>
-                </p>
+			<!-- Individual answer block -->
+			<div
+				style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;">
 
-                <p th:if="${answer.correct}">✅ Correct</p>
-                <p th:if="${!answer.correct}">❌ Incorrect</p>
+				<!-- Question rendering varies by question type -->
+				<p>
+					<strong>Question <span th:text="${iterStat.count}"></span>:
+					</strong>
 
-            </div>
-        </div>
+					<!-- Gender-based question -->
+					<span th:if="${answer.question.questionType.name() == 'GENDER'}">
+						What is the gender of the Welsh noun <strong
+						th:text="${answer.question.noun.welshWord}"></strong>?
+					</span>
 
-        <p th:if="${#lists.isEmpty(answers)}">No answers recorded for this test.</p>
+					<!-- Meaning-based question -->
+					<span th:if="${answer.question.questionType.name() == 'MEANING'}">
+						What is the meaning of the Welsh noun <strong
+						th:text="${answer.question.noun.welshWord}"></strong>?
+					</span>
 
-        <br>
-        <a th:href="@{/lecturer/results}" class="button">Back to results</a>
+					<!-- Translation-based question -->
+					<span th:if="${answer.question.questionType.name() == 'TRANSLATE'}">
+						What is the Welsh noun for the English word <strong
+						th:text="${answer.question.noun.englishWord}"></strong>?
+					</span>
+				</p>
 
-        <hr>
-        <div th:replace="~{layout :: footer}"></div>
-        <div th:replace="~{layout :: scripts}"></div>
-    </section>
+				<!-- Student response -->
+				<p>
+					<strong>Student's answer:</strong> <span
+						th:text="${answer.userAnswer}"></span>
+				</p>
+
+				<!-- Correct answer resolved dynamically based on question type -->
+				<p>
+					<strong>Correct answer:</strong> <span
+						th:if="${answer.question.questionType.name() == 'GENDER'}"
+						th:text="${answer.question.noun.gender}"></span> <span
+						th:if="${answer.question.questionType.name() == 'MEANING'}"
+						th:text="${answer.question.noun.englishWord}"></span> <span
+						th:if="${answer.question.questionType.name() == 'TRANSLATE'}"
+						th:text="${answer.question.noun.welshWord}"></span>
+				</p>
+
+				<!-- Result indicator (correct/incorrect) -->
+				<p th:if="${answer.correct}">✅ Correct</p>
+				<p th:if="${!answer.correct}">❌ Incorrect</p>
+
+			</div>
+		</div>
+
+		<!-- Empty state when no answers exist -->
+		<p th:if="${#lists.isEmpty(answers)}">No answers recorded for this
+			test.</p>
+
+		<br>
+
+		<!-- Navigation back to results overview -->
+		<a th:href="@{/lecturer/results}" class="button">Back to results</a>
+
+		<hr>
+
+		<!-- Injects shared footer fragment -->
+		<div th:replace="~{layout :: footer}"></div>
+
+		<!-- Injects shared JavaScript used across the application -->
+		<div th:replace="~{layout :: scripts}"></div>
+	</section>
 
 </body>
 </html>

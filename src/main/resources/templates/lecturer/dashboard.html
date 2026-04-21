@@ -1,26 +1,38 @@
 <!DOCTYPE html>
+
+<!-- Root HTML element with Thymeleaf and Spring Security namespaces -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<!-- Injects shared <head> content from layout -->
 <head th:replace="~{layout :: head}"></head>
 
 <body>
 
+	<!-- Injects navigation bar fragment; sets LecturerDashboard as active page -->
 	<div th:replace="~{layout :: nav('LecturerDashboard')}"></div>
 
+	<!-- Conditional rendering: login modal shown only when user is not authenticated -->
 	<div sec:authorize="not isAuthenticated()">
 		<div th:replace="~{layout :: loginModal}"></div>
 	</div>
 
 	<section class="div1">
+
+		<!-- Page title for lecturer dashboard -->
 		<h2>Lecturer Dashboard</h2>
 		<hr>
 
+		<!-- Section header for active nouns dataset -->
 		<h2>Active nouns</h2>
+
+		<!-- Injects modal for creating a new noun -->
 		<div th:replace="~{layout :: newNounModal}"></div>
 		<br>
 
 		<table>
+
+			<!-- Table header for active nouns -->
 			<tr>
 				<th>ID</th>
 				<th>Welsh noun</th>
@@ -35,7 +47,10 @@
 				<th>Delete</th>
 			</tr>
 
+			<!-- Iterates over active nouns collection -->
 			<tr th:each="n : ${nouns}">
+
+				<!-- Core noun fields -->
 				<td th:text="${n.nounId}"></td>
 				<td th:text="${n.welshWord}"></td>
 				<td th:text="${n.englishWord}"></td>
@@ -47,6 +62,9 @@
 				<td th:text="${n.englishSent}"></td>
 
 				<td>
+					<!-- Edit action:
+					     - Passes noun data via data-* attributes
+					     - Opens client-side edit modal -->
 					<button type="button" class="smlbtn"
 						th:attr="
                                 data-id=${n.nounId},
@@ -59,10 +77,18 @@
 				</td>
 
 				<td>
+					<!-- Delete noun form:
+					     - Sends POST request to delete endpoint
+					     - CSRF protected
+					     - Confirmation prompt prevents accidental deletion -->
 					<form th:action="@{/nouns/{id}/delete(id=${n.nounId})}"
 						method="post" style="display: inline;">
+
+						<!-- CSRF protection token -->
 						<input type="hidden" th:name="${_csrf.parameterName}"
 							th:value="${_csrf.token}" />
+
+						<!-- Delete action -->
 						<button type="submit" class="smlbtn"
 							onclick="return confirm('Delete this noun?')">Delete</button>
 					</form>
@@ -73,9 +99,12 @@
 		<br>
 		<hr>
 
+		<!-- Section header for soft-deleted nouns -->
 		<h2>Deleted nouns (not used in tests)</h2>
 
 		<table>
+
+			<!-- Table header for deleted nouns -->
 			<tr>
 				<th>ID</th>
 				<th>Welsh noun</th>
@@ -90,7 +119,10 @@
 				<th>Undo Delete</th>
 			</tr>
 
+			<!-- Iterates over deleted nouns collection -->
 			<tr th:each="nd : ${nounsDeleted}">
+
+				<!-- Deleted noun fields -->
 				<td th:text="${nd.nounId}"></td>
 				<td th:text="${nd.welshWord}"></td>
 				<td th:text="${nd.englishWord}"></td>
@@ -102,23 +134,34 @@
 				<td th:text="${nd.deletedAt}"></td>
 				<td th:text="${nd.deletedBy}"></td>
 				<td>
+					<!-- Restore noun form:
+					     - Sends POST request to undelete endpoint
+					     - Confirmation prompt prevents accidental restore -->
 					<form th:action="@{/nounsDeleted/{id}/undelete(id=${nd.nounId})}"
 						method="post" style="display: inline;">
+
+						<!-- CSRF protection token -->
 						<input type="hidden" th:name="${_csrf.parameterName}"
 							th:value="${_csrf.token}" />
+
+						<!-- Restore action -->
 						<button type="submit" class="smlbtn"
-							onclick="return confirm('Restore this noun?')">Undelete
-						</button>
+							onclick="return confirm('Restore this noun?')">Restore</button>
 					</form>
 				</td>
 
 			</tr>
 		</table>
 
+		<!-- Injects modal for editing nouns -->
 		<div th:replace="~{layout :: editNounModal}"></div>
 
 		<hr>
+
+		<!-- Injects shared footer fragment -->
 		<div th:replace="~{layout :: footer}"></div>
+
+		<!-- Injects shared JavaScript used across the application -->
 		<div th:replace="~{layout :: scripts}"></div>
 	</section>
 

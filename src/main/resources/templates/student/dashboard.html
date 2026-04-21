@@ -1,38 +1,66 @@
+<!-- Root HTML element with Thymeleaf and Spring Security namespaces -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<!-- Injects shared <head> content from layout -->
 <head th:replace="~{layout :: head}"></head>
 
 <body>
+
+	<!-- Injects navigation bar fragment; sets StudentDashboard as active page -->
 	<div th:replace="~{layout :: nav('StudentDashboard')}"></div>
+
+	<!-- Conditional rendering: login modal shown only when user is not authenticated -->
 	<div sec:authorize="not isAuthenticated()">
-		<!-- Updated to Thymeleaf full fragment syntax -->
 		<div th:replace="~{layout :: loginModal}"></div>
 	</div>
+
 	<section class="div1">
+
+		<!-- Page title for student dashboard -->
 		<h2>Student Dashboard</h2>
 		<hr>
 		<br>
+
+		<!-- Primary navigation actions for student workflow -->
 		<div class="button-container">
-			<a th:href="@{/student/revision}" class="button">Revise</a> <a
-				th:href="@{/student/test}" class="button">Take a test</a>
+
+			<!-- Link to revision mode -->
+			<a th:href="@{/student/revision}" class="button">Revise</a>
+
+			<!-- Link to test-taking flow -->
+			<a th:href="@{/student/test}" class="button">Take a test</a>
 		</div>
+
+		<!-- Section header for historical performance data -->
 		<h2>Previous results</h2>
+
 		<table>
+
+			<!-- Table header for test history -->
 			<tr>
 				<th>Date of test</th>
 				<th>Score (%)</th>
 			</tr>
+
+			<!-- Iterates over student test history -->
 			<tr th:each="t : ${tests}">
+
+				<!-- Formatted test timestamp -->
 				<td th:text="${#temporals.format(t.testedAt, 'dd MMM yyyy HH:mm')}"></td>
+
+				<!-- Test score percentage -->
 				<td th:text="${t.score}"></td>
 			</tr>
 		</table>
 		<br>
 		<hr>
-		<!-- Updated to Thymeleaf full fragment syntax -->
+
+
+		<!-- Injects shared footer fragment -->
 		<div th:replace="~{layout :: footer}"></div>
-		<!-- Updated to Thymeleaf full fragment syntax -->
+
+		<!-- Injects shared JavaScript used across the application -->
 		<div th:replace="~{layout :: scripts}"></div>
 	</section>
 

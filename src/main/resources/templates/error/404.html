@@ -1,21 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<!-- Root HTML element with Thymeleaf and Spring Security namespaces -->
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Injects shared <head> content from layout -->
 <head th:replace="~{layout :: head}"></head>
 
 <body>
 
-<div th:replace="~{layout :: nav('Home')}"></div>
+	<!-- Injects navigation bar fragment; sets Home as active page -->
+	<div th:replace="~{layout :: nav('Home')}"></div>
 
-<section class="div2">
-    <h1>404 - Page Not Found</h1>
-    <p>Sorry, the page you were looking for does not exist.</p>
-    <a th:href="@{/}">Return to Home</a>
-    <hr>
-    <div th:replace="layout :: footer"></div>
-    <div th:replace="layout :: scripts"></div>
-</section>
+	<section class="div2">
+
+		<!-- Error heading indicating HTTP 404 (resource not found) -->
+		<h1>404 - Page Not Found</h1>
+
+		<!-- User-facing explanation for missing route -->
+		<p>Sorry, the page you were looking for does not exist.</p>
+
+		<!-- Redirect link back to application home page -->
+		<a th:href="@{/}">Return to Home</a>
+
+		<hr>
+
+		<!-- Injects shared footer fragment -->
+		<div th:replace="layout :: footer"></div>
+
+		<!-- Injects shared JavaScript used across the application -->
+		<div th:replace="layout :: scripts"></div>
+	</section>
 
 </body>
 </html>
