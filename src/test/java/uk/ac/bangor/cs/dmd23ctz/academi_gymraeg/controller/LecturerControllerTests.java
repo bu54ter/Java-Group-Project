@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Nouns;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
@@ -84,6 +85,8 @@ class LecturerControllerTests {
 
     /** Controller under test */
     private LecturerController lecturerController;
+    
+    private RedirectAttributes redirectAttributes;
 
     /**
      * Creates a new controller instance before each test.
@@ -177,7 +180,7 @@ class LecturerControllerTests {
      */
     @Test
     void deleteNoun_ShouldCallServiceAndRedirect() {
-        String viewName = lecturerController.deleteNoun(1L, authentication);
+        String viewName = lecturerController.deleteNoun(1L, authentication, redirectAttributes);
 
         assertEquals("redirect:/lecturer/dashboard", viewName);
         verify(nounService).deleteNoun(1L, authentication);
@@ -193,7 +196,7 @@ class LecturerControllerTests {
         updatedNoun.setWelshWord("ci");
         updatedNoun.setEnglishWord("dog");
 
-        String viewName = lecturerController.updateNoun(1L, updatedNoun, authentication);
+        String viewName = lecturerController.updateNoun(1L, updatedNoun, authentication, redirectAttributes);
 
         assertEquals("redirect:/lecturer/dashboard", viewName);
         verify(nounService).updateNoun(1L, updatedNoun, authentication);

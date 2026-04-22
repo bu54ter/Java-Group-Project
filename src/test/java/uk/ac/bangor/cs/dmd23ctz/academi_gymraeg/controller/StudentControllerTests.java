@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Tests;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
@@ -48,6 +49,7 @@ class StudentControllerTests {
 
     /** Controller under test */
     private StudentController studentController;
+    private RedirectAttributes redirectAttributes;
 
     /**
      * Creates a new controller instance before each test.
@@ -72,7 +74,7 @@ class StudentControllerTests {
         when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
         when(testRepository.findAllByUserId(10L)).thenReturn(Collections.emptyList());
 
-        String viewName = studentController.studentTests(model, authentication);
+        String viewName = studentController.studentTests(model, authentication, redirectAttributes);
 
         assertEquals("student/dashboard", viewName);
         verify(model).addAttribute("tests", Collections.emptyList());
@@ -89,7 +91,7 @@ class StudentControllerTests {
         when(userRepository.findByUsername("bob")).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> studentController.studentTests(model, authentication));
+                () -> studentController.studentTests(model, authentication, redirectAttributes));
 
         assertEquals("User not found", exception.getMessage());
     }

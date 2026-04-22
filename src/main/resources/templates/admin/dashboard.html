@@ -37,7 +37,7 @@
 				<th>First Name</th>
 				<th>Surname</th>
 				<th>Date Created</th>
-				<th>Reset Password</th>
+				<th>Edit User</th>
 				<th>Delete User</th>
 			</tr>
 			<!-- Iterates over active users collection provided by controller -->
@@ -49,39 +49,17 @@
 				<td th:text="${u.surname}"></td>
 				<td th:text="${u.createdAt}"></td>
 				<td>
-					<!-- Password reset form:
-					     - POST to user-specific endpoint
-					     - CSRF protected
-					     - JS handles validation and confirmation flow -->
-					<form th:action="@{/users/{id}/reset-password(id=${u.userId})}"
-						method="post" class="resetpwd"
-						onsubmit="return handleResetPasswordSubmit(this)">
-						<!-- CSRF protection token -->
-						<input type="hidden" th:name="${_csrf.parameterName}"
-							th:value="${_csrf.token}" />
-
-						<!-- Tracks whether the reset form is on the first entry or re-enter step -->
-						<input type="hidden" name="confirmStep" value="false"
-							class="confirm-step">
-
-						<!-- Temporarily stores the first password entry for front-end comparison -->
-						<input type="hidden" name="firstPasswordEntry" value=""
-							class="first-password-entry">
-
-						<div class="password-input-wrapper">
-							<!-- Password input with role metadata for validation -->
-							<input type="password" name="newPassword" required
-								class="reset-password-input"
-								th:attr="data-role=${u.role.name()}" placeholder="New password">
-							<!-- Toggles password visibility -->
-							<button type="button" class="toggle-password-btn"
-								onclick="togglePassword(this)" aria-label="Show password"
-								title="Show password">👁</button>
-						</div>
-						<!-- Submit password reset -->
-						<button type="submit" class="smlbtn reset-password-btn">Reset
-							password</button>
-					</form>
+					<!-- Edit action:
+					     - Passes user data via data-* attributes
+					     - Opens client-side edit modal -->
+					<button type="button" class="smlbtn"
+						th:attr="
+                                data-id=${u.userId},
+                                data-username=${u.username},
+                                data-role=${u.role},
+                                data-firstname=${u.firstname},
+                                data-surname=${u.surname}"
+						onclick="openEditUser(this)">Edit</button>
 				</td>
 				<td>
 					<!-- Delete user form:
@@ -141,13 +119,16 @@
 			</tr>
 		</table>
 		<hr>
-
+		<!-- Injects modal for editing users -->
+		<div th:replace="~{layout :: editUserModal}"></div>
 		<!-- Shared footer fragment -->
 		<div th:replace="~{layout :: footer}"></div>
 		<!-- Injects shared JavaScript used across the application -->
 		<div th:replace="~{layout :: scripts}"></div>
 
 	</section>
+
+
 </body>
 
 </html>

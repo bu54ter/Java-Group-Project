@@ -2,10 +2,12 @@ package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service;
 
 import java.time.LocalDateTime;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Role;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.UserDeleted;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserDeletedRepository;
@@ -28,38 +30,105 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final UserDeletedRepository userDeletedRepository;
 
-    /**
-     * Constructs a new {@code UserService} with the required dependencies.
-     *
-     * @param userRepository repository for active users
-     * @param passwordEncoder encoder used to securely hash passwords
-     * @param userDeletedRepository repository for deleted users
-     */
-	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserDeletedRepository userDeletedRepository) {
-		this.userRepository = userRepository;
-		this.passwordEncoder = passwordEncoder;
-		this.userDeletedRepository = userDeletedRepository;
-	}
-	
-    /**
-     * Resets the password for a specific user.
-     *
-     * <p>This method retrieves the user by ID, encodes the provided password,
-     * and updates the stored password in the database.</p>
-     *
-     * @param userId the unique identifier of the user whose password is to be reset
-     * @param newPassword the new raw password to encode and save
-     * @throws RuntimeException if the user cannot be found
-     */
 
-	public void resetPassword(Long userId, String newPassword) {
-		// Retrieve user from database
-		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-		// Encode and update password
-		user.setPassword(passwordEncoder.encode(newPassword));
-		// Persist updated user
-		userRepository.save(user);
-	}
+	    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserDeletedRepository userDeletedRepository) {
+	        this.userRepository = userRepository;
+	        this.passwordEncoder = passwordEncoder;
+	        this.userDeletedRepository = userDeletedRepository;
+	    }
+
+	    public void createUser(User user, String confirmPassword) {
+	        normaliseUserFields(user);
+
+	        if (user.getUsername() != null && userRepository.existsByUsername(user.getUsername())) {
+	            throw new IllegalArgumentException("Username already exists");
+	        }
+
+	        if (user.getPassword() == null || user.getPassword().isBlank()) {
+	            throw new IllegalArgumentException("Password is required");
+	        }
+
+	        if (!user.getPassword().equals(confirmPassword)) {
+	            throw new IllegalArgumentException("Passwords do not match");
+	        }
+
+	        validatePasswordLength(user.getPassword(), user.getRole());
+
+	        user.setPassword(passwordEncoder.encode(user.getPassword()));
+	        userRepository.save(user);
+	    }
+
+	    @Transactional
+	    public void updateUser(Long id, User updatedUser, String confirmPassword, Authentication authentication) {
+	        User existingUser = userRepository.findById(id)
+	                .orElseThrow(() -> new IllegalArgumentException("User not found: " + id));
+
+	        normaliseUserFields(updatedUser);
+
+	        if (updatedUser.getUsername() != null
+	                && !updatedUser.getUsername().equals(existingUser.getUsername())
+	                && userRepository.existsByUsername(updatedUser.getUsername())) {
+	            throw new IllegalArgumentException("Username already exists");
+	        }
+
+	        existingUser.setUsername(updatedUser.getUsername());
+	        existingUser.setFirstname(updatedUser.getFirstname());
+	        existingUser.setSurname(updatedUser.getSurname());
+	        existingUser.setRole(updatedUser.getRole());
+
+	        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isBlank()) {
+	            if (confirmPassword == null || !updatedUser.getPassword().equals(confirmPassword)) {
+	                throw new IllegalArgumentException("Passwords do not match");
+	            }
+
+	            validatePasswordLength(updatedUser.getPassword(), updatedUser.getRole());
+	            existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+	        }
+
+	        userRepository.save(existingUser);
+	    }
+
+	    private void normaliseUserFields(User user) {
+	        if (user.getUsername() != null) {
+	            user.setUsername(user.getUsername().trim().toLowerCase());
+	        }
+
+	        if (user.getFirstname() != null) {
+	            user.setFirstname(user.getFirstname().trim());
+	        }
+
+	        if (user.getSurname() != null) {
+	            user.setSurname(user.getSurname().trim());
+	        }
+	    }
+
+	    private void validatePasswordLength(String password, Role role) {
+	        if (role == null) {
+	            throw new IllegalArgumentException("Role is required");
+	        }
+
+	        int minLength;
+	        switch (role) {
+	        case STUDENT:
+	            minLength = 8;
+	            break;
+	        case LECTURER:
+	            minLength = 10;
+	            break;
+	        case ADMIN:
+	            minLength = 12;
+	            break;
+	        default:
+	            throw new IllegalArgumentException("Invalid role");
+	        }
+
+	        if (password.length() < minLength) {
+	            throw new IllegalArgumentException(
+	                    "Password must be at least " + minLength + " characters for this role");
+	        }
+	    }
+	
+	
     /**
      * Deletes a user by moving their data to the deleted users table (soft delete).
      *
