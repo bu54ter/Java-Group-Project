@@ -194,8 +194,9 @@ Testing is complete when:
 | ADM-005 | User Management | Verify admin can delete a user | Existing user exists | 1. Select user<br>2. Delete account | User can no longer log in | 404 Error | Failed | In issue report |  |
 | ADM-006 | Validation | Verify duplicate username or email is rejected | Existing user exists | 1. Attempt to create second user with same username/email | Validation error is shown | Creates user | Failed | Raised as an issue |  |
 | ADM-007 | Access Control | Verify only admin can create users | Lecturer or student logged in | 1. Attempt to access create user function | Access is denied | Access is denied | Passed |  |  |
-
----
+| ADM-008 | User Update | A User should be able to update all creds via admin dashbaord | Admin logged in | Open modal, edit details, confirm | Update all user fields from modal | Only user name and names update, no return of data if failed to update | Failed | _ | Edit userService to fix|
+| ADM-009 | User Update |  A User should be able to update all creds via admin dashbaord | Admin logged in | Open modal, edit details, confirm | Update all user fields from modal | All fileds updated. Password updated worked. Only reset password if new data added.| Pass | Pass | | |
+--- 
 
 ### 9.5 UI and General Behaviour
 
