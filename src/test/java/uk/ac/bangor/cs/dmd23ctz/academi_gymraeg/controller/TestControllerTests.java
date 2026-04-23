@@ -32,6 +32,7 @@ import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.AnswerService;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.QuestionService;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.TestService;
 
 /**
  * JUnit test class for {@link TestController}.
@@ -80,6 +81,9 @@ class TestControllerTests {
     /** Mock redirect attributes used for flash messages */
     @Mock
     private RedirectAttributes redirectAttributes;
+    /** Mock redirect attributes used for flash messages */
+    @Mock
+    private TestService testService;
 
     /** Controller under test */
     private TestController testController;
@@ -90,14 +94,8 @@ class TestControllerTests {
     @BeforeEach
     void setUp() {
         testController = new TestController(
-                userRepository,
-                testRepository,
-                questionService,
-                questionRepository,
-                answerRepository,
-                answerService
-        );
-    }
+                testService);
+        }
 
     /**
      * Verifies that startTest returns the resume test view

@@ -75,7 +75,7 @@ class AdminControllerTests {
      */
     @BeforeEach
     void setUp() {
-        adminController = new AdminController(userRepo, passwordEncoder, userService, userDeletedRepository);
+        adminController = new AdminController(userRepo, userService, userDeletedRepository);
     }
 
     /**
@@ -207,68 +207,6 @@ class AdminControllerTests {
         verify(userRepo, never()).save(any(User.class));
     }
 
-    /**
-     * Verifies that resetPassword returns the dashboard with an
-     * error when the selected user cannot be found.
-     */
-    @Test
-    void resetPassword_ShouldReturnDashboard_WhenUserNotFound() {
-        when(userRepo.findById(99L)).thenReturn(Optional.empty());
-        when(userRepo.findAll()).thenReturn(Collections.emptyList());
-        when(userDeletedRepository.findAll()).thenReturn(Collections.emptyList());
-
-        String viewName = adminController.resetPassword(99L, "Password12345", model, redirectAttributes);
-
-        assertEquals("admin/dashboard", viewName);
-        verify(model).addAttribute(org.mockito.ArgumentMatchers.eq("user"), org.mockito.ArgumentMatchers.any(User.class));
-        verify(model).addAttribute("users", Collections.emptyList());
-        verify(model).addAttribute("deletedUsers", Collections.emptyList());
-        verify(model).addAttribute("resetPasswordError", "User not found");
-        verify(userService, never()).resetPassword(99L, "Password12345");
-    }
-
-    /**
-     * Verifies that resetPassword returns the dashboard with an
-     * error when the new password is too short for the user role.
-     */
-    @Test
-    void resetPassword_ShouldReturnDashboard_WhenPasswordTooShort() {
-        User user = new User();
-        user.setUserId(10L);
-        user.setUsername("bob");
-        user.setRole(Role.LECTURER);
-
-        when(userRepo.findById(10L)).thenReturn(Optional.of(user));
-        when(userRepo.findAll()).thenReturn(Collections.emptyList());
-        when(userDeletedRepository.findAll()).thenReturn(Collections.emptyList());
-
-        String viewName = adminController.resetPassword(10L, "short", model, redirectAttributes);
-
-        assertEquals("admin/dashboard", viewName);
-        verify(model).addAttribute("resetPasswordError", "Password must be at least 10 characters for this role");
-        verify(userService, never()).resetPassword(10L, "short");
-    }
-
-    /**
-     * Verifies that resetPassword calls the service, adds a flash
-     * success message, and redirects to the dashboard when valid.
-     */
-    @Test
-    void resetPassword_ShouldCallServiceAndRedirect_WhenPasswordIsValid() {
-        User user = new User();
-        user.setUserId(10L);
-        user.setUsername("bob");
-        user.setRole(Role.STUDENT);
-
-        when(userRepo.findById(10L)).thenReturn(Optional.of(user));
-
-        String viewName = adminController.resetPassword(10L, "Password1", model, redirectAttributes);
-
-        assertEquals("redirect:/admin/dashboard", viewName);
-        verify(userService).resetPassword(10L, "Password1");
-        verify(redirectAttributes).addFlashAttribute("resetPasswordSuccess",
-                "Password reset successfully for user: bob");
-    }
 
     /**
      * Verifies that deleteUser redirects successfully when the

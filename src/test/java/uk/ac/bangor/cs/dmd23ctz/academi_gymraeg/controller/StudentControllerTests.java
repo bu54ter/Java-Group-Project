@@ -4,8 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +21,7 @@ import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Tests;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.StudentService;
 
 /**
  * JUnit test class for {@link StudentController}.
@@ -30,6 +33,10 @@ import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
  */
 @ExtendWith(MockitoExtension.class)
 class StudentControllerTests {
+	
+	 /** Mock repository used to retrieve user records */
+    @Mock
+    private TestRepository testRepository;
 
     /** Mock repository used to retrieve user records */
     @Mock
@@ -37,7 +44,7 @@ class StudentControllerTests {
 
     /** Mock repository used to retrieve test records */
     @Mock
-    private TestRepository testRepository;
+    private StudentService studentService;
 
     /** Mock model used to verify attributes added by the controller */
     @Mock
@@ -56,7 +63,7 @@ class StudentControllerTests {
      */
     @BeforeEach
     void setUp() {
-        studentController = new StudentController(userRepository, testRepository);
+        studentController = new StudentController(studentService);
     }
 
     /**
