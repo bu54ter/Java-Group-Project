@@ -1,36 +1,39 @@
 package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 /**
- * JUnit test class for {@link LoginUser}.
+ * Spring Boot test class for {@link LoginUser}.
  *
- * <p>This class tests that the login controller returns the correct
- * login view when the login page is requested.</p>
+ * <p>
+ * This test checks that the LoginUser controller is created by Spring and
+ * returns the correct login view name.
+ * </p>
  */
+@SpringBootTest
 class LoginUserTests {
 
     /**
-     * Controller being tested.
+     * Login controller bean created by Spring.
      */
+    @Autowired
     private LoginUser loginUser;
 
     /**
-     * Creates a fresh LoginUser controller before each test.
+     * Tests that the login controller bean is available in the application context.
      */
-    @BeforeEach
-    void setUp() {
-        loginUser = new LoginUser();
+    @Test
+    void loginUser_ShouldBeAvailable() {
+        assertNotNull(loginUser);
     }
 
     /**
      * Tests that the login method returns the login view.
-     *
-     * <p>The controller should return "login" so that Spring MVC loads
-     * the login.html Thymeleaf template.</p>
      */
     @Test
     void login_ShouldReturnLoginView() {
