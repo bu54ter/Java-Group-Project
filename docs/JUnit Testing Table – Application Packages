@@ -1,0 +1,277 @@
+# JUnit Testing Table – Application Packages
+
+## 1. Document Control
+
+**Document Title:**  
+JUnit Testing Table – Application Packages
+
+**Prepared By:**  
+Phil Bamber
+
+**Reviewed By:**  
+[Name]
+
+**Approved By:**  
+[A Dooley]
+
+**Date:**  
+25/04/2026
+
+## 2. Test Summary
+
+**Purpose:**  
+To record the JUnit testing carried out across the application packages completed so far.
+
+**Scope:**  
+This testing covered:
+
+- Spring Boot application context loading
+- MessageSource bean availability
+- LocalValidatorFactoryBean availability
+- PasswordEncoder bean availability
+- AdminController bean creation
+- HomeController bean creation
+- LecturerController bean creation
+- LoginUser bean creation
+- LoginUser login view return behaviour
+- ResultsController bean creation
+- RevisionController bean creation
+- StudentController bean creation
+- TestController bean creation
+- Answers model getter and setter behaviour
+- Gender enum value checks
+- Nouns model getter and setter behaviour
+- NounsDeleted model getter and setter behaviour
+- Questions model getter and setter behaviour
+- QuestionType enum value checks
+- Role enum value checks
+- Tests model getter, setter, default value, and relationship behaviour
+- User model getter, setter, default value, and authority behaviour
+- UserDeleted model getter and setter behaviour
+
+**Not Yet Covered in This Version:**
+
+- Security package testing
+- Service package testing
+- Repository package testing
+
+**Out of Scope:**
+
+- Browser-based testing
+- Thymeleaf template rendering
+- Full form submission testing
+- Full end-to-end user journey testing
+- Live database testing
+
+**Test Type:**  
+JUnit Testing
+
+**Environment:**  
+Development
+
+**Test Window:**  
+April 2026
+
+## 3. System Overview
+
+This document records the JUnit testing completed so far within the Academi Gymraeg application. The tests were created under the `src/test/java` directory and were executed using Eclipse with **Run As > JUnit Test**.
+
+The application test checked that the Spring Boot application context loaded correctly and that selected application beans were available. The controller tests checked that selected controller classes were detected and created successfully by the Spring application context. The LoginUser controller was also tested to confirm that the login method returned the expected login view name.
+
+The model tests checked that selected model classes stored and returned field values correctly through getter and setter methods. The tests also checked enum values, default values, and simple object relationships, such as adding a question to a test and confirming that the question referenced the same test.
+
+Additional package sections will be added later after the security, service, and repository tests have been reviewed and executed.
+
+## 4. Preconditions
+
+Before testing began, the following were confirmed:
+
+- The project compiled successfully
+- The application test structure under `src/test/java` was available
+- JUnit was available in the project
+- Spring Boot test support was available in the project
+- The selected test classes had been created successfully
+- The tests could be executed in Eclipse using **Run As > JUnit Test**
+
+## 5. Entry Criteria
+
+Testing started only when:
+
+- The latest code changes had been saved
+- The project showed no blocking compile errors
+- The test classes were present in the correct test packages
+- The relevant source classes compiled without error
+
+## 6. Exit Criteria
+
+Testing was considered complete when:
+
+- All planned JUnit test methods had been executed
+- All failed tests had either been corrected or recorded
+- A final pass or fail outcome could be recorded
+
+## 7. Roles and Responsibilities
+
+| Role | Name | Responsibility |
+|---|---|---|
+| Test Owner | Phil Bamber | Created and executed JUnit tests and recorded results |
+| Reviewer | [Name] | Reviewed testing outcome |
+
+## 8. Test Cases
+
+This section records the JUnit testing completed so far.
+
+---
+
+## 8.1 Application Class
+
+| Test ID | Class Under Test | Test Method | Description | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|---|
+| JUT-APP-001 | AcademiGymraegApplication.java | contextLoads | Verify that the Spring Boot application context loads successfully | Application context loads without error | Application context loaded successfully | Passed |
+| JUT-APP-002 | AcademiGymraegApplication.java | messageSource_ShouldBeAvailable | Verify that the MessageSource bean is available | MessageSource bean is not null | MessageSource bean was available | Passed |
+| JUT-APP-003 | AcademiGymraegApplication.java | validator_ShouldBeAvailable | Verify that the validator bean is available | LocalValidatorFactoryBean is not null | Validator bean was available | Passed |
+| JUT-APP-004 | AcademiGymraegApplication.java | passwordEncoder_ShouldEncodePassword | Verify that the password encoder bean is available and can encode a password | Encoded password is created and is not empty | Password was encoded successfully | Passed |
+
+---
+
+## 8.2 Controller Package
+
+| Test ID | Class Under Test | Test Method | Description | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|---|
+| JUT-CON-001 | AdminController.java | adminController_ShouldBeAvailable | Verify that AdminController is created by the Spring application context | AdminController bean is not null | AdminController bean was available | Passed |
+| JUT-CON-002 | HomeController.java | homeController_ShouldBeAvailable | Verify that HomeController is created by the Spring application context | HomeController bean is not null | HomeController bean was available | Passed |
+| JUT-CON-003 | LecturerController.java | lecturerController_ShouldBeAvailable | Verify that LecturerController is created by the Spring application context | LecturerController bean is not null | LecturerController bean was available | Passed |
+| JUT-CON-004 | LoginUser.java | loginUser_ShouldBeAvailable | Verify that LoginUser controller is created by the Spring application context | LoginUser bean is not null | LoginUser bean was available | Passed |
+| JUT-CON-005 | LoginUser.java | login_ShouldReturnLoginView | Verify that the login method returns the correct login view name | The method returns `login` | `login` was returned | Passed |
+| JUT-CON-006 | ResultsController.java | resultsController_ShouldBeAvailable | Verify that ResultsController is created by the Spring application context | ResultsController bean is not null | ResultsController bean was available | Passed |
+| JUT-CON-007 | RevisionController.java | revisionController_ShouldBeAvailable | Verify that RevisionController is created by the Spring application context | RevisionController bean is not null | RevisionController bean was available | Passed |
+| JUT-CON-008 | StudentController.java | studentController_ShouldBeAvailable | Verify that StudentController is created by the Spring application context | StudentController bean is not null | StudentController bean was available | Passed |
+| JUT-CON-009 | TestController.java | testController_ShouldBeAvailable | Verify that TestController is created by the Spring application context | TestController bean is not null | TestController bean was available | Passed |
+
+---
+
+## 8.3 Model Package
+
+| Test ID | Class Under Test | Test Method | Description | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|---|
+| JUT-MOD-001 | Answers.java | answerIdGetterAndSetter_ShouldStoreAnswerId | Verify that the answer ID can be set and retrieved | Getter returns the same answer ID | Answer ID was returned correctly | Passed |
+| JUT-MOD-002 | Answers.java | questionGetterAndSetter_ShouldStoreQuestion | Verify that the question object can be set and retrieved | Getter returns the same question object | Question object was returned correctly | Passed |
+| JUT-MOD-003 | Answers.java | userAnswerGetterAndSetter_ShouldStoreUserAnswer | Verify that the user answer can be set and retrieved | Getter returns the same user answer | User answer was returned correctly | Passed |
+| JUT-MOD-004 | Answers.java | correct_ShouldBeFalseByDefault | Verify that the correct value is false by default | Correct value is false | Correct value was false | Passed |
+| JUT-MOD-005 | Answers.java | correctGetterAndSetter_ShouldStoreTrueValue | Verify that the correct value can be set to true | Getter returns true | True value was returned correctly | Passed |
+| JUT-MOD-006 | Answers.java | correctGetterAndSetter_ShouldStoreFalseValue | Verify that the correct value can be set to false | Getter returns false | False value was returned correctly | Passed |
+| JUT-MOD-007 | Gender.java | genderValues_ShouldContainTwoValues | Verify that the Gender enum contains two values | Enum contains 2 values | Gender enum contained 2 values | Passed |
+| JUT-MOD-008 | Gender.java | genderValues_ShouldContainMasculine | Verify that MASCULINE exists in the Gender enum | MASCULINE value is returned | MASCULINE was returned | Passed |
+| JUT-MOD-009 | Gender.java | genderValues_ShouldContainFeminine | Verify that FEMININE exists in the Gender enum | FEMININE value is returned | FEMININE was returned | Passed |
+| JUT-MOD-010 | Nouns.java | nounIdGetterAndSetter_ShouldStoreNounId | Verify that the noun ID can be set and retrieved | Getter returns the same noun ID | Noun ID was returned correctly | Passed |
+| JUT-MOD-011 | Nouns.java | welshWordGetterAndSetter_ShouldStoreWelshWord | Verify that the Welsh word can be set and retrieved | Getter returns the same Welsh word | Welsh word was returned correctly | Passed |
+| JUT-MOD-012 | Nouns.java | englishWordGetterAndSetter_ShouldStoreEnglishWord | Verify that the English word can be set and retrieved | Getter returns the same English word | English word was returned correctly | Passed |
+| JUT-MOD-013 | Nouns.java | welshSentGetterAndSetter_ShouldStoreWelshSentence | Verify that the Welsh sentence can be set and retrieved | Getter returns the same Welsh sentence | Welsh sentence was returned correctly | Passed |
+| JUT-MOD-014 | Nouns.java | englishSentGetterAndSetter_ShouldStoreEnglishSentence | Verify that the English sentence can be set and retrieved | Getter returns the same English sentence | English sentence was returned correctly | Passed |
+| JUT-MOD-015 | Nouns.java | createdByGetterAndSetter_ShouldStoreCreatedBy | Verify that the created by value can be set and retrieved | Getter returns the same created by value | Created by value was returned correctly | Passed |
+| JUT-MOD-016 | Nouns.java | createdAtGetterAndSetter_ShouldStoreCreatedAt | Verify that the created at value can be set and retrieved | Getter returns the same date and time | Created at value was returned correctly | Passed |
+| JUT-MOD-017 | Nouns.java | editedByGetterAndSetter_ShouldStoreEditedBy | Verify that the edited by value can be set and retrieved | Getter returns the same edited by value | Edited by value was returned correctly | Passed |
+| JUT-MOD-018 | Nouns.java | genderGetterAndSetter_ShouldStoreGender | Verify that the gender value can be set and retrieved | Getter returns the same gender | Gender value was returned correctly | Passed |
+| JUT-MOD-019 | Nouns.java | questionsList_ShouldBeInitialised | Verify that the questions list is initialised by default | Questions list is not null | Questions list was initialised | Passed |
+| JUT-MOD-020 | Nouns.java | questionsGetterAndSetter_ShouldStoreQuestionsList | Verify that the questions list can be set and retrieved | Getter returns the same questions list | Questions list was returned correctly | Passed |
+| JUT-MOD-021 | NounsDeleted.java | nounIdGetterAndSetter_ShouldStoreNounId | Verify that the deleted noun ID can be set and retrieved | Getter returns the same noun ID | Noun ID was returned correctly | Passed |
+| JUT-MOD-022 | NounsDeleted.java | welshWordGetterAndSetter_ShouldStoreWelshWord | Verify that the Welsh word can be set and retrieved | Getter returns the same Welsh word | Welsh word was returned correctly | Passed |
+| JUT-MOD-023 | NounsDeleted.java | englishWordGetterAndSetter_ShouldStoreEnglishWord | Verify that the English word can be set and retrieved | Getter returns the same English word | English word was returned correctly | Passed |
+| JUT-MOD-024 | NounsDeleted.java | welshSentGetterAndSetter_ShouldStoreWelshSentence | Verify that the Welsh sentence can be set and retrieved | Getter returns the same Welsh sentence | Welsh sentence was returned correctly | Passed |
+| JUT-MOD-025 | NounsDeleted.java | englishSentGetterAndSetter_ShouldStoreEnglishSentence | Verify that the English sentence can be set and retrieved | Getter returns the same English sentence | English sentence was returned correctly | Passed |
+| JUT-MOD-026 | NounsDeleted.java | createdByGetterAndSetter_ShouldStoreCreatedBy | Verify that the created by value can be set and retrieved | Getter returns the same created by value | Created by value was returned correctly | Passed |
+| JUT-MOD-027 | NounsDeleted.java | createdAtGetterAndSetter_ShouldStoreCreatedAt | Verify that the created at value can be set and retrieved | Getter returns the same date and time | Created at value was returned correctly | Passed |
+| JUT-MOD-028 | NounsDeleted.java | deletedByGetterAndSetter_ShouldStoreDeletedBy | Verify that the deleted by value can be set and retrieved | Getter returns the same deleted by value | Deleted by value was returned correctly | Passed |
+| JUT-MOD-029 | NounsDeleted.java | deletedAtGetterAndSetter_ShouldStoreDeletedAt | Verify that the deleted at value can be set and retrieved | Getter returns the same date and time | Deleted at value was returned correctly | Passed |
+| JUT-MOD-030 | NounsDeleted.java | genderGetterAndSetter_ShouldStoreGender | Verify that the gender value can be set and retrieved | Getter returns the same gender | Gender value was returned correctly | Passed |
+| JUT-MOD-031 | Questions.java | questionIdGetterAndSetter_ShouldStoreQuestionId | Verify that the question ID can be set and retrieved | Getter returns the same question ID | Question ID was returned correctly | Passed |
+| JUT-MOD-032 | Questions.java | testGetterAndSetter_ShouldStoreTest | Verify that the test object can be set and retrieved | Getter returns the same test object | Test object was returned correctly | Passed |
+| JUT-MOD-033 | Questions.java | nounGetterAndSetter_ShouldStoreNoun | Verify that the noun object can be set and retrieved | Getter returns the same noun object | Noun object was returned correctly | Passed |
+| JUT-MOD-034 | Questions.java | questionTypeGetterAndSetter_ShouldStoreQuestionType | Verify that the question type can be set and retrieved | Getter returns the same question type | Question type was returned correctly | Passed |
+| JUT-MOD-035 | QuestionType.java | questionTypeValues_ShouldContainThreeValues | Verify that the QuestionType enum contains three values | Enum contains 3 values | QuestionType enum contained 3 values | Passed |
+| JUT-MOD-036 | QuestionType.java | questionTypeValues_ShouldContainGender | Verify that GENDER exists in the QuestionType enum | GENDER value is returned | GENDER was returned | Passed |
+| JUT-MOD-037 | QuestionType.java | questionTypeValues_ShouldContainMeaning | Verify that MEANING exists in the QuestionType enum | MEANING value is returned | MEANING was returned | Passed |
+| JUT-MOD-038 | QuestionType.java | questionTypeValues_ShouldContainTranslate | Verify that TRANSLATE exists in the QuestionType enum | TRANSLATE value is returned | TRANSLATE was returned | Passed |
+| JUT-MOD-039 | Role.java | roleValues_ShouldContainThreeValues | Verify that the Role enum contains three values | Enum contains 3 values | Role enum contained 3 values | Passed |
+| JUT-MOD-040 | Role.java | roleValues_ShouldContainAdmin | Verify that ADMIN exists in the Role enum | ADMIN value is returned | ADMIN was returned | Passed |
+| JUT-MOD-041 | Role.java | roleValues_ShouldContainLecturer | Verify that LECTURER exists in the Role enum | LECTURER value is returned | LECTURER was returned | Passed |
+| JUT-MOD-042 | Role.java | roleValues_ShouldContainStudent | Verify that STUDENT exists in the Role enum | STUDENT value is returned | STUDENT was returned | Passed |
+| JUT-MOD-043 | Tests.java | testIdGetterAndSetter_ShouldStoreTestId | Verify that the test ID can be set and retrieved | Getter returns the same test ID | Test ID was returned correctly | Passed |
+| JUT-MOD-044 | Tests.java | userIdGetterAndSetter_ShouldStoreUserId | Verify that the user ID can be set and retrieved | Getter returns the same user ID | User ID was returned correctly | Passed |
+| JUT-MOD-045 | Tests.java | testedAtGetterAndSetter_ShouldStoreTestedAt | Verify that the tested at value can be set and retrieved | Getter returns the same date and time | Tested at value was returned correctly | Passed |
+| JUT-MOD-046 | Tests.java | scoreGetterAndSetter_ShouldStoreScore | Verify that the score can be set and retrieved | Getter returns the same score | Score was returned correctly | Passed |
+| JUT-MOD-047 | Tests.java | submitted_ShouldBeFalseByDefault | Verify that submitted is false by default | Submitted is false | Submitted was false | Passed |
+| JUT-MOD-048 | Tests.java | submittedGetterAndSetter_ShouldStoreTrueValue | Verify that submitted can be set to true | Getter returns true | True value was returned correctly | Passed |
+| JUT-MOD-049 | Tests.java | submittedGetterAndSetter_ShouldStoreFalseValue | Verify that submitted can be set to false | Getter returns false | False value was returned correctly | Passed |
+| JUT-MOD-050 | Tests.java | questionsList_ShouldBeInitialised | Verify that the questions list is initialised by default | Questions list is not null | Questions list was initialised | Passed |
+| JUT-MOD-051 | Tests.java | questionsGetterAndSetter_ShouldStoreQuestionsList | Verify that the questions list can be set and retrieved | Getter returns the same questions list | Questions list was returned correctly | Passed |
+| JUT-MOD-052 | Tests.java | addQuestion_ShouldAddQuestionToList | Verify that addQuestion adds a question to the list | Question list contains the added question | Question was added correctly | Passed |
+| JUT-MOD-053 | Tests.java | addQuestion_ShouldSetQuestionTestReference | Verify that addQuestion sets the question test reference | Question references the same test object | Back reference was set correctly | Passed |
+| JUT-MOD-054 | User.java | userIdGetterAndSetter_ShouldStoreUserId | Verify that the user ID can be set and retrieved | Getter returns the same user ID | User ID was returned correctly | Passed |
+| JUT-MOD-055 | User.java | usernameGetterAndSetter_ShouldStoreUsername | Verify that the username can be set and retrieved | Getter returns the same username | Username was returned correctly | Passed |
+| JUT-MOD-056 | User.java | passwordGetterAndSetter_ShouldStorePassword | Verify that the password can be set and retrieved | Getter returns the same password | Password was returned correctly | Passed |
+| JUT-MOD-057 | User.java | firstnameGetterAndSetter_ShouldStoreFirstname | Verify that the first name can be set and retrieved | Getter returns the same first name | First name was returned correctly | Passed |
+| JUT-MOD-058 | User.java | surnameGetterAndSetter_ShouldStoreSurname | Verify that the surname can be set and retrieved | Getter returns the same surname | Surname was returned correctly | Passed |
+| JUT-MOD-059 | User.java | roleGetterAndSetter_ShouldStoreRole | Verify that the role can be set and retrieved | Getter returns the same role | Role was returned correctly | Passed |
+| JUT-MOD-060 | User.java | createdAtGetterAndSetter_ShouldStoreCreatedAt | Verify that the created at value can be set and retrieved | Getter returns the same date and time | Created at value was returned correctly | Passed |
+| JUT-MOD-061 | User.java | currentStreak_ShouldBeZeroByDefault | Verify that current streak is zero by default | Current streak is 0 | Current streak was 0 | Passed |
+| JUT-MOD-062 | User.java | currentStreakGetterAndSetter_ShouldStoreCurrentStreak | Verify that current streak can be set and retrieved | Getter returns the same current streak | Current streak was returned correctly | Passed |
+| JUT-MOD-063 | User.java | bestStreak_ShouldBeZeroByDefault | Verify that best streak is zero by default | Best streak is 0 | Best streak was 0 | Passed |
+| JUT-MOD-064 | User.java | bestStreakGetterAndSetter_ShouldStoreBestStreak | Verify that best streak can be set and retrieved | Getter returns the same best streak | Best streak was returned correctly | Passed |
+| JUT-MOD-065 | User.java | lastTestDate_ShouldBeNullByDefault | Verify that last test date is null by default | Last test date is null | Last test date was null | Passed |
+| JUT-MOD-066 | User.java | lastTestDateGetterAndSetter_ShouldStoreLastTestDate | Verify that last test date can be set and retrieved | Getter returns the same date | Last test date was returned correctly | Passed |
+| JUT-MOD-067 | User.java | getAuthorities_ShouldReturnAuthorities_WhenRoleIsSet | Verify that authorities are returned when a role is set | Authorities collection is not null and contains one authority | Authority collection was returned correctly | Passed |
+| JUT-MOD-068 | User.java | getAuthorities_ShouldReturnAdminAuthority_WhenRoleIsAdmin | Verify that ADMIN role returns ROLE_ADMIN authority | ROLE_ADMIN is returned | ROLE_ADMIN was returned | Passed |
+| JUT-MOD-069 | User.java | getAuthorities_ShouldReturnStudentAuthority_WhenRoleIsStudent | Verify that STUDENT role returns ROLE_STUDENT authority | ROLE_STUDENT is returned | ROLE_STUDENT was returned | Passed |
+| JUT-MOD-070 | User.java | getAuthorities_ShouldReturnEmptyCollection_WhenRoleIsNull | Verify that no authorities are returned when role is null | Authorities collection is empty | Authorities collection was empty | Passed |
+| JUT-MOD-071 | UserDeleted.java | userIdGetterAndSetter_ShouldStoreUserId | Verify that the deleted user ID can be set and retrieved | Getter returns the same user ID | User ID was returned correctly | Passed |
+| JUT-MOD-072 | UserDeleted.java | usernameGetterAndSetter_ShouldStoreUsername | Verify that the username can be set and retrieved | Getter returns the same username | Username was returned correctly | Passed |
+| JUT-MOD-073 | UserDeleted.java | firstnameGetterAndSetter_ShouldStoreFirstname | Verify that the first name can be set and retrieved | Getter returns the same first name | First name was returned correctly | Passed |
+| JUT-MOD-074 | UserDeleted.java | surnameGetterAndSetter_ShouldStoreSurname | Verify that the surname can be set and retrieved | Getter returns the same surname | Surname was returned correctly | Passed |
+| JUT-MOD-075 | UserDeleted.java | roleGetterAndSetter_ShouldStoreRole | Verify that the role can be set and retrieved | Getter returns the same role | Role was returned correctly | Passed |
+| JUT-MOD-076 | UserDeleted.java | passwordGetterAndSetter_ShouldStorePassword | Verify that the password can be set and retrieved | Getter returns the same password | Password was returned correctly | Passed |
+| JUT-MOD-077 | UserDeleted.java | deletedAtGetterAndSetter_ShouldStoreDeletedAt | Verify that the deleted at value can be set and retrieved | Getter returns the same date and time | Deleted at value was returned correctly | Passed |
+| JUT-MOD-078 | UserDeleted.java | createdAtGetterAndSetter_ShouldStoreCreatedAt | Verify that the created at value can be set and retrieved | Getter returns the same date and time | Created at value was returned correctly | Passed |
+
+## 9. Defects and Issues Log
+
+| Issue ID | Description | Severity | Impact | Raised By | Date Raised | Owner | Status | Resolution |
+|---|---|---|---|---|---|---|---|---|
+| None | No defects were identified during the recorded JUnit tests | N/A | N/A | Phil Bamber | 25/04/2026 | [Name] | Closed | No action required |
+
+## 10. Test Outcome Summary
+
+**Total Test Cases:**  
+91
+
+**Passed:**  
+91
+
+**Failed:**  
+0
+
+**Blocked:**  
+0
+
+**Overall Result:**  
+Pass
+
+**Summary Notes:**  
+JUnit testing confirmed that the Spring Boot application context loaded successfully and that selected application beans were available. The controller package tests confirmed that the selected controller classes were created successfully by the Spring application context. The LoginUser controller was also tested to confirm that the login method returned the expected `login` view name.
+
+Model package testing confirmed that the selected model classes stored and returned field values correctly through getter and setter methods. The tests also confirmed enum values, default values, and simple object relationships, including the relationship between Tests and Questions objects.
+
+## 11. Recommendation
+
+**Recommendation:**  
+Accept
+
+**Reason:**  
+The recorded JUnit tests passed successfully and confirmed that the selected application, controller, and model classes behaved as expected within the scope of the completed tests.
+
+## 12. Sign-Off
+
+| Name | Role | Decision | Date |
+|---|---|---|---|
+| Phil Bamber | Test Owner | Approved | 25/04/2026 |
+| [Name] | Reviewer | Pending | [DD/MM/YYYY] |
