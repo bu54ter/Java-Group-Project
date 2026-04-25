@@ -4,159 +4,232 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
 
-public class UserTest {
+/**
+ * JUnit test class for {@link User}.
+ *
+ * <p>This class tests the basic getter and setter methods for the User
+ * model class, including user details, role, creation timestamp, streak
+ * fields, and Spring Security authorities.</p>
+ */
+class UserTest {
 
+    /**
+     * Tests that the user ID can be set and retrieved correctly.
+     */
     @Test
-    public void testUserIdGetterAndSetter() {
-        // Create a new User object
+    void userIdGetterAndSetter_ShouldStoreUserId() {
         User user = new User();
 
-        // Set the user ID
         user.setUserId(1L);
 
-        // Check the getter returns the same ID
         assertEquals(1L, user.getUserId());
     }
 
+    /**
+     * Tests that the username can be set and retrieved correctly.
+     */
     @Test
-    public void testUsernameGetterAndSetter() {
-        // Create a new User object
+    void usernameGetterAndSetter_ShouldStoreUsername() {
         User user = new User();
 
-        // Set the username
         user.setUsername("phil");
 
-        // Check the getter returns the same username
         assertEquals("phil", user.getUsername());
     }
 
+    /**
+     * Tests that the password can be set and retrieved correctly.
+     */
     @Test
-    public void testPasswordGetterAndSetter() {
-        // Create a new User object
+    void passwordGetterAndSetter_ShouldStorePassword() {
         User user = new User();
 
-        // Set the password
         user.setPassword("Password123");
 
-        // Check the getter returns the same password
         assertEquals("Password123", user.getPassword());
     }
 
+    /**
+     * Tests that the first name can be set and retrieved correctly.
+     */
     @Test
-    public void testFirstnameGetterAndSetter() {
-        // Create a new User object
+    void firstnameGetterAndSetter_ShouldStoreFirstname() {
         User user = new User();
 
-        // Set the first name
         user.setFirstname("Phil");
 
-        // Check the getter returns the same first name
         assertEquals("Phil", user.getFirstname());
     }
 
+    /**
+     * Tests that the surname can be set and retrieved correctly.
+     */
     @Test
-    public void testSurnameGetterAndSetter() {
-        // Create a new User object
+    void surnameGetterAndSetter_ShouldStoreSurname() {
         User user = new User();
 
-        // Set the surname
         user.setSurname("Bamber");
 
-        // Check the getter returns the same surname
         assertEquals("Bamber", user.getSurname());
     }
 
+    /**
+     * Tests that the role can be set and retrieved correctly.
+     */
     @Test
-    public void testRoleGetterAndSetter() {
-        // Create a new User object
+    void roleGetterAndSetter_ShouldStoreRole() {
         User user = new User();
 
-        // Set the role
         user.setRole(Role.ADMIN);
 
-        // Check the getter returns the same role
         assertEquals(Role.ADMIN, user.getRole());
     }
 
+    /**
+     * Tests that the createdAt timestamp can be set and retrieved correctly.
+     */
     @Test
-    public void testCreatedAtGetterAndSetter() {
-        // Create a new User object
+    void createdAtGetterAndSetter_ShouldStoreCreatedAt() {
         User user = new User();
-
-        // Set the created date and time
         LocalDateTime now = LocalDateTime.now();
+
         user.setCreatedAt(now);
 
-        // Check the getter returns the same date and time
         assertEquals(now, user.getCreatedAt());
     }
 
+    /**
+     * Tests that the current streak default value is zero.
+     */
     @Test
-    public void testAuthoritiesAreNotNull() {
-        // Create a new User object
+    void currentStreak_ShouldDefaultToZero() {
         User user = new User();
 
-        // Set a role so authorities can be created
+        assertEquals(0, user.getCurrentStreak());
+    }
+
+    /**
+     * Tests that the current streak can be set and retrieved correctly.
+     */
+    @Test
+    void currentStreakGetterAndSetter_ShouldStoreCurrentStreak() {
+        User user = new User();
+
+        user.setCurrentStreak(5);
+
+        assertEquals(5, user.getCurrentStreak());
+    }
+
+    /**
+     * Tests that the best streak default value is zero.
+     */
+    @Test
+    void bestStreak_ShouldDefaultToZero() {
+        User user = new User();
+
+        assertEquals(0, user.getBestStreak());
+    }
+
+    /**
+     * Tests that the best streak can be set and retrieved correctly.
+     */
+    @Test
+    void bestStreakGetterAndSetter_ShouldStoreBestStreak() {
+        User user = new User();
+
+        user.setBestStreak(10);
+
+        assertEquals(10, user.getBestStreak());
+    }
+
+    /**
+     * Tests that the last test date can be set and retrieved correctly.
+     */
+    @Test
+    void lastTestDateGetterAndSetter_ShouldStoreLastTestDate() {
+        User user = new User();
+        LocalDate today = LocalDate.now();
+
+        user.setLastTestDate(today);
+
+        assertEquals(today, user.getLastTestDate());
+    }
+
+    /**
+     * Tests that authorities are not null when a role is set.
+     */
+    @Test
+    void authorities_ShouldNotBeNull_WhenRoleIsSet() {
+        User user = new User();
+
         user.setRole(Role.ADMIN);
 
-        // Get the authorities
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
-        // Check the authorities collection is not null
         assertNotNull(authorities);
     }
 
+    /**
+     * Tests that the ADMIN role creates the ROLE_ADMIN authority.
+     */
     @Test
-    public void testAdminAuthorityIsReturned() {
-        // Create a new User object
+    void getAuthorities_ShouldReturnRoleAdmin_WhenRoleIsAdmin() {
         User user = new User();
 
-        // Set the role to ADMIN
         user.setRole(Role.ADMIN);
 
-        // Get the authorities
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
-        // Check there is one authority
         assertEquals(1, authorities.size());
-
-        // Check the authority is ROLE_ADMIN
         assertEquals("ROLE_ADMIN", authorities.iterator().next().getAuthority());
     }
 
+    /**
+     * Tests that the LECTURER role creates the ROLE_LECTURER authority.
+     */
     @Test
-    public void testStudentAuthorityIsReturned() {
-        // Create a new User object
+    void getAuthorities_ShouldReturnRoleLecturer_WhenRoleIsLecturer() {
         User user = new User();
 
-        // Set the role to STUDENT
-        user.setRole(Role.STUDENT);
+        user.setRole(Role.LECTURER);
 
-        // Get the authorities
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
-        // Check there is one authority
         assertEquals(1, authorities.size());
+        assertEquals("ROLE_LECTURER", authorities.iterator().next().getAuthority());
+    }
 
-        // Check the authority is ROLE_STUDENT
+    /**
+     * Tests that the STUDENT role creates the ROLE_STUDENT authority.
+     */
+    @Test
+    void getAuthorities_ShouldReturnRoleStudent_WhenRoleIsStudent() {
+        User user = new User();
+
+        user.setRole(Role.STUDENT);
+
+        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+
+        assertEquals(1, authorities.size());
         assertEquals("ROLE_STUDENT", authorities.iterator().next().getAuthority());
     }
 
+    /**
+     * Tests that no authorities are returned when no role has been set.
+     */
     @Test
-    public void testAuthoritiesAreEmptyWhenRoleIsNull() {
-        // Create a new User object
+    void getAuthorities_ShouldReturnEmptyCollection_WhenRoleIsNull() {
         User user = new User();
 
-        // Get the authorities without setting a role
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
-        // Check the authorities collection is empty
         assertTrue(authorities.isEmpty());
     }
 }

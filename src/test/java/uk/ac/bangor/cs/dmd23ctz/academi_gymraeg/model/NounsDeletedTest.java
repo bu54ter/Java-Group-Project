@@ -6,127 +6,134 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
-public class NounsDeletedTest {
+/**
+ * JUnit test class for {@link NounsDeleted}.
+ *
+ * <p>This class tests the basic getter and setter methods for the
+ * NounsDeleted model class, including noun details, example sentences,
+ * creation audit data, deletion audit data, and gender.</p>
+ */
+class NounsDeletedTest {
 
+    /**
+     * Tests that the deleted noun ID can be set and retrieved correctly.
+     */
     @Test
-    public void testNounIdGetterAndSetter() {
-        // Create a new NounsDeleted object
+    void nounIdGetterAndSetter_ShouldStoreNounId() {
         NounsDeleted noun = new NounsDeleted();
 
-        // Set the noun ID
         noun.setNounId(1L);
 
-        // Check the getter returns the same ID
         assertEquals(1L, noun.getNounId());
     }
 
+    /**
+     * Tests that the Welsh word can be set and retrieved correctly.
+     */
     @Test
-    public void testWelshWordGetterAndSetter() {
-        // Create a new NounsDeleted object
+    void welshWordGetterAndSetter_ShouldStoreWelshWord() {
         NounsDeleted noun = new NounsDeleted();
 
-        // Set the Welsh word
         noun.setWelshWord("cath");
 
-        // Check the getter returns the same word
         assertEquals("cath", noun.getWelshWord());
     }
 
+    /**
+     * Tests that the English word can be set and retrieved correctly.
+     */
     @Test
-    public void testEnglishWordGetterAndSetter() {
-        // Create a new NounsDeleted object
+    void englishWordGetterAndSetter_ShouldStoreEnglishWord() {
         NounsDeleted noun = new NounsDeleted();
 
-        // Set the English word
         noun.setEnglishWord("cat");
 
-        // Check the getter returns the same word
         assertEquals("cat", noun.getEnglishWord());
     }
 
+    /**
+     * Tests that the Welsh example sentence can be set and retrieved correctly.
+     */
     @Test
-    public void testWelshSentGetterAndSetter() {
-        // Create a new NounsDeleted object
+    void welshSentGetterAndSetter_ShouldStoreWelshSentence() {
         NounsDeleted noun = new NounsDeleted();
 
-        // Set the Welsh sentence
         noun.setWelshSent("Mae gen i gath.");
 
-        // Check the getter returns the same sentence
         assertEquals("Mae gen i gath.", noun.getWelshSent());
     }
 
+    /**
+     * Tests that the English example sentence can be set and retrieved correctly.
+     */
     @Test
-    public void testEnglishSentGetterAndSetter() {
-        // Create a new NounsDeleted object
+    void englishSentGetterAndSetter_ShouldStoreEnglishSentence() {
         NounsDeleted noun = new NounsDeleted();
 
-        // Set the English sentence
         noun.setEnglishSent("I have a cat.");
 
-        // Check the getter returns the same sentence
         assertEquals("I have a cat.", noun.getEnglishSent());
     }
 
+    /**
+     * Tests that the createdBy audit field can be set and retrieved correctly.
+     */
     @Test
-    public void testCreatedByGetterAndSetter() {
-        // Create a new NounsDeleted object
+    void createdByGetterAndSetter_ShouldStoreCreatedBy() {
         NounsDeleted noun = new NounsDeleted();
 
-        // Set who created the noun
         noun.setCreatedBy("phil");
 
-        // Check the getter returns the same value
         assertEquals("phil", noun.getCreatedBy());
     }
 
+    /**
+     * Tests that the createdAt audit field can be set and retrieved correctly.
+     */
     @Test
-    public void testCreatedAtGetterAndSetter() {
-        // Create a new NounsDeleted object
+    void createdAtGetterAndSetter_ShouldStoreCreatedAt() {
         NounsDeleted noun = new NounsDeleted();
+        LocalDateTime createdAt = LocalDateTime.now();
 
-        // Set the created date and time
-        LocalDateTime now = LocalDateTime.now();
-        noun.setCreatedAt(now);
+        noun.setCreatedAt(createdAt);
 
-        // Check the getter returns the same date and time
-        assertEquals(now, noun.getCreatedAt());
+        assertEquals(createdAt, noun.getCreatedAt());
     }
 
+    /**
+     * Tests that the deletedBy audit field can be set and retrieved correctly.
+     */
     @Test
-    public void testDeletedByGetterAndSetter() {
-        // Create a new NounsDeleted object
+    void deletedByGetterAndSetter_ShouldStoreDeletedBy() {
         NounsDeleted noun = new NounsDeleted();
 
-        // Set who deleted the noun
-        noun.setDeletedBy("phil");
+        noun.setDeletedBy("lecturer1");
 
-        // Check the getter returns the same value
-        assertEquals("phil", noun.getDeletedBy());
+        assertEquals("lecturer1", noun.getDeletedBy());
     }
 
+    /**
+     * Tests that the deletedAt audit field can be set and retrieved correctly.
+     */
     @Test
-    public void testDeletedAtGetterAndSetter() {
-        // Create a new NounsDeleted object
+    void deletedAtGetterAndSetter_ShouldStoreDeletedAt() {
         NounsDeleted noun = new NounsDeleted();
+        LocalDateTime deletedAt = LocalDateTime.now();
 
-        // Set the deleted date and time
-        LocalDateTime now = LocalDateTime.now();
-        noun.setDeletedAt(now);
+        noun.setDeletedAt(deletedAt);
 
-        // Check the getter returns the same date and time
-        assertEquals(now, noun.getDeletedAt());
+        assertEquals(deletedAt, noun.getDeletedAt());
     }
 
+    /**
+     * Tests that the gender value can be set and retrieved correctly.
+     */
     @Test
-    public void testGenderGetterAndSetter() {
-        // Create a new NounsDeleted object
+    void genderGetterAndSetter_ShouldStoreGender() {
         NounsDeleted noun = new NounsDeleted();
 
-        // Set the gender
         noun.setGender(Gender.MASCULINE);
 
-        // Check the getter returns the same gender
         assertEquals(Gender.MASCULINE, noun.getGender());
     }
 }
