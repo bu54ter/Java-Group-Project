@@ -9,14 +9,15 @@ import org.junit.jupiter.api.Test;
 /**
  * JUnit test class for {@link UserDeleted}.
  *
- * <p>This class tests the basic getter and setter methods for the
- * UserDeleted model class, including user details, role, password,
- * creation timestamp, and deletion timestamp.</p>
+ * <p>
+ * This test checks that the UserDeleted model stores and returns its field
+ * values correctly.
+ * </p>
  */
 class UserDeletedTest {
 
     /**
-     * Tests that the deleted user ID can be set and retrieved correctly.
+     * Tests that the userId field can be set and retrieved.
      */
     @Test
     void userIdGetterAndSetter_ShouldStoreUserId() {
@@ -28,7 +29,7 @@ class UserDeletedTest {
     }
 
     /**
-     * Tests that the username can be set and retrieved correctly.
+     * Tests that the username field can be set and retrieved.
      */
     @Test
     void usernameGetterAndSetter_ShouldStoreUsername() {
@@ -40,7 +41,7 @@ class UserDeletedTest {
     }
 
     /**
-     * Tests that the first name can be set and retrieved correctly.
+     * Tests that the firstname field can be set and retrieved.
      */
     @Test
     void firstnameGetterAndSetter_ShouldStoreFirstname() {
@@ -52,7 +53,7 @@ class UserDeletedTest {
     }
 
     /**
-     * Tests that the surname can be set and retrieved correctly.
+     * Tests that the surname field can be set and retrieved.
      */
     @Test
     void surnameGetterAndSetter_ShouldStoreSurname() {
@@ -64,7 +65,7 @@ class UserDeletedTest {
     }
 
     /**
-     * Tests that the role can be set and retrieved correctly.
+     * Tests that the role field can be set and retrieved.
      */
     @Test
     void roleGetterAndSetter_ShouldStoreRole() {
@@ -76,7 +77,7 @@ class UserDeletedTest {
     }
 
     /**
-     * Tests that the password can be set and retrieved correctly.
+     * Tests that the password field can be set and retrieved.
      */
     @Test
     void passwordGetterAndSetter_ShouldStorePassword() {
@@ -88,7 +89,7 @@ class UserDeletedTest {
     }
 
     /**
-     * Tests that the deletedAt timestamp can be set and retrieved correctly.
+     * Tests that the deletedAt field can be set and retrieved.
      */
     @Test
     void deletedAtGetterAndSetter_ShouldStoreDeletedAt() {
@@ -101,7 +102,7 @@ class UserDeletedTest {
     }
 
     /**
-     * Tests that the createdAt timestamp can be set and retrieved correctly.
+     * Tests that the createdAt field can be set and retrieved.
      */
     @Test
     void createdAtGetterAndSetter_ShouldStoreCreatedAt() {

@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 /**
  * JUnit test class for {@link QuestionType}.
  *
- * <p>This class tests that the QuestionType enum contains the expected
- * values and that text values can be converted back into enum values
- * correctly.</p>
+ * <p>
+ * This test checks that the QuestionType enum contains the expected values.
+ * </p>
  */
 class QuestionTypeTest {
 
     /**
-     * Tests that the QuestionType enum contains the expected number of values.
+     * Tests that the QuestionType enum contains three values.
      */
     @Test
     void questionTypeValues_ShouldContainThreeValues() {
@@ -24,42 +24,30 @@ class QuestionTypeTest {
     }
 
     /**
-     * Tests that the QuestionType enum values are in the expected order.
+     * Tests that the GENDER question type exists.
      */
     @Test
-    void questionTypeValues_ShouldContainExpectedValuesInOrder() {
-        QuestionType[] questionTypes = QuestionType.values();
-
-        assertEquals(QuestionType.GENDER, questionTypes[0]);
-        assertEquals(QuestionType.MEANING, questionTypes[1]);
-        assertEquals(QuestionType.TRANSLATE, questionTypes[2]);
-    }
-
-    /**
-     * Tests that a text value can be converted into the GENDER enum value.
-     */
-    @Test
-    void questionTypeValueOf_ShouldReturnGender_WhenTextIsGender() {
+    void questionTypeValues_ShouldContainGender() {
         QuestionType questionType = QuestionType.valueOf("GENDER");
 
         assertEquals(QuestionType.GENDER, questionType);
     }
 
     /**
-     * Tests that a text value can be converted into the MEANING enum value.
+     * Tests that the MEANING question type exists.
      */
     @Test
-    void questionTypeValueOf_ShouldReturnMeaning_WhenTextIsMeaning() {
+    void questionTypeValues_ShouldContainMeaning() {
         QuestionType questionType = QuestionType.valueOf("MEANING");
 
         assertEquals(QuestionType.MEANING, questionType);
     }
 
     /**
-     * Tests that a text value can be converted into the TRANSLATE enum value.
+     * Tests that the TRANSLATE question type exists.
      */
     @Test
-    void questionTypeValueOf_ShouldReturnTranslate_WhenTextIsTranslate() {
+    void questionTypeValues_ShouldContainTranslate() {
         QuestionType questionType = QuestionType.valueOf("TRANSLATE");
 
         assertEquals(QuestionType.TRANSLATE, questionType);

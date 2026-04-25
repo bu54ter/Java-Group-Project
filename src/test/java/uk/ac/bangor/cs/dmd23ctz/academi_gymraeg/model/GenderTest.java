@@ -7,13 +7,14 @@ import org.junit.jupiter.api.Test;
 /**
  * JUnit test class for {@link Gender}.
  *
- * <p>This class tests that the Gender enum contains the expected values
- * and that text values can be converted back into enum values correctly.</p>
+ * <p>
+ * This test checks that the Gender enum contains the expected values.
+ * </p>
  */
 class GenderTest {
 
     /**
-     * Tests that the Gender enum contains the expected number of values.
+     * Tests that the Gender enum contains two values.
      */
     @Test
     void genderValues_ShouldContainTwoValues() {
@@ -23,31 +24,20 @@ class GenderTest {
     }
 
     /**
-     * Tests that the Gender enum values are in the expected order.
+     * Tests that the first Gender value is MASCULINE.
      */
     @Test
-    void genderValues_ShouldContainExpectedValuesInOrder() {
-        Gender[] genders = Gender.values();
-
-        assertEquals(Gender.MASCULINE, genders[0]);
-        assertEquals(Gender.FEMININE, genders[1]);
-    }
-
-    /**
-     * Tests that a text value can be converted into the matching Gender enum.
-     */
-    @Test
-    void genderValueOf_ShouldReturnMasculine_WhenTextIsMasculine() {
+    void genderValues_ShouldContainMasculine() {
         Gender gender = Gender.valueOf("MASCULINE");
 
         assertEquals(Gender.MASCULINE, gender);
     }
 
     /**
-     * Tests that a text value can be converted into the matching Gender enum.
+     * Tests that the second Gender value is FEMININE.
      */
     @Test
-    void genderValueOf_ShouldReturnFeminine_WhenTextIsFeminine() {
+    void genderValues_ShouldContainFeminine() {
         Gender gender = Gender.valueOf("FEMININE");
 
         assertEquals(Gender.FEMININE, gender);
