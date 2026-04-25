@@ -6,78 +6,110 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
-public class UserDeletedTest {
+/**
+ * JUnit test class for {@link UserDeleted}.
+ *
+ * <p>This class tests the basic getter and setter methods for the
+ * UserDeleted model class, including user details, role, password,
+ * creation timestamp, and deletion timestamp.</p>
+ */
+class UserDeletedTest {
 
+    /**
+     * Tests that the deleted user ID can be set and retrieved correctly.
+     */
     @Test
-    public void testUserIdGetterAndSetter() {
-        // Create a new UserDeleted object
+    void userIdGetterAndSetter_ShouldStoreUserId() {
         UserDeleted user = new UserDeleted();
 
-        // Set the user ID
         user.setUserId(1L);
 
-        // Check the getter returns the same ID
         assertEquals(1L, user.getUserId());
     }
 
+    /**
+     * Tests that the username can be set and retrieved correctly.
+     */
     @Test
-    public void testUsernameGetterAndSetter() {
-        // Create a new UserDeleted object
+    void usernameGetterAndSetter_ShouldStoreUsername() {
         UserDeleted user = new UserDeleted();
 
-        // Set the username
         user.setUsername("phil");
 
-        // Check the getter returns the same username
         assertEquals("phil", user.getUsername());
     }
 
+    /**
+     * Tests that the first name can be set and retrieved correctly.
+     */
     @Test
-    public void testFirstnameGetterAndSetter() {
-        // Create a new UserDeleted object
+    void firstnameGetterAndSetter_ShouldStoreFirstname() {
         UserDeleted user = new UserDeleted();
 
-        // Set the first name
         user.setFirstname("Phil");
 
-        // Check the getter returns the same first name
         assertEquals("Phil", user.getFirstname());
     }
 
+    /**
+     * Tests that the surname can be set and retrieved correctly.
+     */
     @Test
-    public void testSurnameGetterAndSetter() {
-        // Create a new UserDeleted object
+    void surnameGetterAndSetter_ShouldStoreSurname() {
         UserDeleted user = new UserDeleted();
 
-        // Set the surname
         user.setSurname("Bamber");
 
-        // Check the getter returns the same surname
         assertEquals("Bamber", user.getSurname());
     }
 
+    /**
+     * Tests that the role can be set and retrieved correctly.
+     */
     @Test
-    public void testRoleGetterAndSetter() {
-        // Create a new UserDeleted object
+    void roleGetterAndSetter_ShouldStoreRole() {
         UserDeleted user = new UserDeleted();
 
-        // Set the role
         user.setRole(Role.ADMIN);
 
-        // Check the getter returns the same role
         assertEquals(Role.ADMIN, user.getRole());
     }
 
+    /**
+     * Tests that the password can be set and retrieved correctly.
+     */
     @Test
-    public void testDeletedAtGetterAndSetter() {
-        // Create a new UserDeleted object
+    void passwordGetterAndSetter_ShouldStorePassword() {
         UserDeleted user = new UserDeleted();
 
-        // Set the deleted date and time
-        LocalDateTime now = LocalDateTime.now();
-        user.setDeletedAt(now);
+        user.setPassword("Password123");
 
-        // Check the getter returns the same date and time
-        assertEquals(now, user.getDeletedAt());
+        assertEquals("Password123", user.getPassword());
+    }
+
+    /**
+     * Tests that the deletedAt timestamp can be set and retrieved correctly.
+     */
+    @Test
+    void deletedAtGetterAndSetter_ShouldStoreDeletedAt() {
+        UserDeleted user = new UserDeleted();
+        LocalDateTime deletedAt = LocalDateTime.now();
+
+        user.setDeletedAt(deletedAt);
+
+        assertEquals(deletedAt, user.getDeletedAt());
+    }
+
+    /**
+     * Tests that the createdAt timestamp can be set and retrieved correctly.
+     */
+    @Test
+    void createdAtGetterAndSetter_ShouldStoreCreatedAt() {
+        UserDeleted user = new UserDeleted();
+        LocalDateTime createdAt = LocalDateTime.now();
+
+        user.setCreatedAt(createdAt);
+
+        assertEquals(createdAt, user.getCreatedAt());
     }
 }

@@ -1,61 +1,76 @@
 package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.Test;
 
-public class QuestionsTest {
+/**
+ * JUnit test class for {@link Questions}.
+ *
+ * <p>This class tests the basic getter and setter methods for the
+ * Questions model class, including question ID, linked test, linked noun,
+ * and question type.</p>
+ */
+class QuestionsTest {
 
+    /**
+     * Tests that a Questions object can be created using the default constructor.
+     */
     @Test
-    public void testQuestionIdGetterAndSetter() {
-        // Create a new Questions object
+    void defaultConstructor_ShouldCreateQuestionsObject() {
         Questions question = new Questions();
 
-        // Set the question ID
+        assertNotNull(question);
+    }
+
+    /**
+     * Tests that the question ID can be set and retrieved correctly.
+     */
+    @Test
+    void questionIdGetterAndSetter_ShouldStoreQuestionId() {
+        Questions question = new Questions();
+
         question.setQuestionId(1L);
 
-        // Check the getter returns the same ID
         assertEquals(1L, question.getQuestionId());
     }
 
+    /**
+     * Tests that the linked test can be set and retrieved correctly.
+     */
     @Test
-    public void testTestGetterAndSetter() {
-        // Create a new Questions object
+    void testGetterAndSetter_ShouldStoreTest() {
         Questions question = new Questions();
-
-        // Create a new Tests object
         Tests test = new Tests();
 
-        // Set the test
         question.setTest(test);
 
-        // Check the getter returns the same test
         assertEquals(test, question.getTest());
     }
 
+    /**
+     * Tests that the linked noun can be set and retrieved correctly.
+     */
     @Test
-    public void testNounGetterAndSetter() {
-        // Create a new Questions object
+    void nounGetterAndSetter_ShouldStoreNoun() {
         Questions question = new Questions();
-
-        // Create a new Nouns object
         Nouns noun = new Nouns();
 
-        // Set the noun
         question.setNoun(noun);
 
-        // Check the getter returns the same noun
         assertEquals(noun, question.getNoun());
     }
 
+    /**
+     * Tests that the question type can be set and retrieved correctly.
+     */
     @Test
-    public void testQuestionTypeGetterAndSetter() {
-        // Create a new Questions object
+    void questionTypeGetterAndSetter_ShouldStoreQuestionType() {
         Questions question = new Questions();
 
-        // Set the question type
         question.setQuestionType(QuestionType.GENDER);
 
-        // Check the getter returns the same question type
         assertEquals(QuestionType.GENDER, question.getQuestionType());
     }
 }

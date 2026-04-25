@@ -9,102 +9,146 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-public class NounsTest {
+/**
+ * JUnit test class for {@link Nouns}.
+ *
+ * <p>This class tests the basic getter and setter methods for the Nouns
+ * model class, including noun words, example sentences, audit fields,
+ * gender, and linked questions.</p>
+ */
+class NounsTest {
 
+    /**
+     * Tests that the noun ID can be set and retrieved correctly.
+     */
     @Test
-    public void testNounIdGetterAndSetter() {
-        // Create a new Nouns object
+    void nounIdGetterAndSetter_ShouldStoreNounId() {
         Nouns noun = new Nouns();
 
-        // Set the noun ID
         noun.setNounId(1L);
 
-        // Check the getter returns the same ID
         assertEquals(1L, noun.getNounId());
     }
 
+    /**
+     * Tests that the Welsh word can be set and retrieved correctly.
+     */
     @Test
-    public void testWelshWordGetterAndSetter() {
-        // Create a new Nouns object
+    void welshWordGetterAndSetter_ShouldStoreWelshWord() {
         Nouns noun = new Nouns();
 
-        // Set the Welsh word
         noun.setWelshWord("cath");
 
-        // Check the getter returns the same word
         assertEquals("cath", noun.getWelshWord());
     }
 
+    /**
+     * Tests that the English word can be set and retrieved correctly.
+     */
     @Test
-    public void testEnglishWordGetterAndSetter() {
-        // Create a new Nouns object
+    void englishWordGetterAndSetter_ShouldStoreEnglishWord() {
         Nouns noun = new Nouns();
 
-        // Set the English word
         noun.setEnglishWord("cat");
 
-        // Check the getter returns the same word
         assertEquals("cat", noun.getEnglishWord());
     }
 
+    /**
+     * Tests that the Welsh example sentence can be set and retrieved correctly.
+     */
     @Test
-    public void testCreatedByGetterAndSetter() {
-        // Create a new Nouns object
+    void welshSentGetterAndSetter_ShouldStoreWelshSentence() {
         Nouns noun = new Nouns();
 
-        // Set who created the noun
+        noun.setWelshSent("Mae'r gath yn cysgu.");
+
+        assertEquals("Mae'r gath yn cysgu.", noun.getWelshSent());
+    }
+
+    /**
+     * Tests that the English example sentence can be set and retrieved correctly.
+     */
+    @Test
+    void englishSentGetterAndSetter_ShouldStoreEnglishSentence() {
+        Nouns noun = new Nouns();
+
+        noun.setEnglishSent("The cat is sleeping.");
+
+        assertEquals("The cat is sleeping.", noun.getEnglishSent());
+    }
+
+    /**
+     * Tests that the createdBy audit field can be set and retrieved correctly.
+     */
+    @Test
+    void createdByGetterAndSetter_ShouldStoreCreatedBy() {
+        Nouns noun = new Nouns();
+
         noun.setCreatedBy("phil");
 
-        // Check the getter returns the same value
         assertEquals("phil", noun.getCreatedBy());
     }
 
+    /**
+     * Tests that the createdAt audit field can be set and retrieved correctly.
+     */
     @Test
-    public void testCreatedAtGetterAndSetter() {
-        // Create a new Nouns object
+    void createdAtGetterAndSetter_ShouldStoreCreatedAt() {
         Nouns noun = new Nouns();
-
-        // Set the created date and time
         LocalDateTime now = LocalDateTime.now();
+
         noun.setCreatedAt(now);
 
-        // Check the getter returns the same date and time
         assertEquals(now, noun.getCreatedAt());
     }
 
+    /**
+     * Tests that the editedBy audit field can be set and retrieved correctly.
+     */
     @Test
-    public void testGenderGetterAndSetter() {
-        // Create a new Nouns object
+    void editedByGetterAndSetter_ShouldStoreEditedBy() {
         Nouns noun = new Nouns();
 
-        // Set the gender
+        noun.setEditedBy("lecturer1");
+
+        assertEquals("lecturer1", noun.getEditedBy());
+    }
+
+    /**
+     * Tests that the gender value can be set and retrieved correctly.
+     */
+    @Test
+    void genderGetterAndSetter_ShouldStoreGender() {
+        Nouns noun = new Nouns();
+
         noun.setGender(Gender.MASCULINE);
 
-        // Check the getter returns the same gender
         assertEquals(Gender.MASCULINE, noun.getGender());
     }
 
+    /**
+     * Tests that the questions list can be set and retrieved correctly.
+     */
     @Test
-    public void testQuestionsGetterAndSetter() {
-        // Create a new Nouns object
+    void questionsGetterAndSetter_ShouldStoreQuestionsList() {
         Nouns noun = new Nouns();
-
-        // Create an empty questions list
         List<Questions> questions = new ArrayList<>();
 
-        // Set the questions list
         noun.setQuestions(questions);
 
-        // Check the getter returns the same list
         assertEquals(questions, noun.getQuestions());
     }
 
+    /**
+     * Tests that the questions list is initialised by default.
+     *
+     * <p>This prevents null pointer issues when questions are added later.</p>
+     */
     @Test
-    public void testQuestionsListIsInitialised() {
-        // Create a new Nouns object
+    void questionsList_ShouldBeInitialisedByDefault() {
         Nouns noun = new Nouns();
 
-        // Check the questions list is not null by default
         assertNotNull(noun.getQuestions());
     }
 }

@@ -11,130 +11,160 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-public class TestsTest {
+/**
+ * JUnit test class for {@link Tests}.
+ *
+ * <p>This class tests the basic getter and setter methods for the Tests
+ * model class, including test ID, user ID, timestamp, score, submitted
+ * status, linked questions, and the addQuestion helper method.</p>
+ */
+class TestsTest {
 
+    /**
+     * Tests that a Tests object can be created using the default constructor.
+     */
     @Test
-    public void testTestIdGetterAndSetter() {
-        // Create a new Tests object
+    void defaultConstructor_ShouldCreateTestsObject() {
         Tests test = new Tests();
 
-        // Set the test ID
+        assertNotNull(test);
+    }
+
+    /**
+     * Tests that the test ID can be set and retrieved correctly.
+     */
+    @Test
+    void testIdGetterAndSetter_ShouldStoreTestId() {
+        Tests test = new Tests();
+
         test.setTestId(1L);
 
-        // Check the getter returns the same ID
         assertEquals(1L, test.getTestId());
     }
 
+    /**
+     * Tests that the user ID can be set and retrieved correctly.
+     */
     @Test
-    public void testUserIdGetterAndSetter() {
-        // Create a new Tests object
+    void userIdGetterAndSetter_ShouldStoreUserId() {
         Tests test = new Tests();
 
-        // Set the user ID
         test.setUserId(10L);
 
-        // Check the getter returns the same user ID
         assertEquals(10L, test.getUserId());
     }
 
+    /**
+     * Tests that the testedAt timestamp can be set and retrieved correctly.
+     */
     @Test
-    public void testTestedAtGetterAndSetter() {
-        // Create a new Tests object
+    void testedAtGetterAndSetter_ShouldStoreTestedAt() {
         Tests test = new Tests();
-
-        // Set the tested date and time
         LocalDateTime now = LocalDateTime.now();
+
         test.setTestedAt(now);
 
-        // Check the getter returns the same date and time
         assertEquals(now, test.getTestedAt());
     }
 
+    /**
+     * Tests that the score can be set and retrieved correctly.
+     */
     @Test
-    public void testScoreGetterAndSetter() {
-        // Create a new Tests object
+    void scoreGetterAndSetter_ShouldStoreScore() {
         Tests test = new Tests();
 
-        // Set the score
         test.setScore(8);
 
-        // Check the getter returns the same score
         assertEquals(8, test.getScore());
     }
 
+    /**
+     * Tests that submitted is false by default.
+     */
     @Test
-    public void testSubmittedDefaultValue() {
-        // Create a new Tests object
+    void submitted_ShouldBeFalseByDefault() {
         Tests test = new Tests();
 
-        // Check submitted is false by default
         assertFalse(test.isSubmitted());
     }
 
+    /**
+     * Tests that submitted can be set to true and retrieved correctly.
+     */
     @Test
-    public void testSubmittedGetterAndSetter() {
-        // Create a new Tests object
+    void submittedGetterAndSetter_ShouldStoreTrueValue() {
         Tests test = new Tests();
 
-        // Set submitted to true
         test.setSubmitted(true);
 
-        // Check the getter returns true
         assertTrue(test.isSubmitted());
     }
 
+    /**
+     * Tests that submitted can be set to false and retrieved correctly.
+     */
     @Test
-    public void testQuestionsGetterAndSetter() {
-        // Create a new Tests object
+    void submittedGetterAndSetter_ShouldStoreFalseValue() {
         Tests test = new Tests();
 
-        // Create an empty questions list
+        test.setSubmitted(false);
+
+        assertFalse(test.isSubmitted());
+    }
+
+    /**
+     * Tests that the questions list can be set and retrieved correctly.
+     */
+    @Test
+    void questionsGetterAndSetter_ShouldStoreQuestionsList() {
+        Tests test = new Tests();
         List<Questions> questions = new ArrayList<>();
 
-        // Set the questions list
         test.setQuestions(questions);
 
-        // Check the getter returns the same list
         assertEquals(questions, test.getQuestions());
     }
 
+    /**
+     * Tests that the questions list is initialised by default.
+     *
+     * <p>This prevents null pointer issues when questions are added later.</p>
+     */
     @Test
-    public void testQuestionsListIsInitialised() {
-        // Create a new Tests object
+    void questionsList_ShouldBeInitialisedByDefault() {
         Tests test = new Tests();
 
-        // Check the questions list is not null by default
         assertNotNull(test.getQuestions());
     }
 
+    /**
+     * Tests that addQuestion adds the question to the test question list.
+     */
     @Test
-    public void testAddQuestionAddsQuestionToList() {
-        // Create a new Tests object
+    void addQuestion_ShouldAddQuestionToList() {
         Tests test = new Tests();
-
-        // Create a new Questions object
         Questions question = new Questions();
 
-        // Add the question to the test
         test.addQuestion(question);
 
-        // Check the question was added to the list
         assertEquals(1, test.getQuestions().size());
         assertEquals(question, test.getQuestions().get(0));
     }
 
+    /**
+     * Tests that addQuestion sets the back-reference from the question to the
+     * test.
+     *
+     * <p>This keeps both sides of the relationship in sync.</p>
+     */
     @Test
-    public void testAddQuestionSetsBackReference() {
-        // Create a new Tests object
+    void addQuestion_ShouldSetQuestionBackReference() {
         Tests test = new Tests();
-
-        // Create a new Questions object
         Questions question = new Questions();
 
-        // Add the question to the test
         test.addQuestion(question);
 
-        // Check the question now points back to the same test
         assertEquals(test, question.getTest());
     }
 }
