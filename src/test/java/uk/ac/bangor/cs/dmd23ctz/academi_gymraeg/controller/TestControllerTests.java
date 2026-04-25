@@ -2,12 +2,14 @@ package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -36,56 +38,75 @@ import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.QuestionService;
 /**
  * JUnit test class for {@link TestController}.
  *
- * <p>This class verifies that the test controller:
- * creates a new test correctly, resumes an existing test where required,
- * continues an unfinished test, starts a fresh test after deleting
- * unsubmitted test data, submits completed tests correctly, and throws
- * the expected exceptions when required records cannot be found.</p>
+ * <p>This class tests the student test controller. It checks that tests can
+ * be started, resumed, continued, replaced, and submitted correctly. It also
+ * checks that expected redirects and exceptions happen when records are
+ * missing or when a test has already been submitted.</p>
  */
 @ExtendWith(MockitoExtension.class)
 class TestControllerTests {
 
-    /** Mock repository used to retrieve user records */
+    /**
+     * Mock repository used to retrieve and save user records.
+     */
     @Mock
     private UserRepository userRepository;
 
-    /** Mock repository used to retrieve and save test records */
+    /**
+     * Mock repository used to retrieve, save, and delete test records.
+     */
     @Mock
     private TestRepository testRepository;
 
-    /** Mock service used to generate test questions */
+    /**
+     * Mock service used to generate questions for a new test.
+     */
     @Mock
     private QuestionService questionService;
 
-    /** Mock repository used to retrieve and delete question records */
+    /**
+     * Mock repository used to retrieve and delete question records.
+     */
     @Mock
     private QuestionRepository questionRepository;
 
-    /** Mock repository used to delete answer records */
+    /**
+     * Mock repository used to delete answer records linked to a test.
+     */
     @Mock
     private AnswerRepository answerRepository;
 
-    /** Mock service used to process submitted answers */
+    /**
+     * Mock service used to process submitted student answers.
+     */
     @Mock
     private AnswerService answerService;
 
-    /** Mock model used to verify attributes added by the controller */
+    /**
+     * Mock model used to check which attributes are passed to the view.
+     */
     @Mock
     private Model model;
 
-    /** Mock authentication object representing the logged-in user */
+    /**
+     * Mock authentication object representing the logged-in student.
+     */
     @Mock
     private Authentication authentication;
 
-    /** Mock redirect attributes used for flash messages */
+    /**
+     * Mock redirect attributes used for flash messages.
+     */
     @Mock
     private RedirectAttributes redirectAttributes;
 
-    /** Controller under test */
+    /**
+     * Controller being tested.
+     */
     private TestController testController;
 
     /**
-     * Creates a new controller instance before each test.
+     * Creates a fresh TestController before each test.
      */
     @BeforeEach
     void setUp() {
@@ -100,8 +121,11 @@ class TestControllerTests {
     }
 
     /**
-     * Verifies that startTest returns the resume test view
-     * when an existing unsubmitted test is found.
+     * Tests that the resume test view is returned when the student already has
+     * an unfinished test.
+     *
+     * <p>The method should add the existing test date to the model and should
+     * not create a new test.</p>
      */
     @Test
     void startTest_ShouldReturnResumeTestView_WhenUnsubmittedTestExists() {
@@ -126,8 +150,11 @@ class TestControllerTests {
     }
 
     /**
-     * Verifies that startTest adds the blockedFrom attribute
-     * when the user arrived from the revision page.
+     * Tests that the blockedFrom attribute is added when the student is sent
+     * to the resume page from the revision section.
+     *
+     * <p>This allows the page to show that revision was blocked because an
+     * unfinished test already exists.</p>
      */
     @Test
     void startTest_ShouldAddBlockedFrom_WhenComingFromRevision() {
@@ -151,8 +178,11 @@ class TestControllerTests {
     }
 
     /**
-     * Verifies that startTest creates and returns a fresh test
-     * when no unsubmitted test exists.
+     * Tests that a fresh test is created when the student has no unfinished
+     * test.
+     *
+     * <p>The method should create a new test, generate questions for it, add
+     * the test and questions to the model, and return the student test view.</p>
      */
     @Test
     void startTest_ShouldCreateNewTest_WhenNoUnsubmittedTestExists() {
@@ -180,8 +210,10 @@ class TestControllerTests {
     }
 
     /**
-     * Verifies that startTest throws an exception when the
-     * authenticated user cannot be found.
+     * Tests that startTest throws an exception when the logged-in user cannot
+     * be found.
+     *
+     * <p>The method should stop before looking for unfinished tests.</p>
      */
     @Test
     void startTest_ShouldThrowException_WhenUserNotFound() {
@@ -196,8 +228,10 @@ class TestControllerTests {
     }
 
     /**
-     * Verifies that continueTest redirects to the start test page
-     * when the user has no unsubmitted tests.
+     * Tests that continueTest redirects to the start test page when the
+     * student has no unfinished test.
+     *
+     * <p>The method should not add a test object to the model.</p>
      */
     @Test
     void continueTest_ShouldRedirectToStartTest_WhenNoUnsubmittedTestExists() {
@@ -216,8 +250,10 @@ class TestControllerTests {
     }
 
     /**
-     * Verifies that continueTest returns the test view and adds
-     * the existing test and question data to the model.
+     * Tests that continueTest loads an existing unfinished test.
+     *
+     * <p>The method should add the existing test and its questions to the
+     * model before returning the student test view.</p>
      */
     @Test
     void continueTest_ShouldReturnStudentTestView_WhenUnsubmittedTestExists() {
@@ -242,8 +278,42 @@ class TestControllerTests {
     }
 
     /**
-     * Verifies that startNewTest deletes all existing unsubmitted
-     * test data before creating a fresh test.
+     * Tests that startNewTest blocks a new test when the cooldown period has
+     * not passed.
+     *
+     * <p>The method should add the cooldown value as a flash attribute and
+     * redirect back to the student test page.</p>
+     */
+    @Test
+    void startNewTest_ShouldRedirect_WhenCooldownIsStillActive() {
+        User user = new User();
+        user.setUserId(10L);
+        user.setUsername("bob");
+
+        Tests recentTest = new Tests();
+        recentTest.setTestId(1L);
+        recentTest.setUserId(10L);
+        recentTest.setTestedAt(LocalDateTime.now().minusMinutes(5));
+
+        when(authentication.getName()).thenReturn("bob");
+        when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
+        when(testRepository.findUnsubmittedTestsByUserId(10L)).thenReturn(List.of(recentTest));
+
+        String viewName = testController.startNewTest(model, authentication, redirectAttributes);
+
+        assertEquals("redirect:/student/test", viewName);
+        verify(redirectAttributes).addFlashAttribute(org.mockito.ArgumentMatchers.eq("cooldownSeconds"), anyLong());
+        verify(answerRepository, never()).deleteByQuestionTestTestId(anyLong());
+        verify(questionRepository, never()).deleteByTestTestId(anyLong());
+        verify(testRepository, never()).deleteAll(any());
+    }
+
+    /**
+     * Tests that startNewTest deletes old unfinished test data before creating
+     * a fresh test.
+     *
+     * <p>Answers are deleted first, followed by questions, then the old test
+     * record. A new test is then created and questions are generated.</p>
      */
     @Test
     void startNewTest_ShouldDeleteOldUnsubmittedTestsAndCreateNewTest() {
@@ -254,7 +324,7 @@ class TestControllerTests {
         Tests oldTest = new Tests();
         oldTest.setTestId(1L);
         oldTest.setUserId(10L);
-        oldTest.setTestedAt(LocalDateTime.now().minusMinutes(20)); // older than 15 min cooldown so it passes
+        oldTest.setTestedAt(LocalDateTime.now().minusMinutes(20));
 
         Tests savedTest = new Tests();
         savedTest.setTestId(2L);
@@ -279,8 +349,11 @@ class TestControllerTests {
     }
 
     /**
-     * Verifies that submitTest redirects directly to the results page
-     * when the test has already been submitted.
+     * Tests that submitTest redirects straight to the results page when the
+     * test has already been submitted.
+     *
+     * <p>The method should not process answers again and should not save the
+     * test again.</p>
      */
     @Test
     void submitTest_ShouldRedirectToResults_WhenTestAlreadySubmitted() {
@@ -298,30 +371,113 @@ class TestControllerTests {
     }
 
     /**
-     * Verifies that submitTest processes the answers, marks the test
-     * as submitted, and saves the updated test record.
+     * Tests that submitTest processes the answers, updates the student's
+     * streak, marks the test as submitted, and saves the updated test record.
+     *
+     * <p>This represents the normal successful submission path.</p>
      */
     @Test
-    void submitTest_ShouldProcessAnswersAndSaveSubmittedTest() {
+    void submitTest_ShouldProcessAnswersUpdateStreakAndSaveSubmittedTest() {
         Tests test = new Tests();
         test.setTestId(1L);
+        test.setUserId(10L);
         test.setSubmitted(false);
 
+        User user = new User();
+        user.setUserId(10L);
+        user.setUsername("bob");
+        user.setCurrentStreak(0);
+        user.setBestStreak(0);
+        user.setLastTestDate(null);
+
         when(testRepository.findById(1L)).thenReturn(Optional.of(test));
+        when(userRepository.findById(10L)).thenReturn(Optional.of(user));
 
         String viewName = testController.submitTest(1L, List.of(10L, 20L), Map.of("answer_10", "cat"));
 
         assertEquals("redirect:/student/results/1", viewName);
         verify(answerService).processTestSubmission(1L, List.of(10L, 20L), Map.of("answer_10", "cat"));
+        verify(userRepository).save(user);
+
+        assertEquals(1, user.getCurrentStreak());
+        assertEquals(1, user.getBestStreak());
+        assertEquals(LocalDate.now(), user.getLastTestDate());
 
         ArgumentCaptor<Tests> captor = ArgumentCaptor.forClass(Tests.class);
         verify(testRepository).save(captor.capture());
-        assertEquals(true, captor.getValue().isSubmitted());
+
+        assertTrue(captor.getValue().isSubmitted());
     }
 
     /**
-     * Verifies that submitTest throws an exception when the
-     * requested test record cannot be found.
+     * Tests that submitTest increases the student's current streak when their
+     * previous completed test was yesterday.
+     *
+     * <p>The best streak should also be updated if the new current streak is
+     * higher than the previous best streak.</p>
+     */
+    @Test
+    void submitTest_ShouldIncreaseStreak_WhenLastTestWasYesterday() {
+        Tests test = new Tests();
+        test.setTestId(1L);
+        test.setUserId(10L);
+        test.setSubmitted(false);
+
+        User user = new User();
+        user.setUserId(10L);
+        user.setCurrentStreak(2);
+        user.setBestStreak(2);
+        user.setLastTestDate(LocalDate.now().minusDays(1));
+
+        when(testRepository.findById(1L)).thenReturn(Optional.of(test));
+        when(userRepository.findById(10L)).thenReturn(Optional.of(user));
+
+        String viewName = testController.submitTest(1L, List.of(10L), Map.of("answer_10", "cat"));
+
+        assertEquals("redirect:/student/results/1", viewName);
+        assertEquals(3, user.getCurrentStreak());
+        assertEquals(3, user.getBestStreak());
+        assertEquals(LocalDate.now(), user.getLastTestDate());
+        verify(userRepository).save(user);
+    }
+
+    /**
+     * Tests that submitTest resets the student's streak when the previous
+     * completed test was older than yesterday.
+     *
+     * <p>The current streak should reset to one, while the best streak should
+     * keep the previous best value if it is higher.</p>
+     */
+    @Test
+    void submitTest_ShouldResetCurrentStreak_WhenLastTestWasBeforeYesterday() {
+        Tests test = new Tests();
+        test.setTestId(1L);
+        test.setUserId(10L);
+        test.setSubmitted(false);
+
+        User user = new User();
+        user.setUserId(10L);
+        user.setCurrentStreak(4);
+        user.setBestStreak(4);
+        user.setLastTestDate(LocalDate.now().minusDays(3));
+
+        when(testRepository.findById(1L)).thenReturn(Optional.of(test));
+        when(userRepository.findById(10L)).thenReturn(Optional.of(user));
+
+        String viewName = testController.submitTest(1L, List.of(10L), Map.of("answer_10", "cat"));
+
+        assertEquals("redirect:/student/results/1", viewName);
+        assertEquals(1, user.getCurrentStreak());
+        assertEquals(4, user.getBestStreak());
+        assertEquals(LocalDate.now(), user.getLastTestDate());
+        verify(userRepository).save(user);
+    }
+
+    /**
+     * Tests that submitTest throws an exception when the requested test cannot
+     * be found.
+     *
+     * <p>The method should stop before processing any answers.</p>
      */
     @Test
     void submitTest_ShouldThrowException_WhenTestNotFound() {
@@ -332,5 +488,31 @@ class TestControllerTests {
 
         assertEquals("Test not found", exception.getMessage());
         verify(answerService, never()).processTestSubmission(anyLong(), any(), any());
+    }
+
+    /**
+     * Tests that submitTest throws an exception when the user who owns the test
+     * cannot be found.
+     *
+     * <p>The answers are processed first, but the method should fail before
+     * saving the user streak or marking the test as submitted.</p>
+     */
+    @Test
+    void submitTest_ShouldThrowException_WhenUserNotFound() {
+        Tests test = new Tests();
+        test.setTestId(1L);
+        test.setUserId(10L);
+        test.setSubmitted(false);
+
+        when(testRepository.findById(1L)).thenReturn(Optional.of(test));
+        when(userRepository.findById(10L)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> testController.submitTest(1L, List.of(10L), Map.of("answer_10", "cat")));
+
+        assertEquals("User not found", exception.getMessage());
+        verify(answerService).processTestSubmission(1L, List.of(10L), Map.of("answer_10", "cat"));
+        verify(userRepository, never()).save(any(User.class));
+        verify(testRepository, never()).save(any(Tests.class));
     }
 }
