@@ -2,24 +2,21 @@ package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
@@ -28,59 +25,27 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Tests;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.AnswerRepository;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.QuestionRepository;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.AnswerService;
-import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.QuestionService;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.TestService;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.TestService.NewTestResult;
+import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.TestService.SubmissionResult;
 
 /**
  * JUnit test class for {@link TestController}.
  *
  * <p>This class tests the student test controller. It checks that tests can
- * be started, resumed, continued, replaced, and submitted correctly. It also
- * checks that expected redirects and exceptions happen when records are
- * missing or when a test has already been submitted.</p>
+ * be started, resumed, continued, replaced, and submitted correctly. The main
+ * business logic is delegated to {@link TestService}, so these tests verify
+ * controller flow, model attributes, redirects, and service calls.</p>
  */
 @ExtendWith(MockitoExtension.class)
 class TestControllerTests {
 
     /**
-     * Mock repository used to retrieve and save user records.
+     * Mock service used to handle test creation, continuation, replacement,
+     * question retrieval, and submission.
      */
     @Mock
-    private UserRepository userRepository;
-
-    /**
-     * Mock repository used to retrieve, save, and delete test records.
-     */
-    @Mock
-    private TestRepository testRepository;
-
-    /**
-     * Mock service used to generate questions for a new test.
-     */
-    @Mock
-    private QuestionService questionService;
-
-    /**
-     * Mock repository used to retrieve and delete question records.
-     */
-    @Mock
-    private QuestionRepository questionRepository;
-
-    /**
-     * Mock repository used to delete answer records linked to a test.
-     */
-    @Mock
-    private AnswerRepository answerRepository;
-
-    /**
-     * Mock service used to process submitted student answers.
-     */
-    @Mock
-    private AnswerService answerService;
+    private TestService testService;
 
     /**
      * Mock model used to check which attributes are passed to the view.
@@ -101,6 +66,18 @@ class TestControllerTests {
     private RedirectAttributes redirectAttributes;
 
     /**
+     * Mock result object returned when a fresh test is requested.
+     */
+    @Mock
+    private NewTestResult newTestResult;
+
+    /**
+     * Mock result object returned after a test submission.
+     */
+    @Mock
+    private SubmissionResult submissionResult;
+
+    /**
      * Controller being tested.
      */
     private TestController testController;
@@ -110,14 +87,7 @@ class TestControllerTests {
      */
     @BeforeEach
     void setUp() {
-        testController = new TestController(
-                userRepository,
-                testRepository,
-                questionService,
-                questionRepository,
-                answerRepository,
-                answerService
-        );
+        testController = new TestController(testService);
     }
 
     /**
@@ -139,14 +109,15 @@ class TestControllerTests {
         existingTest.setTestedAt(LocalDateTime.of(2026, 4, 17, 10, 30));
 
         when(authentication.getName()).thenReturn("bob");
-        when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
-        when(testRepository.findUnsubmittedTestsByUserId(10L)).thenReturn(List.of(existingTest));
+        when(testService.getUserByUsername("bob")).thenReturn(user);
+        when(testService.getUnsubmittedTestsForUser(10L)).thenReturn(List.of(existingTest));
 
         String viewName = testController.startTest(model, authentication, null);
 
         assertEquals("student/resume-test", viewName);
         verify(model).addAttribute("testDate", "17 Apr 2026 10:30");
-        verify(model, never()).addAttribute(org.mockito.ArgumentMatchers.eq("test"), any());
+        verify(model, never()).addAttribute(eq("test"), any());
+        verify(testService, never()).createNewTest(anyLong());
     }
 
     /**
@@ -168,8 +139,8 @@ class TestControllerTests {
         existingTest.setTestedAt(LocalDateTime.of(2026, 4, 17, 10, 30));
 
         when(authentication.getName()).thenReturn("bob");
-        when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
-        when(testRepository.findUnsubmittedTestsByUserId(10L)).thenReturn(List.of(existingTest));
+        when(testService.getUserByUsername("bob")).thenReturn(user);
+        when(testService.getUnsubmittedTestsForUser(10L)).thenReturn(List.of(existingTest));
 
         String viewName = testController.startTest(model, authentication, "revision");
 
@@ -181,8 +152,8 @@ class TestControllerTests {
      * Tests that a fresh test is created when the student has no unfinished
      * test.
      *
-     * <p>The method should create a new test, generate questions for it, add
-     * the test and questions to the model, and return the student test view.</p>
+     * <p>The method should create a new test, add the test and questions to the
+     * model, and return the student test view.</p>
      */
     @Test
     void startTest_ShouldCreateNewTest_WhenNoUnsubmittedTestExists() {
@@ -190,22 +161,22 @@ class TestControllerTests {
         user.setUserId(10L);
         user.setUsername("bob");
 
-        Tests savedTest = new Tests();
-        savedTest.setTestId(5L);
-        savedTest.setUserId(10L);
-        savedTest.setScore(0);
+        Tests newTest = new Tests();
+        newTest.setTestId(5L);
+        newTest.setUserId(10L);
+        newTest.setScore(0);
 
         when(authentication.getName()).thenReturn("bob");
-        when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
-        when(testRepository.findUnsubmittedTestsByUserId(10L)).thenReturn(Collections.emptyList());
-        when(testRepository.save(any(Tests.class))).thenReturn(savedTest);
-        when(questionRepository.findQuestionsWithNounByTestId(5L)).thenReturn(Collections.emptyList());
+        when(testService.getUserByUsername("bob")).thenReturn(user);
+        when(testService.getUnsubmittedTestsForUser(10L)).thenReturn(Collections.emptyList());
+        when(testService.createNewTest(10L)).thenReturn(newTest);
+        when(testService.getQuestionsForTest(5L)).thenReturn(Collections.emptyList());
 
         String viewName = testController.startTest(model, authentication, null);
 
         assertEquals("student/test", viewName);
-        verify(questionService).generateQuestionsForTest(5L);
-        verify(model).addAttribute("test", savedTest);
+        verify(testService).createNewTest(10L);
+        verify(model).addAttribute("test", newTest);
         verify(model).addAttribute("questions", Collections.emptyList());
     }
 
@@ -213,23 +184,23 @@ class TestControllerTests {
      * Tests that startTest throws an exception when the logged-in user cannot
      * be found.
      *
-     * <p>The method should stop before looking for unfinished tests.</p>
+     * <p>The method should stop before checking for unfinished tests.</p>
      */
     @Test
     void startTest_ShouldThrowException_WhenUserNotFound() {
         when(authentication.getName()).thenReturn("bob");
-        when(userRepository.findByUsername("bob")).thenReturn(Optional.empty());
+        when(testService.getUserByUsername("bob")).thenThrow(new RuntimeException("User not found"));
 
         RuntimeException exception = assertThrows(RuntimeException.class,
                 () -> testController.startTest(model, authentication, null));
 
         assertEquals("User not found", exception.getMessage());
-        verify(testRepository, never()).findUnsubmittedTestsByUserId(anyLong());
+        verify(testService, never()).getUnsubmittedTestsForUser(anyLong());
     }
 
     /**
-     * Tests that continueTest redirects to the start test page when the
-     * student has no unfinished test.
+     * Tests that continueTest redirects to the start test page when the student
+     * has no unfinished test.
      *
      * <p>The method should not add a test object to the model.</p>
      */
@@ -240,20 +211,21 @@ class TestControllerTests {
         user.setUsername("bob");
 
         when(authentication.getName()).thenReturn("bob");
-        when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
-        when(testRepository.findUnsubmittedTestsByUserId(10L)).thenReturn(Collections.emptyList());
+        when(testService.getUserByUsername("bob")).thenReturn(user);
+        when(testService.getUnsubmittedTestsForUser(10L)).thenReturn(Collections.emptyList());
 
         String viewName = testController.continueTest(model, authentication);
 
         assertEquals("redirect:/student/test", viewName);
-        verify(model, never()).addAttribute(org.mockito.ArgumentMatchers.eq("test"), any());
+        verify(model, never()).addAttribute(eq("test"), any());
+        verify(testService, never()).getQuestionsForTest(anyLong());
     }
 
     /**
      * Tests that continueTest loads an existing unfinished test.
      *
-     * <p>The method should add the existing test and its questions to the
-     * model before returning the student test view.</p>
+     * <p>The method should add the existing test and its questions to the model
+     * before returning the student test view.</p>
      */
     @Test
     void continueTest_ShouldReturnStudentTestView_WhenUnsubmittedTestExists() {
@@ -266,9 +238,9 @@ class TestControllerTests {
         existingTest.setUserId(10L);
 
         when(authentication.getName()).thenReturn("bob");
-        when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
-        when(testRepository.findUnsubmittedTestsByUserId(10L)).thenReturn(List.of(existingTest));
-        when(questionRepository.findQuestionsWithNounByTestId(3L)).thenReturn(Collections.emptyList());
+        when(testService.getUserByUsername("bob")).thenReturn(user);
+        when(testService.getUnsubmittedTestsForUser(10L)).thenReturn(List.of(existingTest));
+        when(testService.getQuestionsForTest(3L)).thenReturn(Collections.emptyList());
 
         String viewName = testController.continueTest(model, authentication);
 
@@ -290,61 +262,49 @@ class TestControllerTests {
         user.setUserId(10L);
         user.setUsername("bob");
 
-        Tests recentTest = new Tests();
-        recentTest.setTestId(1L);
-        recentTest.setUserId(10L);
-        recentTest.setTestedAt(LocalDateTime.now().minusMinutes(5));
-
         when(authentication.getName()).thenReturn("bob");
-        when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
-        when(testRepository.findUnsubmittedTestsByUserId(10L)).thenReturn(List.of(recentTest));
+        when(testService.getUserByUsername("bob")).thenReturn(user);
+        when(testService.discardAndStartFreshTest(10L)).thenReturn(newTestResult);
+        when(newTestResult.isBlockedByCooldown()).thenReturn(true);
+        when(newTestResult.getCooldownSeconds()).thenReturn(600L);
 
         String viewName = testController.startNewTest(model, authentication, redirectAttributes);
 
         assertEquals("redirect:/student/test", viewName);
-        verify(redirectAttributes).addFlashAttribute(org.mockito.ArgumentMatchers.eq("cooldownSeconds"), anyLong());
-        verify(answerRepository, never()).deleteByQuestionTestTestId(anyLong());
-        verify(questionRepository, never()).deleteByTestTestId(anyLong());
-        verify(testRepository, never()).deleteAll(any());
+        verify(redirectAttributes).addFlashAttribute("cooldownSeconds", 600L);
+        verify(testService, never()).getQuestionsForTest(anyLong());
+        verify(model, never()).addAttribute(eq("test"), any());
     }
 
     /**
-     * Tests that startNewTest deletes old unfinished test data before creating
-     * a fresh test.
+     * Tests that startNewTest creates and displays a fresh test when the
+     * cooldown does not block the request.
      *
-     * <p>Answers are deleted first, followed by questions, then the old test
-     * record. A new test is then created and questions are generated.</p>
+     * <p>The method should add the new test and questions to the model before
+     * returning the student test view.</p>
      */
     @Test
-    void startNewTest_ShouldDeleteOldUnsubmittedTestsAndCreateNewTest() {
+    void startNewTest_ShouldCreateFreshTest_WhenNotBlockedByCooldown() {
         User user = new User();
         user.setUserId(10L);
         user.setUsername("bob");
 
-        Tests oldTest = new Tests();
-        oldTest.setTestId(1L);
-        oldTest.setUserId(10L);
-        oldTest.setTestedAt(LocalDateTime.now().minusMinutes(20));
-
-        Tests savedTest = new Tests();
-        savedTest.setTestId(2L);
-        savedTest.setUserId(10L);
-        savedTest.setScore(0);
+        Tests newTest = new Tests();
+        newTest.setTestId(2L);
+        newTest.setUserId(10L);
+        newTest.setScore(0);
 
         when(authentication.getName()).thenReturn("bob");
-        when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
-        when(testRepository.findUnsubmittedTestsByUserId(10L)).thenReturn(List.of(oldTest));
-        when(testRepository.save(any(Tests.class))).thenReturn(savedTest);
-        when(questionRepository.findQuestionsWithNounByTestId(2L)).thenReturn(Collections.emptyList());
+        when(testService.getUserByUsername("bob")).thenReturn(user);
+        when(testService.discardAndStartFreshTest(10L)).thenReturn(newTestResult);
+        when(newTestResult.isBlockedByCooldown()).thenReturn(false);
+        when(newTestResult.getTest()).thenReturn(newTest);
+        when(testService.getQuestionsForTest(2L)).thenReturn(Collections.emptyList());
 
         String viewName = testController.startNewTest(model, authentication, redirectAttributes);
 
         assertEquals("student/test", viewName);
-        verify(answerRepository).deleteByQuestionTestTestId(1L);
-        verify(questionRepository).deleteByTestTestId(1L);
-        verify(testRepository).deleteAll(List.of(oldTest));
-        verify(questionService).generateQuestionsForTest(2L);
-        verify(model).addAttribute("test", savedTest);
+        verify(model).addAttribute("test", newTest);
         verify(model).addAttribute("questions", Collections.emptyList());
     }
 
@@ -352,167 +312,101 @@ class TestControllerTests {
      * Tests that submitTest redirects straight to the results page when the
      * test has already been submitted.
      *
-     * <p>The method should not process answers again and should not save the
-     * test again.</p>
+     * <p>The controller should not add validation errors to the model.</p>
      */
     @Test
     void submitTest_ShouldRedirectToResults_WhenTestAlreadySubmitted() {
-        Tests test = new Tests();
-        test.setTestId(1L);
-        test.setSubmitted(true);
-
-        when(testRepository.findById(1L)).thenReturn(Optional.of(test));
-
-        String viewName = testController.submitTest(1L, List.of(10L, 20L), Map.of("answer_10", "cat"));
-
-        assertEquals("redirect:/student/results/1", viewName);
-        verify(answerService, never()).processTestSubmission(anyLong(), any(), any());
-        verify(testRepository, never()).save(any(Tests.class));
-    }
-
-    /**
-     * Tests that submitTest processes the answers, updates the student's
-     * streak, marks the test as submitted, and saves the updated test record.
-     *
-     * <p>This represents the normal successful submission path.</p>
-     */
-    @Test
-    void submitTest_ShouldProcessAnswersUpdateStreakAndSaveSubmittedTest() {
-        Tests test = new Tests();
-        test.setTestId(1L);
-        test.setUserId(10L);
-        test.setSubmitted(false);
-
         User user = new User();
         user.setUserId(10L);
         user.setUsername("bob");
-        user.setCurrentStreak(0);
-        user.setBestStreak(0);
-        user.setLastTestDate(null);
 
-        when(testRepository.findById(1L)).thenReturn(Optional.of(test));
-        when(userRepository.findById(10L)).thenReturn(Optional.of(user));
+        when(authentication.getName()).thenReturn("bob");
+        when(testService.getUserByUsername("bob")).thenReturn(user);
+        when(testService.submitTest(user, 1L, List.of(10L, 20L), Map.of("answer_10", "cat")))
+                .thenReturn(submissionResult);
+        when(submissionResult.isAlreadySubmitted()).thenReturn(true);
 
-        String viewName = testController.submitTest(1L, List.of(10L, 20L), Map.of("answer_10", "cat"));
+        String viewName = testController.submitTest(
+                1L,
+                List.of(10L, 20L),
+                Map.of("answer_10", "cat"),
+                authentication,
+                model
+        );
 
         assertEquals("redirect:/student/results/1", viewName);
-        verify(answerService).processTestSubmission(1L, List.of(10L, 20L), Map.of("answer_10", "cat"));
-        verify(userRepository).save(user);
-
-        assertEquals(1, user.getCurrentStreak());
-        assertEquals(1, user.getBestStreak());
-        assertEquals(LocalDate.now(), user.getLastTestDate());
-
-        ArgumentCaptor<Tests> captor = ArgumentCaptor.forClass(Tests.class);
-        verify(testRepository).save(captor.capture());
-
-        assertTrue(captor.getValue().isSubmitted());
+        verify(model, never()).addAttribute(eq("answerErrors"), any());
     }
 
     /**
-     * Tests that submitTest increases the student's current streak when their
-     * previous completed test was yesterday.
+     * Tests that submitTest returns the test page when validation errors are
+     * found in the submitted answers.
      *
-     * <p>The best streak should also be updated if the new current streak is
-     * higher than the previous best streak.</p>
+     * <p>The method should add the test, questions, answer errors, and submitted
+     * answers back to the model.</p>
      */
     @Test
-    void submitTest_ShouldIncreaseStreak_WhenLastTestWasYesterday() {
-        Tests test = new Tests();
-        test.setTestId(1L);
-        test.setUserId(10L);
-        test.setSubmitted(false);
-
+    void submitTest_ShouldReturnTestView_WhenValidationErrorsExist() {
         User user = new User();
         user.setUserId(10L);
-        user.setCurrentStreak(2);
-        user.setBestStreak(2);
-        user.setLastTestDate(LocalDate.now().minusDays(1));
+        user.setUsername("bob");
 
-        when(testRepository.findById(1L)).thenReturn(Optional.of(test));
-        when(userRepository.findById(10L)).thenReturn(Optional.of(user));
+        Tests test = new Tests();
+        test.setTestId(1L);
 
-        String viewName = testController.submitTest(1L, List.of(10L), Map.of("answer_10", "cat"));
+        Map<String, String> allParams = Map.of("answer_10", "");
+        Map<Long, String> answerErrors = Map.of(10L, "Answer is required");
+        Map<Long, String> submittedAnswers = Map.of(10L, "");
 
-        assertEquals("redirect:/student/results/1", viewName);
-        assertEquals(3, user.getCurrentStreak());
-        assertEquals(3, user.getBestStreak());
-        assertEquals(LocalDate.now(), user.getLastTestDate());
-        verify(userRepository).save(user);
+        when(authentication.getName()).thenReturn("bob");
+        when(testService.getUserByUsername("bob")).thenReturn(user);
+        when(testService.submitTest(user, 1L, List.of(10L), allParams)).thenReturn(submissionResult);
+        when(submissionResult.isAlreadySubmitted()).thenReturn(false);
+        when(submissionResult.hasValidationErrors()).thenReturn(true);
+        when(submissionResult.getTest()).thenReturn(test);
+        when(submissionResult.getQuestions()).thenReturn(Collections.emptyList());
+        when(submissionResult.getAnswerErrors()).thenReturn(answerErrors);
+        when(submissionResult.getSubmittedAnswers()).thenReturn(submittedAnswers);
+
+        String viewName = testController.submitTest(1L, List.of(10L), allParams, authentication, model);
+
+        assertEquals("student/test", viewName);
+        verify(model).addAttribute("test", test);
+        verify(model).addAttribute("questions", Collections.emptyList());
+        verify(model).addAttribute("answerErrors", answerErrors);
+        verify(model).addAttribute("submittedAnswers", submittedAnswers);
     }
 
     /**
-     * Tests that submitTest resets the student's streak when the previous
-     * completed test was older than yesterday.
+     * Tests that submitTest redirects to the results page when submission is
+     * successful.
      *
-     * <p>The current streak should reset to one, while the best streak should
-     * keep the previous best value if it is higher.</p>
+     * <p>The result test ID returned from the service should be used in the
+     * redirect URL.</p>
      */
     @Test
-    void submitTest_ShouldResetCurrentStreak_WhenLastTestWasBeforeYesterday() {
-        Tests test = new Tests();
-        test.setTestId(1L);
-        test.setUserId(10L);
-        test.setSubmitted(false);
-
+    void submitTest_ShouldRedirectToResults_WhenSubmissionSucceeds() {
         User user = new User();
         user.setUserId(10L);
-        user.setCurrentStreak(4);
-        user.setBestStreak(4);
-        user.setLastTestDate(LocalDate.now().minusDays(3));
+        user.setUsername("bob");
 
-        when(testRepository.findById(1L)).thenReturn(Optional.of(test));
-        when(userRepository.findById(10L)).thenReturn(Optional.of(user));
+        when(authentication.getName()).thenReturn("bob");
+        when(testService.getUserByUsername("bob")).thenReturn(user);
+        when(testService.submitTest(user, 1L, List.of(10L), Map.of("answer_10", "cat")))
+                .thenReturn(submissionResult);
+        when(submissionResult.isAlreadySubmitted()).thenReturn(false);
+        when(submissionResult.hasValidationErrors()).thenReturn(false);
+        when(submissionResult.getTestId()).thenReturn(1L);
 
-        String viewName = testController.submitTest(1L, List.of(10L), Map.of("answer_10", "cat"));
+        String viewName = testController.submitTest(
+                1L,
+                List.of(10L),
+                Map.of("answer_10", "cat"),
+                authentication,
+                model
+        );
 
         assertEquals("redirect:/student/results/1", viewName);
-        assertEquals(1, user.getCurrentStreak());
-        assertEquals(4, user.getBestStreak());
-        assertEquals(LocalDate.now(), user.getLastTestDate());
-        verify(userRepository).save(user);
-    }
-
-    /**
-     * Tests that submitTest throws an exception when the requested test cannot
-     * be found.
-     *
-     * <p>The method should stop before processing any answers.</p>
-     */
-    @Test
-    void submitTest_ShouldThrowException_WhenTestNotFound() {
-        when(testRepository.findById(99L)).thenReturn(Optional.empty());
-
-        RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> testController.submitTest(99L, List.of(1L), Map.of()));
-
-        assertEquals("Test not found", exception.getMessage());
-        verify(answerService, never()).processTestSubmission(anyLong(), any(), any());
-    }
-
-    /**
-     * Tests that submitTest throws an exception when the user who owns the test
-     * cannot be found.
-     *
-     * <p>The answers are processed first, but the method should fail before
-     * saving the user streak or marking the test as submitted.</p>
-     */
-    @Test
-    void submitTest_ShouldThrowException_WhenUserNotFound() {
-        Tests test = new Tests();
-        test.setTestId(1L);
-        test.setUserId(10L);
-        test.setSubmitted(false);
-
-        when(testRepository.findById(1L)).thenReturn(Optional.of(test));
-        when(userRepository.findById(10L)).thenReturn(Optional.empty());
-
-        RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> testController.submitTest(1L, List.of(10L), Map.of("answer_10", "cat")));
-
-        assertEquals("User not found", exception.getMessage());
-        verify(answerService).processTestSubmission(1L, List.of(10L), Map.of("answer_10", "cat"));
-        verify(userRepository, never()).save(any(User.class));
-        verify(testRepository, never()).save(any(Tests.class));
+        verify(model, never()).addAttribute(eq("answerErrors"), any());
     }
 }
