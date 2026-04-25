@@ -1,5 +1,8 @@
 package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.controller;
 
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,19 +11,6 @@ import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.User;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.NounRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.TestRepository;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.repo.UserRepository;
-import java.time.LocalDateTime;
-import java.util.stream.Collectors;
-import java.util.Map;
-
-/**
- * Controller responsible for handling the student revision section.
- * 
- * <p>
- * This controller provides a way for students to access revision materials,
- * specifically generating a random list of nouns (Welsh word, English meaning,
- * and gender) for flashcard-style studying.
- * </p>
- */
 
 @Controller
 public class RevisionController {
@@ -40,31 +30,37 @@ public class RevisionController {
 	 * Displays the student revision page populated with random nouns.
 	 *
 	 * <p>
-	 * This method retrieves a random selection of active nouns from the repository,
-	 * maps their key attributes into a simplified structure, and adds them to the
-	 * model so the front end can render them as interactive flashcards.
+	 * This method retrieves the currently authenticated user and checks whether
+	 * they have an active test within the last two hours. If so, the user is
+	 * redirected to the test page. Otherwise, a random selection of active nouns is
+	 * retrieved and added to the model for display as interactive flashcards.
 	 * </p>
 	 *
-	 * @param model the {@link Model} used to pass attributes to the view
-	 * @return the name of the student revision view ("student/revision")
+	 * @param model          the {@link Model} used to pass attributes to the view
+	 * @param authentication the {@link Authentication} object containing the
+	 *                       current user's details
+	 * @return the student revision view ("student/revision"), or a redirect to the
+	 *         student test page ("redirect:/student/test?from=revision")
+	 * @throws IllegalArgumentException if the authenticated user cannot be found in
+	 *                                  the repository
 	 */
-
 	@GetMapping("/student/revision")
 	public String revision(Model model, Authentication authentication) {
-		// Retrieve currently logged-in user
 		String username = authentication.getName();
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
-		// Prevent access if the user has an active test within the last 2 hours
+		User user = userRepository.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("User not found"));
+
 		LocalDateTime twoHoursAgo = LocalDateTime.now().minusHours(2);
 		if (testRepository.existsActiveTestForUser(user.getUserId(), twoHoursAgo)) {
 			return "redirect:/student/test?from=revision";
 		}
-		// Load random nouns and map to simplified structure for frontend flashcards
+
 		model.addAttribute("nouns",
 				nounRepository
 						.findRandomActiveNouns().stream().map(noun -> Map.of("welshWord", noun.getWelshWord(),
 								"englishWord", noun.getEnglishWord(), "gender", noun.getGender().name()))
 						.collect(Collectors.toList()));
+
 		return "student/revision";
 	}
 }

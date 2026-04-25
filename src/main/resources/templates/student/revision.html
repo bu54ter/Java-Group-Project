@@ -1,33 +1,54 @@
+<!-- Root HTML element with Thymeleaf and Spring Security namespaces -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<!-- Injects shared <head> content from layout -->
 <head th:replace="~{layout :: head}"></head>
 
 <body>
+
+	<!-- Injects navigation bar fragment; sets Revision as active page -->
 	<div th:replace="~{layout :: nav('Revision')}"></div>
+
+	<!-- Conditional rendering: login modal shown only when user is not authenticated -->
 	<div sec:authorize="not isAuthenticated()">
 		<div th:replace="~{layout :: loginModal}"></div>
 	</div>
 
 	<section class="div1">
+
+		<!-- Page title for revision mode -->
 		<h2>Revision</h2>
 		<hr>
 
+		<!-- Flashcard revision component -->
 		<div class="revision-card">
 			<div class="flashcard-container">
-				<!-- Translation Card -->
+
+				<!-- Translation flashcard:
+				     - Click to flip between question and answer
+				     - Controlled via toggleFlashcardAnswer JS -->
 				<div class="flashcard" id="revisionCard"
 					onclick="toggleFlashcardAnswer('revisionCard')">
+
 					<div class="flashcard-inner">
+
+						<!-- Front side: question -->
 						<div class="flashcard-front">
 							<h3 id="cardHeader">Translation Question</h3>
 							<p id="cardQuestion">Loading questions...</p>
+
+							<!-- Manual toggle button (prevents parent click propagation) -->
 							<button class="smlbtn"
 								onclick="event.stopPropagation(); toggleFlashcardAnswer('revisionCard')">
 								Show Answer</button>
 						</div>
+
+						<!-- Back side: answer -->
 						<div class="flashcard-back">
 							<p class="answer-text" id="cardAnswer"></p>
+
+							<!-- Return to question -->
 							<button class="smlbtn"
 								onclick="event.stopPropagation(); toggleFlashcardAnswer('revisionCard')">
 								Back to Question</button>
@@ -35,19 +56,27 @@
 					</div>
 				</div>
 
-				<!-- Gender Card -->
+				<!-- Gender flashcard:
+				     - Separate card for gender-based questions -->
 				<div class="flashcard" id="genderCard"
 					onclick="toggleFlashcardAnswer('genderCard')">
+
 					<div class="flashcard-inner">
+
+						<!-- Front side: question -->
 						<div class="flashcard-front">
 							<h3 id="genderHeader">Gender Question</h3>
 							<p id="genderQuestion">Loading questions...</p>
+
 							<button class="smlbtn"
 								onclick="event.stopPropagation(); toggleFlashcardAnswer('genderCard')">
 								Show Answer</button>
 						</div>
+
+						<!-- Back side: answer -->
 						<div class="flashcard-back">
 							<p class="answer-text" id="genderAnswer"></p>
+
 							<button class="smlbtn"
 								onclick="event.stopPropagation(); toggleFlashcardAnswer('genderCard')">
 								Back to Question</button>
@@ -55,6 +84,7 @@
 					</div>
 				</div>
 
+				<!-- Navigation control to cycle through flashcards -->
 				<button class="nav-arrow next" onclick="nextCard()" id="nextBtn"
 					title="Next Card">
 					<span class="arrow-icon">&#10140;</span>
@@ -62,8 +92,12 @@
 			</div>
 		</div>
 
+		<!-- Guidance section for learning Welsh noun rules -->
 		<div class="rulesbox">
+
 			<h3>Tips and tricks</h3>
+
+			<!-- Gender heuristics -->
 			<p>
 				<strong>Gender Rules of Thumb</strong>
 			</p>
@@ -75,7 +109,10 @@
 				Words ending in -yn, -wr, -deb, or -der are often masculine (e.g.,
 				pysgodyn, cyflymder).<br>
 			</p>
+
 			<br>
+
+			<!-- Mutation rule explanation -->
 			<p>
 				<strong>The Mutation Trick</strong>
 			</p>
@@ -87,7 +124,10 @@
 				"ll" or "rh" are exceptions and do not mutate after "y" (e.g., y
 				llyfrgell).<br>
 			</p>
+
 			<br>
+
+			<!-- Adjective agreement rule -->
 			<p>
 				<strong>The Adjective Trick</strong>
 			</p>
@@ -97,7 +137,10 @@
 				dda (good girl, 'd' of 'da' changed to 'dd')<br> Masculine:
 				bachgen da (good boy, 'd' stays 'd')<br>
 			</p>
+
 			<br>
+
+			<!-- Number agreement rule -->
 			<p>
 				<strong>The Number Trick</strong>
 			</p>
@@ -111,22 +154,33 @@
 
 		<br>
 
+		<!-- Navigation actions for student workflow -->
 		<div class="button-container">
-			<a th:href="@{/student/test}" class="button">Take a test</a> <a
-				th:href="@{/student/dashboard}" class="button">Back to dashboard</a>
+
+			<!-- Link to test mode -->
+			<a th:href="@{/student/test}" class="button">Take a test</a>
+
+			<!-- Link back to dashboard -->
+			<a th:href="@{/student/dashboard}" class="button">Back to
+				dashboard</a>
 		</div>
 
 		<hr>
+
+		<!-- Injects shared footer fragment -->
 		<div th:replace="~{layout :: footer}"></div>
 
 
-        <div id="nouns-data" style="display:none;">
-            <div th:each="noun : ${nouns}" class="noun-item" 
-                 th:data-welsh="${noun.welshWord}" 
-                 th:data-english="${noun.englishWord}" 
-                 th:data-gender="${noun.gender}"></div>
-        </div>
+		<!-- Hidden data source:
+		     - Provides noun data to client-side JS via data-* attributes -->
+		<div id="nouns-data" style="display: none;">
+			<div th:each="noun : ${nouns}" class="noun-item"
+				th:data-welsh="${noun.welshWord}"
+				th:data-english="${noun.englishWord}"
+				th:data-gender="${noun.gender}"></div>
+		</div>
 
+		<!-- Injects shared JavaScript used across the application -->
 		<div th:replace="~{layout :: scripts}"></div>
 	</section>
 

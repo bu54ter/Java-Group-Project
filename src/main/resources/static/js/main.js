@@ -175,6 +175,24 @@ function handleResetPasswordSubmit(form) {
     return true;
 }
 
+/* ======================== Password Lengh Helper for user Edit modal ======================== */
+
+function updateEditPasswordRule() {
+    const selectedRole = document.querySelector('#editUserModal input[name="role"]:checked');
+    const passwordRule = document.getElementById('editPasswordRule');
+
+    if (!passwordRule) return;
+
+    if (!selectedRole) {
+        passwordRule.textContent = "Select a role to see the minimum password length.";
+    } else if (selectedRole.value === "STUDENT") {
+        passwordRule.textContent = "Minimum 8 characters.";
+    } else if (selectedRole.value === "LECTURER") {
+        passwordRule.textContent = "Minimum 10 characters.";
+    } else if (selectedRole.value === "ADMIN") {
+        passwordRule.textContent = "Minimum 12 characters.";
+    }
+}
 
 /* ======================== Edit Noun Modal ======================== */
 
@@ -194,6 +212,31 @@ function openEdit(button) {
     document.getElementById('editGenderMasculine').checked = (gender === 'MASCULINE');
     document.getElementById('editGenderFeminine').checked = (gender === 'FEMININE');
     document.getElementById('editNounModal').style.display = 'block';
+}
+
+/* ======================== Edit User Modal ======================== */
+
+function openEditUser(button) {
+    const id = button.getAttribute('data-id');
+    const username = button.getAttribute('data-username');
+    const firstname = button.getAttribute('data-firstname');
+    const surname = button.getAttribute('data-surname');
+    const role = button.getAttribute('data-role');
+
+    document.getElementById('editUserForm').action = '/users/' + id + '/update';
+	document.getElementById('editUsername').value = username || '';
+    document.getElementById('editFirstname').value = firstname || '';
+    document.getElementById('editSurname').value = surname || '';
+	document.getElementById('editRoleAdmin').checked = (role === 'ADMIN');
+	document.getElementById('editRoleLecturer').checked = (role === 'LECTURER');
+	document.getElementById('editRoleStudent').checked = (role === 'STUDENT');
+	
+	document.getElementById('editPassword').value = '';
+	document.getElementById('editConfirmPassword').value = '';
+	
+	updateEditPasswordRule();
+	
+    document.getElementById('editUserModal').style.display = 'block';
 }
 
 

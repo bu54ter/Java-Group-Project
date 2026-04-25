@@ -1,21 +1,28 @@
 <!DOCTYPE html>
+<!-- Root HTML element with Thymeleaf and Spring Security namespaces -->
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!-- Injects shared <head> content from layout -->
 <head th:replace="~{layout :: head}"></head>
 
 <body>
+	<!-- Navigation bar fragment; highlights Home as active -->
+	<div th:replace="~{layout :: nav('Home')}"></div>
 
-<div th:replace="~{layout :: nav('Home')}"></div>
+	<section class="div2">
+		<!-- Error page heading indicating HTTP 403 (forbidden access) -->
+		<h1>403 - Access Denied</h1>
+		<!-- User-facing explanation of the error -->
+		<p>Sorry, you do not have permission to view this page.</p>
+		<!-- Link back to application root (home page) -->
+		<a th:href="@{/}">Return to Home</a>
+		<hr>
 
-<section class="div2">
-    <h1>403 - Access Denied</h1>
-    <p>Sorry, you do not have permission to view this page.</p>
-    <a th:href="@{/}">Return to Home</a>
-    <hr>
-    <div th:replace="layout :: footer"></div>
-    <div th:replace="layout :: scripts"></div>
-</section>
+		<!-- Shared footer fragment -->
+		<div th:replace="layout :: footer"></div>
+		<!-- Injects shared JavaScript used across the application -->
+		<div th:replace="layout :: scripts"></div>
+	</section>
 
 </body>
 </html>

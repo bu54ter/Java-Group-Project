@@ -21,6 +21,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Answers;
 import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model.Nouns;
@@ -99,6 +101,18 @@ class LecturerControllerTests {
     private Authentication authentication;
 
     /**
+     * Mock binding result used for form validation.
+     */
+    @Mock
+    private BindingResult bindingResult;
+
+    /**
+     * Mock redirect attributes used for flash messages.
+     */
+    @Mock
+    private RedirectAttributes redirectAttributes;
+
+    /**
      * Controller being tested.
      */
     private LecturerController lecturerController;
@@ -157,8 +171,10 @@ class LecturerControllerTests {
 
         when(authentication.getName()).thenReturn("bob");
         when(userRepository.findByUsername("bob")).thenReturn(Optional.of(user));
+        when(nounRepository.existsByWelshWordIgnoreCase("cath")).thenReturn(false);
+        when(bindingResult.hasErrors()).thenReturn(false);
 
-        String viewName = lecturerController.createNoun(noun, authentication);
+        String viewName = lecturerController.createNoun(noun, bindingResult, authentication, model);
 
         assertEquals("redirect:/lecturer/dashboard", viewName);
 
@@ -186,9 +202,10 @@ class LecturerControllerTests {
 
         when(authentication.getName()).thenReturn("bob");
         when(userRepository.findByUsername("bob")).thenReturn(Optional.empty());
+        when(bindingResult.hasErrors()).thenReturn(false);
 
         RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> lecturerController.createNoun(noun, authentication));
+                () -> lecturerController.createNoun(noun, bindingResult, authentication, model));
 
         assertEquals("User not found", exception.getMessage());
     }
@@ -201,7 +218,7 @@ class LecturerControllerTests {
      */
     @Test
     void deleteNoun_ShouldCallServiceAndRedirect() {
-        String viewName = lecturerController.deleteNoun(1L, authentication);
+        String viewName = lecturerController.deleteNoun(1L, authentication, redirectAttributes);
 
         assertEquals("redirect:/lecturer/dashboard", viewName);
         verify(nounService).deleteNoun(1L, authentication);
@@ -234,7 +251,7 @@ class LecturerControllerTests {
         updatedNoun.setWelshWord("ci");
         updatedNoun.setEnglishWord("dog");
 
-        String viewName = lecturerController.updateNoun(1L, updatedNoun, authentication);
+        String viewName = lecturerController.updateNoun(1L, updatedNoun, authentication, redirectAttributes);
 
         assertEquals("redirect:/lecturer/dashboard", viewName);
         verify(nounService).updateNoun(1L, updatedNoun, authentication);

@@ -1,47 +1,60 @@
 <!DOCTYPE html>
+<!-- Root HTML element with Thymeleaf and Spring Security namespaces -->
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!-- Injects shared <head> content from layout -->
 <head th:replace="~{layout :: head}"></head>
 
 <body>
+	<!-- Injects navigation bar fragment; sets LecturerResults as active page -->
+	<div th:replace="~{layout :: nav('LecturerResults')}"></div>
+	<!-- Conditional rendering: login modal shown only when user is not authenticated -->
+	<div sec:authorize="not isAuthenticated()">
+		<div th:replace="~{layout :: loginModal}"></div>
+	</div>
 
-    <div th:replace="~{layout :: nav('LecturerResults')}"></div>
-    <div sec:authorize="not isAuthenticated()">
-        <div th:replace="~{layout :: loginModal}"></div>
-    </div>
+	<section class="div1">
+		<!-- Page title for lecturer results view -->
+		<h2>Student Test Results</h2>
+		<hr>
+		<!-- Empty state: displayed when no test submissions exist -->
+		<p th:if="${#lists.isEmpty(tests)}">No submitted tests found.</p>
+		<!-- Results table rendered only when test data exists -->
+		<table th:if="${!#lists.isEmpty(tests)}" style="width: 75%;">
+			<!-- Table header for test results overview -->
+			<tr>
 
-    <section class="div1">
-        <h2>Student Test Results</h2>
-        <hr>
+				<th>Test ID</th>
+				<th>Student</th>
+				<th>Date Taken</th>
+				<th>Score (%)</th>
+				<th style="text-align: center;">Detail</th>
+			</tr>
+			<!-- Iterates over test result records -->
+			<tr th:each="t : ${tests}">
+				<td th:text="${t.testId}"></td>
+				<td th:text="${studentNames[t.userId]}"></td>
+				<td th:text="${#temporals.format(t.testedAt, 'dd MMM yyyy HH:mm')}"></td>
+				<td th:text="${t.score}"></td>
+				<td style="text-align: center;">
+					<!-- Detail view navigation:
+                         - GET request to lecturer results detail page
+                         - Uses test ID as route parameter -->
+					<form th:action="@{/lecturer/results/{id}(id=${t.testId})}"
+						method="get" style="display: inline;">
+						<!-- Navigates to detailed test breakdown -->
+						<button type="submit" class="smlbtn">View</button>
+					</form>
+				</td>
+			</tr>
+		</table>
 
-        <p th:if="${#lists.isEmpty(tests)}">No submitted tests found.</p>
-
-        <table th:if="${!#lists.isEmpty(tests)}" style="width: 75%;">
-            <tr>
-                <th>Test ID</th>
-                <th>Student</th>
-                <th>Date Taken</th>
-                <th>Score (%)</th>
-                <th style="text-align: center;">Detail</th>
-            </tr>
-            <tr th:each="t : ${tests}">
-                <td th:text="${t.testId}"></td>
-                <td th:text="${studentNames[t.userId]}"></td>
-                <td th:text="${#temporals.format(t.testedAt, 'dd MMM yyyy HH:mm')}"></td>
-                <td th:text="${t.score}"></td>
-                <td style="text-align: center;">
-                    <form th:action="@{/lecturer/results/{id}(id=${t.testId})}" method="get" style="display:inline;">
-                        <button type="submit" class="smlbtn">View</button>
-                    </form>
-                </td>
-            </tr>
-        </table>
-
-        <hr>
-        <div th:replace="~{layout :: footer}"></div>
-        <div th:replace="~{layout :: scripts}"></div>
-    </section>
+		<hr>
+		<!-- Injects shared footer fragment -->
+		<div th:replace="~{layout :: footer}"></div>
+		<!-- Injects shared JavaScript used across the application -->
+		<div th:replace="~{layout :: scripts}"></div>
+	</section>
 
 </body>
 </html>

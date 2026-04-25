@@ -1,92 +1,53 @@
+<!-- Root HTML element with Thymeleaf and Spring Security namespaces -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+<!-- Injects shared <head> content from layout -->
 <head th:replace="~{layout :: head}"></head>
 
 <body>
-
+	<!-- Injects navigation bar fragment; sets Results as active page -->
 	<div th:replace="~{layout :: nav('Results')}"></div>
+	<!-- Conditional rendering: login modal shown only when user is not authenticated -->
 	<div sec:authorize="not isAuthenticated()">
 		<div th:replace="~{layout :: loginModal}"></div>
 	</div>
 
 	<section class="div2">
+		<!-- Page context header for result view -->
 		<h2>Student</h2>
 		<p>
+			<!-- Displays test identifier -->
 			<strong>Test ID:</strong> <span th:text="${test.testId}"></span>
 		</p>
 		<p>
-			<strong>Date Taken:</strong>
-			<span th:text="${#temporals.format(test.testedAt, 'dd MMM yyyy HH:mm')}"></span>
+			<!-- Displays formatted test timestamp -->
+			<strong>Date Taken:</strong> <span
+				th:text="${#temporals.format(test.testedAt, 'dd MMM yyyy HH:mm')}"></span>
 		</p>
 
 		<hr>
-
+		<!-- Score summary section -->
 		<h2>Your Score</h2>
 		<p>
 			<strong th:text="${test.score}"></strong> %
 		</p>
-		<p th:if="${test.score >= 70}">🎉 Well done!</p>
-		<p th:if="${test.score < 70}">📘 Keep practicing!</p>
+		<!-- Conditional feedback based on performance threshold -->
+		<p th:if="${test.score >= 70}">Well done!</p>
+		<p th:if="${test.score < 70}">Keep practising!</p>
 
 		<hr />
 
-		<section class="div1">
+		<br>
+		<!-- Navigation back to dashboard -->
+		<a th:href="@{/student/dashboard}" class="button">Back to
+			Dashboard</a>
 
-			<h2>Answer Review. EXTRA</h2>
+		<hr>
+		<!-- Injects shared footer fragment -->
+		<div th:replace="~{layout :: footer}"></div>
+		<!-- Injects shared JavaScript used across the application -->
+		<div th:replace="~{layout :: scripts}"></div>
 
-			<div th:each="answer, iterStat : ${answers}">
-				<div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;">
-
-					<!-- Question -->
-					<p>
-						<strong>Question [[${iterStat.count}]]:</strong>
-						<span th:if="${answer.question.questionType.name() == 'GENDER'}">
-							What is the gender of the Welsh noun
-							<strong th:text="${answer.question.noun.welshWord}"></strong>?
-						</span>
-						<span th:if="${answer.question.questionType.name() == 'MEANING'}">
-							What is the meaning of the Welsh noun
-							<strong th:text="${answer.question.noun.welshWord}"></strong>?
-						</span>
-						<span th:if="${answer.question.questionType.name() == 'TRANSLATE'}">
-							What is the Welsh noun for the English word
-							<strong th:text="${answer.question.noun.englishWord}"></strong>?
-						</span>
-					</p>
-
-					<!-- User answer -->
-					<p>
-						<strong>Your answer:</strong>
-						<span th:text="${answer.userAnswer}"></span>
-					</p>
-
-					<!-- Correct answer -->
-					<p>
-						<strong>Correct answer:</strong>
-						<span th:if="${answer.question.questionType.name() == 'GENDER'}"
-							th:text="${answer.question.noun.gender}"></span>
-						<span th:if="${answer.question.questionType.name() == 'MEANING'}"
-							th:text="${answer.question.noun.englishWord}"></span>
-						<span th:if="${answer.question.questionType.name() == 'TRANSLATE'}"
-							th:text="${answer.question.noun.welshWord}"></span>
-					</p>
-
-					<!-- Result -->
-					<p th:if="${answer.correct}">✅ Correct</p>
-					<p th:if="${!answer.correct}">❌ Incorrect</p>
-
-				</div>
-			</div>
-
-			<br>
-			<a th:href="@{/student/dashboard}" class="button">back to dash board</a>
-
-			<hr>
-			<div th:replace="~{layout :: footer}"></div>
-			<div th:replace="~{layout :: scripts}"></div>
-
-		</section>
 	</section>
 
 </body>

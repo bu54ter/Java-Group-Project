@@ -45,7 +45,59 @@ public class NounService {
 		this.nounDeletedRepository = nounDeletedRepository;
 		this.userRepository = userRepository;
 	}
+	
+	/**
+	 * Creates and persists a new {@link Nouns} entity.
+	 *
+	 * <p>This method performs preprocessing and validation on the provided noun,
+	 * including trimming input fields and checking for duplicate Welsh entries.
+	 * It also enriches the entity with audit information such as the creator's
+	 * full name and the creation timestamp before saving it to the database.</p>
+	 *
+	 * <p>If a noun with the same Welsh word already exists (case-insensitive),
+	 * an exception is thrown to prevent duplication.</p>
+	 *
+	 * @param noun the {@link Nouns} entity containing user-submitted data
+	 * @param username the username of the currently authenticated user
+	 *
+	 * @throws IllegalArgumentException if a duplicate Welsh noun already exists
+	 * @throws RuntimeException if the user cannot be found in the repository
+	 *
+	 * @implNote This method ensures data consistency by validating input and
+	 *           enriching the entity before persistence.
+	 */
+	@Transactional
+	public void createNoun(Nouns noun, String username) {
+        // Trim fields
+        if (noun.getWelshWord() != null) {
+            noun.setWelshWord(noun.getWelshWord().trim());
+        }
+        if (noun.getEnglishWord() != null) {
+            noun.setEnglishWord(noun.getEnglishWord().trim());
+        }
+        if (noun.getWelshSent() != null) {
+            noun.setWelshSent(noun.getWelshSent().trim());
+        }
+        if (noun.getEnglishSent() != null) {
+            noun.setEnglishSent(noun.getEnglishSent().trim());
+        }
+        // Duplicate check
+        if (noun.getWelshWord() != null &&
+            nounRepository.existsByWelshWordIgnoreCase(noun.getWelshWord())) {
+            throw new IllegalArgumentException("Welsh noun already exists");
+        }
+        // Get user
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
+        String fullName = user.getFirstname() + " " + user.getSurname();
+        // Audit fields
+        noun.setCreatedBy(fullName);
+        noun.setCreatedAt(LocalDateTime.now());
+        // Save
+        nounRepository.save(noun);
+    }
+	
 	/**
 	 * Deletes a noun by moving it to the deleted nouns table (soft delete).
 	 *
