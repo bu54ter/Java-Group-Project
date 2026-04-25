@@ -55,10 +55,12 @@ This testing covered:
 - TestRepository bean creation
 - UserDeletedRepository bean creation
 - UserRepository bean creation
+- FirstUserAutoConfigure bean creation
+- LoginSuccessHandler object creation
+- UserDetail bean creation
 
 **Not Yet Covered in This Version:**
 
-- Security package testing
 - Service package testing
 
 **Out of Scope:**
@@ -89,7 +91,9 @@ The model tests checked that selected model classes stored and returned field va
 
 The repository tests checked that selected repository interfaces were detected and created successfully by the Spring application context. These tests confirmed that the repository beans were available for dependency injection. Repository query result testing was not included because that would require controlled test data or a separate test database configuration.
 
-Additional package sections will be added later after the security and service tests have been reviewed and executed.
+The security tests checked that selected security classes were created successfully. This included checking that the first user configuration component and user details component were available through the Spring application context, and that the login success handler object could be created.
+
+Additional package sections will be added later after the service tests have been reviewed and executed.
 
 ## 4. Preconditions
 
@@ -256,6 +260,16 @@ This section records the JUnit testing completed so far.
 | JUT-REP-006 | UserDeletedRepository.java | userDeletedRepository_ShouldBeAvailable | Verify that UserDeletedRepository is created by the Spring application context | UserDeletedRepository bean is not null | UserDeletedRepository bean was available | Passed |
 | JUT-REP-007 | UserRepository.java | userRepository_ShouldBeAvailable | Verify that UserRepository is created by the Spring application context | UserRepository bean is not null | UserRepository bean was available | Passed |
 
+---
+
+## 8.5 Security Package
+
+| Test ID | Class Under Test | Test Method | Description | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|---|
+| JUT-SEC-001 | FirstUserAutoConfigure.java | firstUserAutoConfigure_ShouldBeAvailable | Verify that FirstUserAutoConfigure is created by the Spring application context | FirstUserAutoConfigure bean is not null | FirstUserAutoConfigure bean was available | Passed |
+| JUT-SEC-002 | LoginSuccessHandler.java | loginSuccessHandler_ShouldBeCreated | Verify that a LoginSuccessHandler object can be created | LoginSuccessHandler object is not null | LoginSuccessHandler object was created successfully | Passed |
+| JUT-SEC-003 | UserDetail.java | userDetail_ShouldBeAvailable | Verify that UserDetail is created by the Spring application context | UserDetail bean is not null | UserDetail bean was available | Passed |
+
 ## 9. Defects and Issues Log
 
 | Issue ID | Description | Severity | Impact | Raised By | Date Raised | Owner | Status | Resolution |
@@ -265,10 +279,10 @@ This section records the JUnit testing completed so far.
 ## 10. Test Outcome Summary
 
 **Total Test Cases:**  
-98
+101
 
 **Passed:**  
-98
+101
 
 **Failed:**  
 0
@@ -286,13 +300,15 @@ Model package testing confirmed that the selected model classes stored and retur
 
 Repository package testing confirmed that the selected repository interfaces were created successfully by the Spring application context and were available for dependency injection. These tests did not check live query results or database content.
 
+Security package testing confirmed that the selected security classes could be created successfully. The tests checked that the first user configuration component and user details component were available through the Spring application context, and that the login success handler object could be created.
+
 ## 11. Recommendation
 
 **Recommendation:**  
 Accept
 
 **Reason:**  
-The recorded JUnit tests passed successfully and confirmed that the selected application, controller, model, and repository classes behaved as expected within the scope of the completed tests.
+The recorded JUnit tests passed successfully and confirmed that the selected application, controller, model, repository, and security classes behaved as expected within the scope of the completed tests.
 
 ## 12. Sign-Off
 
