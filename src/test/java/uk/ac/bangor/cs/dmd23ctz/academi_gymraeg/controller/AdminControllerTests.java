@@ -3,6 +3,7 @@ package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -31,73 +32,93 @@ import uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.service.UserService;
 /**
  * JUnit test class for {@link AdminController}.
  *
- * <p>This class verifies that the admin controller:
- * returns the correct dashboard view, creates users correctly,
- * applies validation and password policy rules, resets passwords,
- * deletes users, and handles expected error conditions.</p>
+ * <p>This class tests the main admin controller actions, including loading
+ * the dashboard, creating users, validating password rules, resetting
+ * passwords, deleting users, and restoring deleted users.</p>
  */
 @ExtendWith(MockitoExtension.class)
 class AdminControllerTests {
 
-    /** Mock repository used to retrieve and save user records */
+    /**
+     * Mock repository used to retrieve, check, and save user records.
+     */
     @Mock
     private UserRepository userRepo;
 
-    /** Mock password encoder used during user creation */
+    /**
+     * Mock password encoder used when a new user is created.
+     */
     @Mock
     private PasswordEncoder passwordEncoder;
 
-    /** Mock service used for password reset and user deletion */
+    /**
+     * Mock service used for password reset, delete, and undelete actions.
+     */
     @Mock
     private UserService userService;
 
-    /** Mock repository used to retrieve deleted user records */
+    /**
+     * Mock repository used to retrieve deleted user records.
+     */
     @Mock
     private UserDeletedRepository userDeletedRepository;
 
-    /** Mock model used to verify attributes added by the controller */
+    /**
+     * Mock model used to check which attributes are sent back to the view.
+     */
     @Mock
     private Model model;
 
-    /** Mock binding result used to simulate validation state */
+    /**
+     * Mock binding result used to simulate form validation errors.
+     */
     @Mock
     private BindingResult bindingResult;
 
-    /** Mock redirect attributes used for flash messages */
+    /**
+     * Mock redirect attributes used to check flash messages after redirects.
+     */
     @Mock
     private RedirectAttributes redirectAttributes;
 
-    /** Controller under test */
+    /**
+     * Controller being tested.
+     */
     private AdminController adminController;
 
     /**
-     * Creates a new controller instance before each test.
+     * Creates a fresh AdminController before each test.
      */
     @BeforeEach
     void setUp() {
-        adminController = new AdminController(userRepo, userService, userDeletedRepository);
+        adminController = new AdminController(userRepo, passwordEncoder, userService, userDeletedRepository);
     }
 
     /**
-     * Verifies that the admin dashboard returns the correct view
-     * and adds the expected model attributes.
+     * Tests that the admin dashboard page loads correctly.
+     *
+     * <p>The method should add a blank user object, active users, and deleted
+     * users to the model before returning the admin dashboard view.</p>
      */
     @Test
     void adminPage_ShouldReturnDashboardViewAndAddModelAttributes() {
-        when(userRepo.findAll()).thenReturn(Collections.emptyList());
+        when(userRepo.findAllActiveUsers()).thenReturn(Collections.emptyList());
         when(userDeletedRepository.findAll()).thenReturn(Collections.emptyList());
 
         String viewName = adminController.adminPage(model);
 
         assertEquals("admin/dashboard", viewName);
-        verify(model).addAttribute(org.mockito.ArgumentMatchers.eq("user"), org.mockito.ArgumentMatchers.any(User.class));
+        verify(model).addAttribute(eq("user"), any(User.class));
         verify(model).addAttribute("users", Collections.emptyList());
         verify(model).addAttribute("deletedUsers", Collections.emptyList());
     }
 
     /**
-     * Verifies that a valid user is trimmed, lowercased, encoded,
-     * saved correctly, and redirected back to the dashboard.
+     * Tests that a valid user can be created.
+     *
+     * <p>The method should trim the first name and surname, convert the
+     * username to lowercase, encode the password, save the user, and redirect
+     * back to the admin dashboard.</p>
      */
     @Test
     void createUser_ShouldTrimEncodeSaveAndRedirect_WhenInputIsValid() {
@@ -120,6 +141,7 @@ class AdminControllerTests {
         verify(userRepo).save(captor.capture());
 
         User savedUser = captor.getValue();
+
         assertEquals("bob.user", savedUser.getUsername());
         assertEquals("Bob", savedUser.getFirstname());
         assertEquals("Jones", savedUser.getSurname());
@@ -128,8 +150,10 @@ class AdminControllerTests {
     }
 
     /**
-     * Verifies that a duplicate username is rejected and the
-     * dashboard is returned with the create user modal reopened.
+     * Tests that a duplicate username is rejected.
+     *
+     * <p>The method should add a validation error, return the dashboard view,
+     * reopen the create user modal, and not save the user.</p>
      */
     @Test
     void createUser_ShouldReturnDashboard_WhenUsernameAlreadyExists() {
@@ -156,8 +180,11 @@ class AdminControllerTests {
     }
 
     /**
-     * Verifies that a password mismatch returns the dashboard,
-     * adds the correct error message, and does not save the user.
+     * Tests that a user is not created when the password and confirm password
+     * fields do not match.
+     *
+     * <p>The method should return the dashboard view, add a password error,
+     * reopen the create user modal, and not save the user.</p>
      */
     @Test
     void createUser_ShouldReturnDashboard_WhenPasswordsDoNotMatch() {
@@ -182,8 +209,11 @@ class AdminControllerTests {
     }
 
     /**
-     * Verifies that a password shorter than the role-based minimum
-     * returns the dashboard with the correct error message.
+     * Tests that a user is not created when the password is too short for
+     * the selected role.
+     *
+     * <p>The method should return the dashboard view, add the correct password
+     * policy error, reopen the create user modal, and not save the user.</p>
      */
     @Test
     void createUser_ShouldReturnDashboard_WhenPasswordTooShortForRole() {
@@ -207,10 +237,111 @@ class AdminControllerTests {
         verify(userRepo, never()).save(any(User.class));
     }
 
+    /**
+     * Tests that a user is not created when no role has been selected.
+     *
+     * <p>The method should reject the role field, return the dashboard view,
+     * reopen the create user modal, and not save the user.</p>
+     */
+    @Test
+    void createUser_ShouldReturnDashboard_WhenRoleIsMissing() {
+        User user = new User();
+        user.setUsername("bob");
+        user.setFirstname("Bob");
+        user.setSurname("Jones");
+        user.setPassword("Password12345");
+        user.setRole(null);
+
+        when(userRepo.existsByUsername("bob")).thenReturn(false);
+        when(bindingResult.hasErrors()).thenReturn(true);
+        when(userRepo.findAll()).thenReturn(Collections.emptyList());
+        when(userDeletedRepository.findAll()).thenReturn(Collections.emptyList());
+
+        String viewName = adminController.createUser(user, bindingResult, "Password12345", model);
+
+        assertEquals("admin/dashboard", viewName);
+        verify(bindingResult).rejectValue("role", "error.user", "Role is required");
+        verify(model).addAttribute("showNewUserModal", true);
+        verify(userRepo, never()).save(any(User.class));
+    }
 
     /**
-     * Verifies that deleteUser redirects successfully when the
-     * user service deletes the user without error.
+     * Tests that reset password returns the dashboard when the user cannot
+     * be found.
+     *
+     * <p>The method should add a user not found error and should not call the
+     * user service reset password method.</p>
+     */
+    @Test
+    void resetPassword_ShouldReturnDashboard_WhenUserNotFound() {
+        when(userRepo.findById(99L)).thenReturn(Optional.empty());
+        when(userRepo.findAll()).thenReturn(Collections.emptyList());
+        when(userDeletedRepository.findAll()).thenReturn(Collections.emptyList());
+
+        String viewName = adminController.resetPassword(99L, "Password12345", model, redirectAttributes);
+
+        assertEquals("admin/dashboard", viewName);
+        verify(model).addAttribute(eq("user"), any(User.class));
+        verify(model).addAttribute("users", Collections.emptyList());
+        verify(model).addAttribute("deletedUsers", Collections.emptyList());
+        verify(model).addAttribute("resetPasswordError", "User not found");
+        verify(userService, never()).resetPassword(99L, "Password12345");
+    }
+
+    /**
+     * Tests that reset password fails when the new password is too short for
+     * the user's role.
+     *
+     * <p>The method should return the dashboard view, add the correct password
+     * policy error, and should not call the user service reset method.</p>
+     */
+    @Test
+    void resetPassword_ShouldReturnDashboard_WhenPasswordTooShort() {
+        User user = new User();
+        user.setUserId(10L);
+        user.setUsername("bob");
+        user.setRole(Role.LECTURER);
+
+        when(userRepo.findById(10L)).thenReturn(Optional.of(user));
+        when(userRepo.findAll()).thenReturn(Collections.emptyList());
+        when(userDeletedRepository.findAll()).thenReturn(Collections.emptyList());
+
+        String viewName = adminController.resetPassword(10L, "short", model, redirectAttributes);
+
+        assertEquals("admin/dashboard", viewName);
+        verify(model).addAttribute("resetPasswordError", "Password must be at least 10 characters for this role");
+        verify(userService, never()).resetPassword(10L, "short");
+    }
+
+    /**
+     * Tests that reset password works when the new password meets the
+     * required role-based password length.
+     *
+     * <p>The method should call the user service, add a temporary success
+     * message, and redirect back to the admin dashboard.</p>
+     */
+    @Test
+    void resetPassword_ShouldCallServiceAndRedirect_WhenPasswordIsValid() {
+        User user = new User();
+        user.setUserId(10L);
+        user.setUsername("bob");
+        user.setRole(Role.STUDENT);
+
+        when(userRepo.findById(10L)).thenReturn(Optional.of(user));
+
+        String viewName = adminController.resetPassword(10L, "Password1", model, redirectAttributes);
+
+        assertEquals("redirect:/admin/dashboard", viewName);
+        verify(userService).resetPassword(10L, "Password1");
+        verify(redirectAttributes).addFlashAttribute("resetPasswordSuccess",
+                "Password reset successfully for user: bob");
+    }
+
+    /**
+     * Tests that deleting a user redirects back to the dashboard when the
+     * delete operation succeeds.
+     *
+     * <p>The method should call the user service delete method once.</p>
      */
     @Test
     void deleteUser_ShouldRedirect_WhenDeleteSucceeds() {
@@ -221,21 +352,37 @@ class AdminControllerTests {
     }
 
     /**
-     * Verifies that deleteUser returns the dashboard with an
-     * error message when the service throws an exception.
+     * Tests that the controller handles a delete error.
+     *
+     * <p>The method should catch the exception, add error details to the model,
+     * and redirect back to the admin dashboard.</p>
      */
     @Test
-    void deleteUser_ShouldReturnDashboard_WhenDeleteFails() {
+    void deleteUser_ShouldRedirect_WhenDeleteFails() {
         doThrow(new RuntimeException("Delete failed")).when(userService).deleteUser(10L);
         when(userRepo.findAll()).thenReturn(Collections.emptyList());
         when(userDeletedRepository.findAll()).thenReturn(Collections.emptyList());
 
         String viewName = adminController.deleteUser(10L, model);
 
-        assertEquals("admin/dashboard", viewName);
-        verify(model).addAttribute(org.mockito.ArgumentMatchers.eq("user"), org.mockito.ArgumentMatchers.any(User.class));
+        assertEquals("redirect:/admin/dashboard", viewName);
+        verify(model).addAttribute(eq("user"), any(User.class));
         verify(model).addAttribute("users", Collections.emptyList());
         verify(model).addAttribute("deletedUsers", Collections.emptyList());
-        verify(model).addAttribute(contains("deleteUserError"), contains("Delete failed"));
+        verify(model).addAttribute(eq("deleteUserError"), contains("Delete failed"));
+    }
+
+    /**
+     * Tests that a deleted user can be restored.
+     *
+     * <p>The method should call the user service undelete method and redirect
+     * back to the admin dashboard.</p>
+     */
+    @Test
+    void undeleteUser_ShouldCallServiceAndRedirect() {
+        String viewName = adminController.undeleteUser(20L);
+
+        assertEquals("redirect:/admin/dashboard", viewName);
+        verify(userService).undeleteUser(20L);
     }
 }
