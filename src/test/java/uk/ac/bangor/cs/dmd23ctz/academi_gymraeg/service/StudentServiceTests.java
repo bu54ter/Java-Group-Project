@@ -7,27 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
- * JUnit test class for {@link AnswerService}.
+ * JUnit test class for {@link StudentService}.
  *
  * <p>
- * This test checks that the AnswerService is created successfully by the
+ * This test checks that the StudentService is created successfully by the
  * Spring application context.
  * </p>
  */
 @SpringBootTest
-class AnswerServiceTests {
+class StudentServiceTests {
 
     /**
-     * Answer service bean created by Spring.
+     * Student service bean created by Spring.
      */
     @Autowired
-    private AnswerService answerService;
+    private StudentService studentService;
 
     /**
-     * Tests that the answer service bean is available in the application context.
+     * Tests that the student service bean is available in the application context.
      */
     @Test
-    void answerService_ShouldBeAvailable() {
-        assertNotNull(answerService);
+    void studentService_ShouldBeAvailable() {
+        assertNotNull(studentService);
     }
 }
