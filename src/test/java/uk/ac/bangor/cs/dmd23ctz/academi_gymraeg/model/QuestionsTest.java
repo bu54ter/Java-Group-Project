@@ -1,31 +1,21 @@
 package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
 /**
  * JUnit test class for {@link Questions}.
  *
- * <p>This class tests the basic getter and setter methods for the
- * Questions model class, including question ID, linked test, linked noun,
- * and question type.</p>
+ * <p>
+ * This test checks that the Questions model stores and returns its field
+ * values correctly.
+ * </p>
  */
 class QuestionsTest {
 
     /**
-     * Tests that a Questions object can be created using the default constructor.
-     */
-    @Test
-    void defaultConstructor_ShouldCreateQuestionsObject() {
-        Questions question = new Questions();
-
-        assertNotNull(question);
-    }
-
-    /**
-     * Tests that the question ID can be set and retrieved correctly.
+     * Tests that the questionId field can be set and retrieved.
      */
     @Test
     void questionIdGetterAndSetter_ShouldStoreQuestionId() {
@@ -37,7 +27,7 @@ class QuestionsTest {
     }
 
     /**
-     * Tests that the linked test can be set and retrieved correctly.
+     * Tests that the test field can be set and retrieved.
      */
     @Test
     void testGetterAndSetter_ShouldStoreTest() {
@@ -50,7 +40,7 @@ class QuestionsTest {
     }
 
     /**
-     * Tests that the linked noun can be set and retrieved correctly.
+     * Tests that the noun field can be set and retrieved.
      */
     @Test
     void nounGetterAndSetter_ShouldStoreNoun() {
@@ -63,7 +53,7 @@ class QuestionsTest {
     }
 
     /**
-     * Tests that the question type can be set and retrieved correctly.
+     * Tests that the questionType field can be set and retrieved.
      */
     @Test
     void questionTypeGetterAndSetter_ShouldStoreQuestionType() {

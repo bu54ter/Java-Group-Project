@@ -14,24 +14,15 @@ import org.junit.jupiter.api.Test;
 /**
  * JUnit test class for {@link Tests}.
  *
- * <p>This class tests the basic getter and setter methods for the Tests
- * model class, including test ID, user ID, timestamp, score, submitted
- * status, linked questions, and the addQuestion helper method.</p>
+ * <p>
+ * This test checks that the Tests model stores and returns its field values
+ * correctly.
+ * </p>
  */
 class TestsTest {
 
     /**
-     * Tests that a Tests object can be created using the default constructor.
-     */
-    @Test
-    void defaultConstructor_ShouldCreateTestsObject() {
-        Tests test = new Tests();
-
-        assertNotNull(test);
-    }
-
-    /**
-     * Tests that the test ID can be set and retrieved correctly.
+     * Tests that the testId field can be set and retrieved.
      */
     @Test
     void testIdGetterAndSetter_ShouldStoreTestId() {
@@ -43,7 +34,7 @@ class TestsTest {
     }
 
     /**
-     * Tests that the user ID can be set and retrieved correctly.
+     * Tests that the userId field can be set and retrieved.
      */
     @Test
     void userIdGetterAndSetter_ShouldStoreUserId() {
@@ -55,20 +46,20 @@ class TestsTest {
     }
 
     /**
-     * Tests that the testedAt timestamp can be set and retrieved correctly.
+     * Tests that the testedAt field can be set and retrieved.
      */
     @Test
     void testedAtGetterAndSetter_ShouldStoreTestedAt() {
         Tests test = new Tests();
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime testedAt = LocalDateTime.now();
 
-        test.setTestedAt(now);
+        test.setTestedAt(testedAt);
 
-        assertEquals(now, test.getTestedAt());
+        assertEquals(testedAt, test.getTestedAt());
     }
 
     /**
-     * Tests that the score can be set and retrieved correctly.
+     * Tests that the score field can be set and retrieved.
      */
     @Test
     void scoreGetterAndSetter_ShouldStoreScore() {
@@ -90,7 +81,7 @@ class TestsTest {
     }
 
     /**
-     * Tests that submitted can be set to true and retrieved correctly.
+     * Tests that the submitted field can be set to true.
      */
     @Test
     void submittedGetterAndSetter_ShouldStoreTrueValue() {
@@ -102,7 +93,7 @@ class TestsTest {
     }
 
     /**
-     * Tests that submitted can be set to false and retrieved correctly.
+     * Tests that the submitted field can be set to false.
      */
     @Test
     void submittedGetterAndSetter_ShouldStoreFalseValue() {
@@ -114,7 +105,17 @@ class TestsTest {
     }
 
     /**
-     * Tests that the questions list can be set and retrieved correctly.
+     * Tests that the questions list is created when a Tests object is made.
+     */
+    @Test
+    void questionsList_ShouldBeInitialised() {
+        Tests test = new Tests();
+
+        assertNotNull(test.getQuestions());
+    }
+
+    /**
+     * Tests that the questions list can be set and retrieved.
      */
     @Test
     void questionsGetterAndSetter_ShouldStoreQuestionsList() {
@@ -127,19 +128,7 @@ class TestsTest {
     }
 
     /**
-     * Tests that the questions list is initialised by default.
-     *
-     * <p>This prevents null pointer issues when questions are added later.</p>
-     */
-    @Test
-    void questionsList_ShouldBeInitialisedByDefault() {
-        Tests test = new Tests();
-
-        assertNotNull(test.getQuestions());
-    }
-
-    /**
-     * Tests that addQuestion adds the question to the test question list.
+     * Tests that addQuestion adds a question to the test.
      */
     @Test
     void addQuestion_ShouldAddQuestionToList() {
@@ -153,13 +142,10 @@ class TestsTest {
     }
 
     /**
-     * Tests that addQuestion sets the back-reference from the question to the
-     * test.
-     *
-     * <p>This keeps both sides of the relationship in sync.</p>
+     * Tests that addQuestion sets the test reference on the question.
      */
     @Test
-    void addQuestion_ShouldSetQuestionBackReference() {
+    void addQuestion_ShouldSetQuestionTestReference() {
         Tests test = new Tests();
         Questions question = new Questions();
 

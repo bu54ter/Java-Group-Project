@@ -9,14 +9,15 @@ import org.junit.jupiter.api.Test;
 /**
  * JUnit test class for {@link Answers}.
  *
- * <p>This class tests the basic getter and setter methods for the Answers
- * model class, including answer ID, linked question, submitted user answer,
- * and whether the answer was correct.</p>
+ * <p>
+ * This test checks that the Answers model stores and returns its field values
+ * correctly.
+ * </p>
  */
 class AnswersTest {
 
     /**
-     * Tests that the answer ID can be set and retrieved correctly.
+     * Tests that the answerId field can be set and retrieved.
      */
     @Test
     void answerIdGetterAndSetter_ShouldStoreAnswerId() {
@@ -28,10 +29,7 @@ class AnswersTest {
     }
 
     /**
-     * Tests that the question object can be set and retrieved correctly.
-     *
-     * <p>This checks the relationship between an answer and the question that
-     * the answer belongs to.</p>
+     * Tests that the question field can be set and retrieved.
      */
     @Test
     void questionGetterAndSetter_ShouldStoreQuestion() {
@@ -44,31 +42,29 @@ class AnswersTest {
     }
 
     /**
-     * Tests that the submitted user answer can be set and retrieved correctly.
+     * Tests that the userAnswer field can be set and retrieved.
      */
     @Test
     void userAnswerGetterAndSetter_ShouldStoreUserAnswer() {
         Answers answer = new Answers();
 
-        answer.setUserAnswer("hello");
+        answer.setUserAnswer("cath");
 
-        assertEquals("hello", answer.getUserAnswer());
+        assertEquals("cath", answer.getUserAnswer());
     }
 
     /**
-     * Tests that the correct flag can be set to false and retrieved correctly.
+     * Tests that the correct field is false by default.
      */
     @Test
-    void correctGetterAndSetter_ShouldStoreFalseValue() {
+    void correct_ShouldBeFalseByDefault() {
         Answers answer = new Answers();
-
-        answer.setCorrect(false);
 
         assertFalse(answer.isCorrect());
     }
 
     /**
-     * Tests that the correct flag can be set to true and retrieved correctly.
+     * Tests that the correct field can be set to true.
      */
     @Test
     void correctGetterAndSetter_ShouldStoreTrueValue() {
@@ -77,5 +73,17 @@ class AnswersTest {
         answer.setCorrect(true);
 
         assertTrue(answer.isCorrect());
+    }
+
+    /**
+     * Tests that the correct field can be set to false.
+     */
+    @Test
+    void correctGetterAndSetter_ShouldStoreFalseValue() {
+        Answers answer = new Answers();
+
+        answer.setCorrect(false);
+
+        assertFalse(answer.isCorrect());
     }
 }

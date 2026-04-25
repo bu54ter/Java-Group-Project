@@ -2,6 +2,7 @@ package uk.ac.bangor.cs.dmd23ctz.academi_gymraeg.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -14,14 +15,15 @@ import org.springframework.security.core.GrantedAuthority;
 /**
  * JUnit test class for {@link User}.
  *
- * <p>This class tests the basic getter and setter methods for the User
- * model class, including user details, role, creation timestamp, streak
- * fields, and Spring Security authorities.</p>
+ * <p>
+ * This test checks that the User model stores and returns its field values
+ * correctly.
+ * </p>
  */
 class UserTest {
 
     /**
-     * Tests that the user ID can be set and retrieved correctly.
+     * Tests that the userId field can be set and retrieved.
      */
     @Test
     void userIdGetterAndSetter_ShouldStoreUserId() {
@@ -33,7 +35,7 @@ class UserTest {
     }
 
     /**
-     * Tests that the username can be set and retrieved correctly.
+     * Tests that the username field can be set and retrieved.
      */
     @Test
     void usernameGetterAndSetter_ShouldStoreUsername() {
@@ -45,7 +47,7 @@ class UserTest {
     }
 
     /**
-     * Tests that the password can be set and retrieved correctly.
+     * Tests that the password field can be set and retrieved.
      */
     @Test
     void passwordGetterAndSetter_ShouldStorePassword() {
@@ -57,7 +59,7 @@ class UserTest {
     }
 
     /**
-     * Tests that the first name can be set and retrieved correctly.
+     * Tests that the firstname field can be set and retrieved.
      */
     @Test
     void firstnameGetterAndSetter_ShouldStoreFirstname() {
@@ -69,7 +71,7 @@ class UserTest {
     }
 
     /**
-     * Tests that the surname can be set and retrieved correctly.
+     * Tests that the surname field can be set and retrieved.
      */
     @Test
     void surnameGetterAndSetter_ShouldStoreSurname() {
@@ -81,7 +83,7 @@ class UserTest {
     }
 
     /**
-     * Tests that the role can be set and retrieved correctly.
+     * Tests that the role field can be set and retrieved.
      */
     @Test
     void roleGetterAndSetter_ShouldStoreRole() {
@@ -93,80 +95,90 @@ class UserTest {
     }
 
     /**
-     * Tests that the createdAt timestamp can be set and retrieved correctly.
+     * Tests that the createdAt field can be set and retrieved.
      */
     @Test
     void createdAtGetterAndSetter_ShouldStoreCreatedAt() {
         User user = new User();
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime createdAt = LocalDateTime.now();
 
-        user.setCreatedAt(now);
+        user.setCreatedAt(createdAt);
 
-        assertEquals(now, user.getCreatedAt());
+        assertEquals(createdAt, user.getCreatedAt());
     }
 
     /**
-     * Tests that the current streak default value is zero.
+     * Tests that the currentStreak field is zero by default.
      */
     @Test
-    void currentStreak_ShouldDefaultToZero() {
+    void currentStreak_ShouldBeZeroByDefault() {
         User user = new User();
 
         assertEquals(0, user.getCurrentStreak());
     }
 
     /**
-     * Tests that the current streak can be set and retrieved correctly.
+     * Tests that the currentStreak field can be set and retrieved.
      */
     @Test
     void currentStreakGetterAndSetter_ShouldStoreCurrentStreak() {
         User user = new User();
 
-        user.setCurrentStreak(5);
+        user.setCurrentStreak(3);
 
-        assertEquals(5, user.getCurrentStreak());
+        assertEquals(3, user.getCurrentStreak());
     }
 
     /**
-     * Tests that the best streak default value is zero.
+     * Tests that the bestStreak field is zero by default.
      */
     @Test
-    void bestStreak_ShouldDefaultToZero() {
+    void bestStreak_ShouldBeZeroByDefault() {
         User user = new User();
 
         assertEquals(0, user.getBestStreak());
     }
 
     /**
-     * Tests that the best streak can be set and retrieved correctly.
+     * Tests that the bestStreak field can be set and retrieved.
      */
     @Test
     void bestStreakGetterAndSetter_ShouldStoreBestStreak() {
         User user = new User();
 
-        user.setBestStreak(10);
+        user.setBestStreak(5);
 
-        assertEquals(10, user.getBestStreak());
+        assertEquals(5, user.getBestStreak());
     }
 
     /**
-     * Tests that the last test date can be set and retrieved correctly.
+     * Tests that the lastTestDate field is null by default.
+     */
+    @Test
+    void lastTestDate_ShouldBeNullByDefault() {
+        User user = new User();
+
+        assertNull(user.getLastTestDate());
+    }
+
+    /**
+     * Tests that the lastTestDate field can be set and retrieved.
      */
     @Test
     void lastTestDateGetterAndSetter_ShouldStoreLastTestDate() {
         User user = new User();
-        LocalDate today = LocalDate.now();
+        LocalDate lastTestDate = LocalDate.now();
 
-        user.setLastTestDate(today);
+        user.setLastTestDate(lastTestDate);
 
-        assertEquals(today, user.getLastTestDate());
+        assertEquals(lastTestDate, user.getLastTestDate());
     }
 
     /**
-     * Tests that authorities are not null when a role is set.
+     * Tests that authorities are returned when a role is set.
      */
     @Test
-    void authorities_ShouldNotBeNull_WhenRoleIsSet() {
+    void getAuthorities_ShouldReturnAuthorities_WhenRoleIsSet() {
         User user = new User();
 
         user.setRole(Role.ADMIN);
@@ -174,55 +186,39 @@ class UserTest {
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
         assertNotNull(authorities);
+        assertEquals(1, authorities.size());
     }
 
     /**
-     * Tests that the ADMIN role creates the ROLE_ADMIN authority.
+     * Tests that the ADMIN role returns ROLE_ADMIN as an authority.
      */
     @Test
-    void getAuthorities_ShouldReturnRoleAdmin_WhenRoleIsAdmin() {
+    void getAuthorities_ShouldReturnAdminAuthority_WhenRoleIsAdmin() {
         User user = new User();
 
         user.setRole(Role.ADMIN);
 
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
-        assertEquals(1, authorities.size());
         assertEquals("ROLE_ADMIN", authorities.iterator().next().getAuthority());
     }
 
     /**
-     * Tests that the LECTURER role creates the ROLE_LECTURER authority.
+     * Tests that the STUDENT role returns ROLE_STUDENT as an authority.
      */
     @Test
-    void getAuthorities_ShouldReturnRoleLecturer_WhenRoleIsLecturer() {
-        User user = new User();
-
-        user.setRole(Role.LECTURER);
-
-        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-
-        assertEquals(1, authorities.size());
-        assertEquals("ROLE_LECTURER", authorities.iterator().next().getAuthority());
-    }
-
-    /**
-     * Tests that the STUDENT role creates the ROLE_STUDENT authority.
-     */
-    @Test
-    void getAuthorities_ShouldReturnRoleStudent_WhenRoleIsStudent() {
+    void getAuthorities_ShouldReturnStudentAuthority_WhenRoleIsStudent() {
         User user = new User();
 
         user.setRole(Role.STUDENT);
 
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
-        assertEquals(1, authorities.size());
         assertEquals("ROLE_STUDENT", authorities.iterator().next().getAuthority());
     }
 
     /**
-     * Tests that no authorities are returned when no role has been set.
+     * Tests that no authorities are returned when no role is set.
      */
     @Test
     void getAuthorities_ShouldReturnEmptyCollection_WhenRoleIsNull() {

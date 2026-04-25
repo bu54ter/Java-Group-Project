@@ -9,14 +9,15 @@ import org.junit.jupiter.api.Test;
 /**
  * JUnit test class for {@link NounsDeleted}.
  *
- * <p>This class tests the basic getter and setter methods for the
- * NounsDeleted model class, including noun details, example sentences,
- * creation audit data, deletion audit data, and gender.</p>
+ * <p>
+ * This test checks that the NounsDeleted model stores and returns its field
+ * values correctly.
+ * </p>
  */
 class NounsDeletedTest {
 
     /**
-     * Tests that the deleted noun ID can be set and retrieved correctly.
+     * Tests that the nounId field can be set and retrieved.
      */
     @Test
     void nounIdGetterAndSetter_ShouldStoreNounId() {
@@ -28,7 +29,7 @@ class NounsDeletedTest {
     }
 
     /**
-     * Tests that the Welsh word can be set and retrieved correctly.
+     * Tests that the welshWord field can be set and retrieved.
      */
     @Test
     void welshWordGetterAndSetter_ShouldStoreWelshWord() {
@@ -40,7 +41,7 @@ class NounsDeletedTest {
     }
 
     /**
-     * Tests that the English word can be set and retrieved correctly.
+     * Tests that the englishWord field can be set and retrieved.
      */
     @Test
     void englishWordGetterAndSetter_ShouldStoreEnglishWord() {
@@ -52,7 +53,7 @@ class NounsDeletedTest {
     }
 
     /**
-     * Tests that the Welsh example sentence can be set and retrieved correctly.
+     * Tests that the welshSent field can be set and retrieved.
      */
     @Test
     void welshSentGetterAndSetter_ShouldStoreWelshSentence() {
@@ -64,7 +65,7 @@ class NounsDeletedTest {
     }
 
     /**
-     * Tests that the English example sentence can be set and retrieved correctly.
+     * Tests that the englishSent field can be set and retrieved.
      */
     @Test
     void englishSentGetterAndSetter_ShouldStoreEnglishSentence() {
@@ -76,7 +77,7 @@ class NounsDeletedTest {
     }
 
     /**
-     * Tests that the createdBy audit field can be set and retrieved correctly.
+     * Tests that the createdBy field can be set and retrieved.
      */
     @Test
     void createdByGetterAndSetter_ShouldStoreCreatedBy() {
@@ -88,7 +89,7 @@ class NounsDeletedTest {
     }
 
     /**
-     * Tests that the createdAt audit field can be set and retrieved correctly.
+     * Tests that the createdAt field can be set and retrieved.
      */
     @Test
     void createdAtGetterAndSetter_ShouldStoreCreatedAt() {
@@ -101,19 +102,19 @@ class NounsDeletedTest {
     }
 
     /**
-     * Tests that the deletedBy audit field can be set and retrieved correctly.
+     * Tests that the deletedBy field can be set and retrieved.
      */
     @Test
     void deletedByGetterAndSetter_ShouldStoreDeletedBy() {
         NounsDeleted noun = new NounsDeleted();
 
-        noun.setDeletedBy("lecturer1");
+        noun.setDeletedBy("lecturer");
 
-        assertEquals("lecturer1", noun.getDeletedBy());
+        assertEquals("lecturer", noun.getDeletedBy());
     }
 
     /**
-     * Tests that the deletedAt audit field can be set and retrieved correctly.
+     * Tests that the deletedAt field can be set and retrieved.
      */
     @Test
     void deletedAtGetterAndSetter_ShouldStoreDeletedAt() {
@@ -126,14 +127,14 @@ class NounsDeletedTest {
     }
 
     /**
-     * Tests that the gender value can be set and retrieved correctly.
+     * Tests that the gender field can be set and retrieved.
      */
     @Test
     void genderGetterAndSetter_ShouldStoreGender() {
         NounsDeleted noun = new NounsDeleted();
 
-        noun.setGender(Gender.MASCULINE);
+        noun.setGender(Gender.FEMININE);
 
-        assertEquals(Gender.MASCULINE, noun.getGender());
+        assertEquals(Gender.FEMININE, noun.getGender());
     }
 }
