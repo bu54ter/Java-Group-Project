@@ -20,7 +20,7 @@ Phil Bamber
 ## 2. Test Summary
 
 **Purpose:**  
-To record the JUnit testing carried out across the application packages completed so far.
+To record the JUnit testing carried out across the application packages.
 
 **Scope:**  
 This testing covered:
@@ -58,10 +58,13 @@ This testing covered:
 - FirstUserAutoConfigure bean creation
 - LoginSuccessHandler object creation
 - UserDetail bean creation
-
-**Not Yet Covered in This Version:**
-
-- Service package testing
+- AnswerService bean creation
+- NounLoad configuration creation
+- NounService bean creation
+- QuestionService bean creation
+- StudentService bean creation
+- TestService bean creation
+- UserService bean creation
 
 **Out of Scope:**
 
@@ -69,8 +72,9 @@ This testing covered:
 - Thymeleaf template rendering
 - Full form submission testing
 - Full end-to-end user journey testing
-- Live database testing
+- Manual live database data validation
 - Repository query result testing
+- Detailed service method behaviour testing
 
 **Test Type:**  
 JUnit Testing
@@ -83,7 +87,7 @@ April 2026
 
 ## 3. System Overview
 
-This document records the JUnit testing completed so far within the Academi Gymraeg application. The tests were created under the `src/test/java` directory and were executed using Eclipse with **Run As > JUnit Test**.
+This document records the JUnit testing completed within the Academi Gymraeg application. The tests were created under the `src/test/java` directory and were executed using Eclipse with **Run As > JUnit Test**.
 
 The application test checked that the Spring Boot application context loaded correctly and that selected application beans were available. The controller tests checked that selected controller classes were detected and created successfully by the Spring application context. The LoginUser controller was also tested to confirm that the login method returned the expected login view name.
 
@@ -93,7 +97,7 @@ The repository tests checked that selected repository interfaces were detected a
 
 The security tests checked that selected security classes were created successfully. This included checking that the first user configuration component and user details component were available through the Spring application context, and that the login success handler object could be created.
 
-Additional package sections will be added later after the service tests have been reviewed and executed.
+The service tests checked that selected service classes were created successfully by the Spring application context. These tests confirmed that the main service beans were available and could be injected where required. Detailed service method behaviour testing was not included in this version.
 
 ## 4. Preconditions
 
@@ -132,7 +136,7 @@ Testing was considered complete when:
 
 ## 8. Test Cases
 
-This section records the JUnit testing completed so far.
+This section records the JUnit testing completed.
 
 ---
 
@@ -270,6 +274,20 @@ This section records the JUnit testing completed so far.
 | JUT-SEC-002 | LoginSuccessHandler.java | loginSuccessHandler_ShouldBeCreated | Verify that a LoginSuccessHandler object can be created | LoginSuccessHandler object is not null | LoginSuccessHandler object was created successfully | Passed |
 | JUT-SEC-003 | UserDetail.java | userDetail_ShouldBeAvailable | Verify that UserDetail is created by the Spring application context | UserDetail bean is not null | UserDetail bean was available | Passed |
 
+---
+
+## 8.6 Service Package
+
+| Test ID | Class Under Test | Test Method | Description | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|---|
+| JUT-SER-001 | AnswerService.java | answerService_ShouldBeAvailable | Verify that AnswerService is created by the Spring application context | AnswerService bean is not null | AnswerService bean was available | Passed |
+| JUT-SER-002 | NounLoad.java | nounLoad_ShouldBeAvailable | Verify that NounLoad is created by the Spring application context | NounLoad bean is not null | NounLoad bean was available | Passed |
+| JUT-SER-003 | NounService.java | nounService_ShouldBeAvailable | Verify that NounService is created by the Spring application context | NounService bean is not null | NounService bean was available | Passed |
+| JUT-SER-004 | QuestionService.java | questionService_ShouldBeAvailable | Verify that QuestionService is created by the Spring application context | QuestionService bean is not null | QuestionService bean was available | Passed |
+| JUT-SER-005 | StudentService.java | studentService_ShouldBeAvailable | Verify that StudentService is created by the Spring application context | StudentService bean is not null | StudentService bean was available | Passed |
+| JUT-SER-006 | TestService.java | testService_ShouldBeAvailable | Verify that TestService is created by the Spring application context | TestService bean is not null | TestService bean was available | Passed |
+| JUT-SER-007 | UserService.java | userService_ShouldBeAvailable | Verify that UserService is created by the Spring application context | UserService bean is not null | UserService bean was available | Passed |
+
 ## 9. Defects and Issues Log
 
 | Issue ID | Description | Severity | Impact | Raised By | Date Raised | Owner | Status | Resolution |
@@ -279,10 +297,10 @@ This section records the JUnit testing completed so far.
 ## 10. Test Outcome Summary
 
 **Total Test Cases:**  
-101
+108
 
 **Passed:**  
-101
+108
 
 **Failed:**  
 0
@@ -302,13 +320,15 @@ Repository package testing confirmed that the selected repository interfaces wer
 
 Security package testing confirmed that the selected security classes could be created successfully. The tests checked that the first user configuration component and user details component were available through the Spring application context, and that the login success handler object could be created.
 
+Service package testing confirmed that the selected service classes and configuration class were created successfully by the Spring application context and were available for dependency injection. These tests did not check detailed service method behaviour or database result accuracy.
+
 ## 11. Recommendation
 
 **Recommendation:**  
 Accept
 
 **Reason:**  
-The recorded JUnit tests passed successfully and confirmed that the selected application, controller, model, repository, and security classes behaved as expected within the scope of the completed tests.
+The recorded JUnit tests passed successfully and confirmed that the selected application, controller, model, repository, security, and service classes behaved as expected within the scope of the completed tests.
 
 ## 12. Sign-Off
 
